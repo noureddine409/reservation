@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-
+import "./faq.page.css"
 
 // FAQ -> Frequently asked questions page
 class FAQPage extends Component {

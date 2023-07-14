@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-
+import {Link} from "react-router-dom"
+import "./side-bar.component.css"
 
 class SideBarComponent extends Component {
     render() {
@@ -9,17 +10,16 @@ class SideBarComponent extends Component {
             >
                 <ul className="sidebar-nav" id="sidebar-nav">
                     <li className="nav-item">
-                        <a className="nav-link collapsed">
+                        <Link to="/" className="nav-link collapsed">
                             <i className="bi bi-grid" />
                             <span>Home</span>
-                        </a>
+                        </Link>
                     </li>
                     <li className="nav-item">
                         <a
                             className="nav-link collapsed"
                             data-bs-target="#components-nav"
                             data-bs-toggle="collapse"
-                            href="#"
                         >
                             <i className="bi bi bi-box-seam" />
                             <span>Products</span>
@@ -88,22 +88,22 @@ class SideBarComponent extends Component {
                     </li>
 
                     <li className="nav-item">
-                        <a className="nav-link collapsed">
+                        <Link className="nav-link collapsed" to="/profile">
                             <i className="bi bi-person" />
                             <span>Profile</span>
-                        </a>
+                        </Link>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link collapsed" href="#">
+                        <Link className="nav-link collapsed" to="f-a-q">
                             <i className="bi bi-question-circle" />
                             <span>F.A.Q</span>
-                        </a>
+                        </Link>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link collapsed">
+                        <Link className="nav-link collapsed" to="/contact">
                             <i className="bi bi-envelope" />
                             <span>Contact</span>
-                        </a>
+                        </Link>
                     </li>
                     <li className="nav-item">
                         <a className="nav-link collapsed">

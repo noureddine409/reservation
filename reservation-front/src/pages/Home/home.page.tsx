@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 class HomePage extends Component {
     render() {
         return (
-            <>
                 <main id="main" className="main">
                     <div className="pagetitle">
                         <h1>Home</h1>
@@ -36,9 +35,6 @@ class HomePage extends Component {
                         </div>
                     </section>
                 </main>
-                {/* End #main */}
-            </>
-
         );
     }
 }
