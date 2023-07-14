@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import "./header.component.css"
+import {Link} from "react-router-dom"
 
 interface HeaderProps {
     change: () => void;
@@ -18,10 +20,10 @@ class HeaderComponent extends Component<HeaderProps> {
         return (
             <header id="header" className="header fixed-top d-flex align-items-center">
                 <div className="d-flex align-items-center justify-content-between">
-                    <a href="index.html" className="logo d-flex align-items-center">
+                    <Link to="/" className="logo d-flex align-items-center">
                         <img src= "https://www.norsys.fr/sites/all/modules/custom/norsys_base/images/4-logo3.png" alt="" />
                         <span className="d-none d-lg-block">NorSys</span>
-                    </a>
+                    </Link>
                     <i  className="bi bi-list toggle-sidebar-btn" onClick={this.handleChange} />
                 </div>
                 {/* End Logo */}
@@ -227,25 +229,25 @@ class HeaderComponent extends Component<HeaderProps> {
                                     <hr className="dropdown-divider" />
                                 </li>
                                 <li>
-                                    <a
+                                    <Link
                                         className="dropdown-item d-flex align-items-center"
-                                        href="users-profile.html"
+                                        to="/profile"
                                     >
                                         <i className="bi bi-person" />
                                         <span>My Profile</span>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
                                     <hr className="dropdown-divider" />
                                 </li>
                                 <li>
-                                    <a
+                                    <Link
                                         className="dropdown-item d-flex align-items-center"
-                                        href="users-profile.html"
+                                        to="/profile"
                                     >
                                         <i className="bi bi-gear" />
                                         <span>Account Settings</span>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
                                     <hr className="dropdown-divider" />
@@ -263,10 +265,10 @@ class HeaderComponent extends Component<HeaderProps> {
                                     <hr className="dropdown-divider" />
                                 </li>
                                 <li>
-                                    <a className="dropdown-item d-flex align-items-center" href="#">
+                                    <Link className="dropdown-item d-flex align-items-center" to="">
                                         <i className="bi bi-box-arrow-right" />
                                         <span>Sign Out</span>
-                                    </a>
+                                    </Link>
                                 </li>
                             </ul>
                             {/* End Profile Dropdown Items */}
