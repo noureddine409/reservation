@@ -94,23 +94,18 @@ class SideBarComponent extends Component {
                         </Link>
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link collapsed" to="f-a-q">
-                            <i className="bi bi-question-circle" />
-                            <span>F.A.Q</span>
-                        </Link>
-                    </li>
-                    <li className="nav-item">
                         <Link className="nav-link collapsed" to="/contact">
                             <i className="bi bi-envelope" />
                             <span>Contact</span>
                         </Link>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link collapsed">
-                            <i className="bi bi-exclamation-triangle" />
-                            <span>Help</span>
-                        </a>
+                        <Link className="nav-link collapsed" to="f-a-q">
+                            <i className="bi bi-question-circle" />
+                            <span>F.A.Q</span>
+                        </Link>
                     </li>
+
                 </ul>
             </aside>
         );

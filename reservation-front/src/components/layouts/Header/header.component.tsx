@@ -48,9 +48,9 @@ class HeaderComponent extends Component<HeaderProps> {
                 <nav className="header-nav ms-auto">
                     <ul className="d-flex align-items-center">
                         <li className="nav-item d-block d-lg-none">
-                            <a className="nav-link nav-icon search-bar-toggle " href="#">
+                            <div className="nav-link nav-icon search-bar-toggle ">
                                 <i className="bi bi-search" />
-                            </a>
+                            </div>
                         </li>
                         {/* End Search Icon*/}
                         <li className="nav-item dropdown">
@@ -253,19 +253,19 @@ class HeaderComponent extends Component<HeaderProps> {
                                     <hr className="dropdown-divider" />
                                 </li>
                                 <li>
-                                    <a
+                                    <Link
                                         className="dropdown-item d-flex align-items-center"
-                                        href="pages-faq.html"
+                                        to="f-a-q"
                                     >
                                         <i className="bi bi-question-circle" />
                                         <span>Need Help?</span>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
                                     <hr className="dropdown-divider" />
                                 </li>
                                 <li>
-                                    <Link className="dropdown-item d-flex align-items-center" to="">
+                                    <Link className="dropdown-item d-flex align-items-center" to="/login">
                                         <i className="bi bi-box-arrow-right" />
                                         <span>Sign Out</span>
                                     </Link>
