@@ -30,7 +30,7 @@ To install and set up this project, follow these steps:
 
 ### Backend (Spring Boot)
 
-1.  Clone the repository: `git clone [https://git.norsys-afrique.ma/ztiga/reservation]`
+1.  Clone the repository: `git clone https://git.norsys-afrique.ma/ztiga/reservation`
 2.  Navigate to the backend directory: `cd reservation-api`
 3.  Open the `src/main/resources/application.properties` file and configure the PostgreSQL database connection settings.
 4.  Build the project: `./mvnw clean install`
