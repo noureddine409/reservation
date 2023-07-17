@@ -4,13 +4,13 @@ This project is the result of an internship at NorSys Afrique. It was developed 
 
 
 ##  Table of Contents
--   [Project Description](## Project Description)
--   [Installation](## Installation)
--   [Usage](## Usage)
--   [License](## Licence)
--   [Support](## Support)
--   [Acknowledgements](## Acknowledgements)
--   [About the Team](## About the Team)
+-   [Project Description](# Project Description)
+-   [Installation](# Installation)
+-   [Usage](# Usage)
+-   [License](# Licence)
+-   [Support](# Support)
+-   [Acknowledgements](# Acknowledgements)
+-   [About the Team](# About the Team)
 
 ## Project Description
 
