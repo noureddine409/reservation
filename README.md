@@ -1,17 +1,16 @@
 # Summer Internship!
 
-This project is the result of an internship at NorSys Afrique. It was developed collaboratively by a team of four interns. with the guidance and support of Zoubida Tiga and Soukaina ABU SHMAIS as Scrum Masters.
+This project is the result of an internship at NorSys Afrique. It was developed collaboratively by a team of four interns, with the guidance and support of Zoubida Tiga as our supervisor and Soukaina ABU SHMAIS as Scrum Master.
 
 
 ##  Table of Contents
--   [Project Description]()
--   [Installation]()
--   [Usage]()
--   [Features]()
--   [Contributing]()
--   [License]()
--   [Support]()
--   [Acknowledgements]()
+-   [Project Description](## Project Description)
+-   [Installation](## Installation)
+-   [Usage](## Usage)
+-   [License](## Licence)
+-   [Support](## Support)
+-   [Acknowledgements](## Acknowledgements)
+-   [About the Team](## About the Team)
 
 ## Project Description
 
