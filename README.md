@@ -73,7 +73,7 @@ We  would  like  to  acknowledge  the  following  resources  and  individuals  f
 - [React](https://reactjs.org/) with TypeScript: JavaScript library used for building the frontend of the application with the added benefits of TypeScript.
 - [Bootstrap](https://getbootstrap.com/): Frontend framework used for responsive and mobile-first design. 
 - [NiceAdmin Template](https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/): The NiceAdmin template used for the project's user interface.
--   Zoubida and Shaima: We express our gratitude to Zoubida and Shaima for their guidance and support as our Scrum Masters throughout the internship project.
+-   Zoubida and Shaima: We express our gratitude to Zoubida and Shaima for their guidance and support throughout the internship project.
 
 ## About the Team
 
