@@ -79,7 +79,7 @@ We  would  like  to  acknowledge  the  following  resources  and  individuals  f
 
 We are a team of four interns at NorSys Afrique, working together to complete this project. Here's a brief introduction to each team member:
 
-1.  [Nour-eddine Lachgar]: [Provide a short bio or background of the first team member]
+1.  [Nour-eddine Lachgar](https://github.com/noureddine409): [Provide a short bio or background of the first team member]
 2.  [Chaimae Alkur]: [Provide a short bio or background of the second team member]
 3.  [Hajar Abouyahya]: [Provide a short bio or background of the third team member]
 4.  [Wafa Almoubarik]: [Provide a short bio or background of the fourth team member]
