@@ -1,0 +1,28 @@
+# Define the global images used for all jobs
+image: node:18  # Use a Docker image with Node.js pre-installed
+
+stages:
+  - build
+  - test
+
+maven_build:
+  image: maven:3.8.6-openjdk-18  # Specify the Maven Docker image with JDK 17
+  stage: build
+  script:
+    - cd reservation-api  # Change directory to the root of your Maven project
+    - mvn clean package
+
+react_build:
+  stage: build
+  script:
+    - cd reservation-front  # Change directory to the root of your React project
+    - npm install
+    - npm run build
+
+test:
+  stage: test
+  script:
+    - cd reservation-front  # Run frontend tests
+    - npm test
+    - cd ../reservation-api  # Run backend tests (if you have any)
+    - mvn test
