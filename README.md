@@ -23,7 +23,7 @@ To install and set up this project, follow these steps:
 
 ### Prerequisites
 
--   Java Development Kit (JDK +17) installed
+-   Java Development Kit (JDK 18) installed
 -   Node.js and npm (Node Package Manager 18.x.x) installed
 -   PostgreSQL database installed and running
 
