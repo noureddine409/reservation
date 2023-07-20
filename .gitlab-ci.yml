@@ -28,6 +28,8 @@ maven_build:
   stage: build
   script:
     - cd reservation-api  # Change directory to the root of your Maven project
+    - mkdir -p $CI_PROJECT_DIR/.m2  # Create a .m2 directory in the project root
+    - mv ~/.m2/repository $CI_PROJECT_DIR/.m2/repository  # Move Maven's local repository to the project's .m2 directory
     - mvn clean package
 
 react_build:
