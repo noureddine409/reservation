@@ -1,6 +1,11 @@
 # Define the global images used for all jobs
 image: node:18  # Use a Docker image with Node.js pre-installed
 
+# Define the PostgreSQL service
+services:
+  - name: postgres:latest
+    alias: postgresql
+
 stages:
   - build
   - test
