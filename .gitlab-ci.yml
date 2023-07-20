@@ -35,6 +35,7 @@ react_build:
   script:
     - cd reservation-front  # Change directory to the root of your React project
     - npm install
+    - npm run build
 
 test:
   stage: test
