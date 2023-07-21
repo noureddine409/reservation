@@ -1,6 +1,6 @@
 import './App.css';
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import React, {useState} from 'react';
+import {BrowserRouter as Router, Route, Routes, useLocation} from 'react-router-dom';
 import HomePage from './pages/Home/home.page';
 import ContactPage from './pages/Contact/contact.page';
 import FAQPage from './pages/FrequentlyAskedQuestions/faq.page';
@@ -49,6 +49,7 @@ const AppContent: React.FC<AppContentProps> = ({ toggleSideBar }) => {
                 <>
                     <HeaderComponent change={toggleSideBar} />
                     <SideBarComponent />
+
                 </>
             )}
             <Routes>
