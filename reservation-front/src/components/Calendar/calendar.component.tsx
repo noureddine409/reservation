@@ -14,10 +14,6 @@ function Calendar() {
         info.el.style.borderColor = 'red';
     };
 
-    const handleSelect = (info : any) => {
-        alert('selected ' + info.startStr + ' to ' + info.endStr + ' on resource ' + info.resource.id);
-    };
-
     return (
         <div>
             <Fullcalendar
