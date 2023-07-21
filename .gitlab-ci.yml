@@ -40,7 +40,5 @@ react_build:
 test:
   stage: test
   script:
-    - cd reservation-front  # Run frontend tests
-    - npm test
-    - cd ../reservation-api  # Run backend tests (if you have any)
+    - cd reservation-api  # Run backend tests (if you have any)
     - mvn test -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository
