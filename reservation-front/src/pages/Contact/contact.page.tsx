@@ -61,7 +61,6 @@ class ContactPage extends Component {
                         <div className="col-xl-6">
                             <div className="card p-4">
                                 <form
-                                    action="forms/contact.php"
                                     method="post"
                                     className="php-email-form"
                                 >
