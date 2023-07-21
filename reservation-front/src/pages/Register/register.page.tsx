@@ -15,7 +15,7 @@ class RegisterPage extends Component {
                                             to="/"
                                             className="logo d-flex align-items-center w-auto"
                                         >
-                                            <img src="assets/img/logo.png" alt="" />
+                                            <img alt="" />
                                             <span className="d-none d-lg-block">NiceAdmin</span>
                                         </Link>
                                     </div>
@@ -106,7 +106,7 @@ class RegisterPage extends Component {
                                                         />
                                                         <label className="form-check-label" htmlFor="acceptTerms">
                                                             I agree and accept the{" "}
-                                                            <a href="#">terms and conditions</a>
+                                                            <a href="/#">terms and conditions</a>
                                                         </label>
                                                         <div className="invalid-feedback">
                                                             You must agree before submitting.

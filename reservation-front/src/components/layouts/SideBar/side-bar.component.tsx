@@ -20,6 +20,7 @@ class SideBarComponent extends Component {
                             className="nav-link collapsed"
                             data-bs-target="#components-nav"
                             data-bs-toggle="collapse"
+                            href="/#"
                         >
                             <i className="bi bi bi-box-seam" />
                             <span>Products</span>
@@ -37,13 +38,13 @@ class SideBarComponent extends Component {
                                 </Link>
                             </li>
                             <li>
-                                <a >
+                                <a href="/#">
                                     <i className="bi bi-circle" />
                                     <span>Breadcrumbs</span>
                                 </a>
                             </li>
                             <li>
-                                <a>
+                                <a href="/#">
                                     <i className="bi bi-circle" />
                                     <span>Buttons</span>
                                 </a>
@@ -55,8 +56,7 @@ class SideBarComponent extends Component {
                             className="nav-link collapsed"
                             data-bs-target="#tables-nav"
                             data-bs-toggle="collapse"
-                            href="#"
-                        >
+                            href="/#"                        >
                             <i className="bi bi-calendar2-date-fill" />
                             <span>Reservations</span>
                             <i className="bi bi-chevron-down ms-auto" />
@@ -67,19 +67,19 @@ class SideBarComponent extends Component {
                             data-bs-parent="#sidebar-nav"
                         >
                             <li>
-                                <a>
+                                <a href="/#">
                                     <i className="bi bi-circle" />
                                     <span>Badges</span>
                                 </a>
                             </li>
                             <li>
-                                <a >
+                                <a href="/#">
                                     <i className="bi bi-circle" />
                                     <span>Breadcrumbs</span>
                                 </a>
                             </li>
                             <li>
-                                <a>
+                                <a href="/#">
                                     <i className="bi bi-circle" />
                                     <span>Buttons</span>
                                 </a>
