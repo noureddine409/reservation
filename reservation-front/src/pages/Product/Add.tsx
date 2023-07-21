@@ -1,6 +1,5 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import React from 'react';
-import './add-product.page.css';
 import {ERROR_MESSAGES} from "../../common/constants";
 
 interface FormData {
@@ -8,7 +7,7 @@ interface FormData {
     description: string;
     productImage: FileList;
 }
-const AddProductPage: React.FC = () => {
+const AddProduct= () => {
     const {
         register,
         handleSubmit,
@@ -75,4 +74,4 @@ const AddProductPage: React.FC = () => {
     );
 };
 
-export default AddProductPage;
+export default AddProduct;

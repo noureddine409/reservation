@@ -4,7 +4,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 
-function Calendar() {
+const Calendar = () => {
     const handleEventClick = (info:any) => {
         alert('Event: ' + info.event.title);
         alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);

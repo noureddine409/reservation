@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import "./error.page.css"
 import {Link} from "react-router-dom";
-class ErrorPage extends Component {
-    render() {
+
+const ErrorPage = () =>{
         return (
             <main>
                 <div className="container">
@@ -21,7 +20,6 @@ class ErrorPage extends Component {
             </main>
 
         );
-    }
 }
 
 export default ErrorPage;
