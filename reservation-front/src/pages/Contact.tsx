@@ -1,7 +1,6 @@
-import React, {Component} from 'react';
-import "./contact.page.css"
-class ContactPage extends Component {
-    render() {
+import React from 'react';
+
+const ContactPage = ()=> {
         return (
             <main id="main" className="main">
                 <div className="pagetitle">
@@ -115,6 +114,5 @@ class ContactPage extends Component {
 
         );
     }
-}
 
 export default ContactPage;

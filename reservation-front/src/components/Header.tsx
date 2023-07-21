@@ -1,22 +1,15 @@
 import React, {Component} from 'react';
-import "./header.component.css"
 import {Link} from "react-router-dom"
 
 interface HeaderProps {
     change: () => void;
 }
-class HeaderComponent extends Component<HeaderProps> {
+const HeaderComponent = ({change}:HeaderProps)=> {
 
-    constructor(props: HeaderProps) {
-        super(props);
-        this.handleChange = this.handleChange.bind(this);
+    const handleChange = () => {
+        change();
     }
 
-    handleChange() {
-        this.props.change();
-    }
-
-    render() {
         return (
             <header id="header" className="header fixed-top d-flex align-items-center">
                 <div className="d-flex align-items-center justify-content-between">
@@ -24,7 +17,7 @@ class HeaderComponent extends Component<HeaderProps> {
                         <img src= "https://www.norsys.fr/sites/all/modules/custom/norsys_base/images/4-logo3.png" alt="" />
                         <span className="d-none d-lg-block">NorSys</span>
                     </Link>
-                    <i  className="bi bi-list toggle-sidebar-btn" onClick={this.handleChange} />
+                    <i  className="bi bi-list toggle-sidebar-btn" onClick={handleChange} />
                 </div>
                 {/* End Logo */}
                 <div className="search-bar">
@@ -272,7 +265,6 @@ class HeaderComponent extends Component<HeaderProps> {
                 </nav>
             </header>
         );
-    }
 }
 
 export default HeaderComponent;

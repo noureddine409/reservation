@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from "react-router-dom"
-import "./side-bar.component.css"
 
-class SideBarComponent extends Component {
-    render() {
+const SideBarComponent = () => {
         return (
             <aside id="sidebar"
                    className="sidebar"
@@ -109,7 +107,6 @@ class SideBarComponent extends Component {
                 </ul>
             </aside>
         );
-    }
 }
 
 export default SideBarComponent;
