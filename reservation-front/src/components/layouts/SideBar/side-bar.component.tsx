@@ -31,10 +31,10 @@ class SideBarComponent extends Component {
                             data-bs-parent="#sidebar-nav"
                         >
                             <li>
-                                <a>
+                                <Link to="/add-product">
                                     <i className="bi bi-circle" />
-                                    <span>Badges</span>
-                                </a>
+                                    <span>Add product</span>
+                                </Link>
                             </li>
                             <li>
                                 <a >
