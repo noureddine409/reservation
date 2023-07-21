@@ -18,7 +18,7 @@ class ForgetPasswordPage extends Component {
                                             to="/"
                                             className="logo d-flex align-items-center w-auto"
                                         >
-                                            <img src="assets/img/logo.png" alt=""/>
+                                            <img alt=""/>
                                             <span className="d-none d-lg-block">NorSys</span>
                                         </Link>
                                     </div>
