@@ -30,8 +30,6 @@ class HeaderComponent extends Component<HeaderProps> {
                 <div className="search-bar">
                     <form
                         className="search-form d-flex align-items-center"
-                        method="POST"
-                        action="#"
                     >
                         <input
                             type="text"
@@ -54,7 +52,7 @@ class HeaderComponent extends Component<HeaderProps> {
                         </li>
                         {/* End Search Icon*/}
                         <li className="nav-item dropdown">
-                            <a className="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                            <a className="nav-link nav-icon" href="/#" data-bs-toggle="dropdown">
                                 <i className="bi bi-bell" />
                                 <span className="badge bg-primary badge-number">4</span>
                             </a>
@@ -62,7 +60,7 @@ class HeaderComponent extends Component<HeaderProps> {
                             <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
                                 <li className="dropdown-header">
                                     You have 4 new notifications
-                                    <a href="#">
+                                    <a href="/#">
                 <span className="badge rounded-pill bg-primary p-2 ms-2">
                   View all
                 </span>
@@ -116,7 +114,7 @@ class HeaderComponent extends Component<HeaderProps> {
                                     <hr className="dropdown-divider" />
                                 </li>
                                 <li className="dropdown-footer">
-                                    <a href="#">Show all notifications</a>
+                                    <a href="/#">Show all notifications</a>
                                 </li>
                             </ul>
                             {/* End Notification Dropdown Items */}
@@ -128,7 +126,7 @@ class HeaderComponent extends Component<HeaderProps> {
                             <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
                                 <li className="dropdown-header">
                                     You have 3 new messages
-                                    <a href="#">
+                                    <a href="/#">
                 <span className="badge rounded-pill bg-primary p-2 ms-2">
                   View all
                 </span>
@@ -138,9 +136,8 @@ class HeaderComponent extends Component<HeaderProps> {
                                     <hr className="dropdown-divider" />
                                 </li>
                                 <li className="message-item">
-                                    <a href="#">
+                                    <a href="/#">
                                         <img
-                                            src="assets/img/messages-1.jpg"
                                             alt=""
                                             className="rounded-circle"
                                         />
@@ -158,9 +155,8 @@ class HeaderComponent extends Component<HeaderProps> {
                                     <hr className="dropdown-divider" />
                                 </li>
                                 <li className="message-item">
-                                    <a href="#">
+                                    <a href="/#">
                                         <img
-                                            src="assets/img/messages-2.jpg"
                                             alt=""
                                             className="rounded-circle"
                                         />
@@ -178,9 +174,8 @@ class HeaderComponent extends Component<HeaderProps> {
                                     <hr className="dropdown-divider" />
                                 </li>
                                 <li className="message-item">
-                                    <a href="#">
+                                    <a href="/#">
                                         <img
-                                            src="assets/img/messages-3.jpg"
                                             alt=""
                                             className="rounded-circle"
                                         />
@@ -198,7 +193,7 @@ class HeaderComponent extends Component<HeaderProps> {
                                     <hr className="dropdown-divider" />
                                 </li>
                                 <li className="dropdown-footer">
-                                    <a href="#">Show all messages</a>
+                                    <a href="/#">Show all messages</a>
                                 </li>
                             </ul>
                             {/* End Messages Dropdown Items */}
@@ -207,11 +202,10 @@ class HeaderComponent extends Component<HeaderProps> {
                         <li className="nav-item dropdown pe-3">
                             <a
                                 className="nav-link nav-profile d-flex align-items-center pe-0"
-                                href="#"
+                                href="/#"
                                 data-bs-toggle="dropdown"
                             >
                                 <img
-                                    src="assets/img/profile-img.jpg"
                                     alt="Profile"
                                     className="rounded-circle"
                                 />
