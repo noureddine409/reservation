@@ -10,6 +10,8 @@ import naf.norsys.reservation.service.GenericService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -89,9 +91,12 @@ public class GenericServiceImpl<T extends GenericEntity> implements GenericServi
         try {
             genericRepository.deleteById(id);
             return true;
-        } catch (final BusinessException e) {
+        } catch (final EmptyResultDataAccessException e) {
             LOG.error("Error", e);
-            throw new BusinessException(null, e, CoreConstant.Exception.DELETE_ELEMENT, new Object[]{id});
+            throw new ElementNotFoundException(null, e, CoreConstant.Exception.NOT_FOUND, new Object[]{id});
+        }
+        catch (final DataAccessException ex) {
+            throw new BusinessException(null, ex, CoreConstant.Exception.DELETE_ELEMENT, new Object[]{id});
         }
     }
 
@@ -99,7 +104,7 @@ public class GenericServiceImpl<T extends GenericEntity> implements GenericServi
     public List<T> findAll() throws BusinessException {
         try {
             return genericRepository.findAll();
-        } catch (BusinessException e) {
+        } catch (DataAccessException e) {
             throw new BusinessException(null, e, CoreConstant.Exception.FIND_ELEMENTS, null);
         }
     }
