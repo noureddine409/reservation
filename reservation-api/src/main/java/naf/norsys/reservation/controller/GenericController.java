@@ -1,5 +1,7 @@
 package naf.norsys.reservation.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import naf.norsys.reservation.dto.GenericDto;
 import naf.norsys.reservation.dto.SearchDto;
 import naf.norsys.reservation.exception.BusinessException;
@@ -10,11 +12,11 @@ import naf.norsys.reservation.service.GenericService;
 import naf.norsys.reservation.utils.ClassTypeProvider;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import javax.validation.Valid;
 
 public abstract class GenericController <T extends GenericEntity, D extends GenericDto> {
     private final ModelMapper modelMapper;
@@ -41,44 +43,37 @@ public abstract class GenericController <T extends GenericEntity, D extends Gene
         return (D) modelMapper.map(entity, getClasses()[1]);
     }
 
-    protected List<D> convertListToDto(List<T> source, Class<D> targetClass) {
-        return source
-                .stream()
-                .map(element -> modelMapper.map(element, targetClass))
-                .collect(Collectors.toList());
-    }
-
-
     @PostMapping
-    public ResponseEntity<D> save(@RequestBody D dto) throws ElementAlreadyExistsException {
-        return null;
+    public ResponseEntity<D> save(@Valid @RequestBody D dto) throws ElementAlreadyExistsException {
+        T entity = convertToEntity(dto);
+        entity.setId(null);
+        T savedEntity = genericService.save(entity);
+        return new ResponseEntity<>(convertToDto(savedEntity), HttpStatus.CREATED);
     }
 
     @PostMapping("/search")
     public ResponseEntity<Page<D>> getAll(@RequestBody SearchDto dto) throws BusinessException {
+        // TODO add search end point logic
         return null;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<D> getById(@PathVariable("id") Long id) throws ElementNotFoundException {
-        return null;
+        return new ResponseEntity<>(convertToDto(genericService.findById(id)), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<D> update(@PathVariable("id") Long id, @RequestBody D dto) throws ElementNotFoundException {
-        return null;
+    public ResponseEntity<D> update(@PathVariable("id") Long id, @Valid @RequestBody D dto) throws ElementNotFoundException {
+        dto.setId(id);
+        T entity = genericService.update(id, convertToEntity(dto));
+        return new ResponseEntity<>(convertToDto(entity), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable("id") Long id) throws ElementNotFoundException {
-        return null;
+        return new ResponseEntity<>(genericService.delete(id), HttpStatus.OK);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<D> patch(@PathVariable(name = "id") Long id,
-                                   @RequestBody D dto) throws ElementNotFoundException {
-        return null;
-    }
 
 
 }

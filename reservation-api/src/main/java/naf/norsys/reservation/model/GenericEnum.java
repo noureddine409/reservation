@@ -9,6 +9,7 @@ public class GenericEnum {
 
 
     public enum ItemCategory {
-
+        APARTMENT,
+        VEHICULE
     }
 }
