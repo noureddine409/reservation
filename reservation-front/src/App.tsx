@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import {BrowserRouter as Router, Route, Routes, useLocation} from 'react-router-dom';
 import HomePage from './pages/Home';
 import HeaderComponent from "./components/Header";
-import SideBarComponent from "./components/SidBar";
+import SideBarComponent from "./components/SideBar";
 import AddProduct from "./pages/Product/Add";
 import ContactPage from './pages/Contact';
 import ProfilePage from './pages/Profile';

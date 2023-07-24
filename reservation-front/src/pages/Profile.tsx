@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
+
 const ProfilePage = () => {
     return (
         <main id="main" className="main">
