@@ -685,6 +685,8 @@
     padding: 3px 6px;
 }
 
+
+
 .header-nav .notifications {
     inset: 8px -15px auto auto !important;
 }
@@ -1037,5 +1039,19 @@ li a {
 
 .sidebar-nav .nav-content a.active i {
     background-color: #4154f1;
+}
+
+/*add product page*/
+
+button[type=submit] {
+    background: #4154f1;
+    border: 0;
+    padding: 10px 30px;
+    color: #fff;
+    transition: 0.4s;
+    border-radius: 4px;
+}
+.error-message {
+    color: #f53f3f;
 }
 

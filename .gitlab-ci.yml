@@ -1,6 +1,5 @@
 # Define the global images used for all jobs
 image: node:18  # Use a Docker image with Node.js pre-installed
-
 # Define the PostgreSQL service
 services:
   - name: postgres:latest
@@ -24,7 +23,7 @@ cache:
     - reservation-front/node_modules  # Cache npm dependencies
 
 maven_build:
-  image: maven:3.8.6-openjdk-18  # Specify the Maven Docker image with JDK 17
+  image: maven:3.8.6-openjdk-18  # Specify the Maven Docker image with JDK 18
   stage: build
   script:
     - cd reservation-api  # Change directory to the root of your Maven project
@@ -38,7 +37,8 @@ react_build:
     - npm run build
 
 test:
+  image: maven:3.8.6-openjdk-18  # Specify the Maven Docker image with JDK 18
   stage: test
   script:
     - cd reservation-api  # Run backend tests (if you have any)
-#   - mvn test -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository
+    - mvn test
