@@ -1,11 +1,8 @@
 package naf.norsys.reservation.model;
 
-
+import javax.persistence.Entity;
 import lombok.*;
 import javax.persistence.*;
-import javax.persistence.Entity;
-import java.time.LocalDateTime;
-
 
 @Getter
 @Setter
@@ -13,15 +10,14 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @Entity
-public class Reservation extends GenericEntity{
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+public class EvaluationComment extends GenericEntity {
 
+    private String comment;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
     @ManyToOne
+    @JoinColumn(name = "item_id")
     private Item item;
 
 }
-
