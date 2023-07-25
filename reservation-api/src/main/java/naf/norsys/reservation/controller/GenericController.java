@@ -1,22 +1,19 @@
 package naf.norsys.reservation.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import naf.norsys.reservation.dto.GenericDto;
-import naf.norsys.reservation.dto.SearchDto;
-import naf.norsys.reservation.exception.BusinessException;
 import naf.norsys.reservation.exception.ElementAlreadyExistsException;
 import naf.norsys.reservation.exception.ElementNotFoundException;
 import naf.norsys.reservation.model.GenericEntity;
 import naf.norsys.reservation.service.GenericService;
 import naf.norsys.reservation.utils.ClassTypeProvider;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class GenericController <T extends GenericEntity, D extends GenericDto> {
     private final ModelMapper modelMapper;
@@ -34,13 +31,19 @@ public abstract class GenericController <T extends GenericEntity, D extends Gene
         return classTypeProvider.getClasses(this, GenericController.class);
     }
     @SuppressWarnings("unchecked")
-    protected T convertToEntity(D dto) {
+    protected T convertToEntity(final D dto) {
         return (T) modelMapper.map(dto, getClasses()[0]);
     }
 
     @SuppressWarnings("unchecked")
-    protected D convertToDto(T entity) {
+    protected D convertToDto(final T entity) {
         return (D) modelMapper.map(entity, getClasses()[1]);
+    }
+
+    protected List<D> convertListToDto(final List<T> entities) {
+        return entities.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @PostMapping
@@ -49,12 +52,6 @@ public abstract class GenericController <T extends GenericEntity, D extends Gene
         entity.setId(null);
         T savedEntity = genericService.save(entity);
         return new ResponseEntity<>(convertToDto(savedEntity), HttpStatus.CREATED);
-    }
-
-    @PostMapping("/search")
-    public ResponseEntity<Page<D>> getAll(@RequestBody SearchDto dto) throws BusinessException {
-        // TODO add search end point logic
-        return null;
     }
 
     @GetMapping("/{id}")
