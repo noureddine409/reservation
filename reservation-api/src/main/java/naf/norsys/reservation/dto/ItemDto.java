@@ -1,17 +1,19 @@
 package naf.norsys.reservation.dto;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import naf.norsys.reservation.model.GenericEnum;
 import naf.norsys.reservation.model.User;
 
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class ItemDto extends GenericDto{
     @NotBlank
     private String name;
@@ -19,4 +21,13 @@ public class ItemDto extends GenericDto{
     private GenericEnum.ItemCategory category;
 
     private User createdBy;
+
+    @Builder
+    public ItemDto(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String name, String description, GenericEnum.ItemCategory category, User createdBy) {
+        super(id, createdAt, updatedAt);
+        this.name = name;
+        this.description = description;
+        this.category = category;
+        this.createdBy = createdBy;
+    }
 }

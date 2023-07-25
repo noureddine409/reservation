@@ -12,11 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -47,16 +45,7 @@ public class GenericServiceImpl<T extends GenericEntity> implements GenericServi
         return genericRepository.save(newEntity);
     }
 
-    @Override
-    public List<T> search(String keyword, Pageable pageable) throws BusinessException {
-        // TODO implement search service
-        return null;
-    }
 
-    @Override
-    public long countAll() {
-        return genericRepository.count();
-    }
 
     @Override
     public T findById(Long id) throws ElementNotFoundException {
@@ -101,11 +90,8 @@ public class GenericServiceImpl<T extends GenericEntity> implements GenericServi
     }
 
     @Override
-    public List<T> findAll() throws BusinessException {
-        try {
-            return genericRepository.findAll();
-        } catch (DataAccessException e) {
-            throw new BusinessException(null, e, CoreConstant.Exception.FIND_ELEMENTS, null);
-        }
+    public int getTotalPages(final int pageSize) {
+        final long count = genericRepository.count();
+        return (int) Math.ceil((double) count / pageSize) ;
     }
 }

@@ -1,5 +1,6 @@
 package naf.norsys.reservation.service;
 
+import naf.norsys.reservation.common.CoreConstant;
 import naf.norsys.reservation.exception.BusinessException;
 import naf.norsys.reservation.exception.ElementAlreadyExistsException;
 import naf.norsys.reservation.exception.ElementNotFoundException;
@@ -16,10 +17,15 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -226,6 +232,50 @@ public class ItemServiceTest {
 
         // Verify that there are no further interactions with the genericRepository
         verifyNoMoreInteractions(itemRepository);
+    }
+
+    @Test
+    public void testSearchByKeywordAndCategory() {
+        // Prepare test data
+        final String keyword = "Item";
+        final GenericEnum.ItemCategory category = GenericEnum.ItemCategory.APARTMENT;
+        int page = 0;
+        final int size = 10;
+        final Pageable pageable = PageRequest.of(page, size);
+
+
+        List<Item> expectedItems = Arrays.asList(
+                Item.builder().name("Item 1").category(GenericEnum.ItemCategory.APARTMENT).build(),
+                Item.builder().name("Item 3").category(GenericEnum.ItemCategory.APARTMENT).build()
+        );
+
+        // Mock the repository method
+        when(itemRepository.searchByKeywordAndCategory(keyword, category, pageable)).thenReturn(expectedItems);
+
+        // Perform the search
+        List<Item> result = itemService.search(keyword, category, page, size);
+
+        // Verify the result
+        assertThat(result).isEqualTo(expectedItems);
+    }
+
+    @Test
+    public void testSearchWithException() {
+        // Prepare test data
+        final String keyword = "InvalidKeyword";
+        final GenericEnum.ItemCategory category = GenericEnum.ItemCategory.VEHICULE;
+        final int page = 0;
+        final int size = 10;
+
+        // Mock the repository method to throw a DataAccessException
+        when(itemRepository.searchByKeywordAndCategory(any(), any(), any())).thenThrow(Mockito.mock(DataAccessException.class));
+
+        // Perform the search and expect BusinessException
+        BusinessException exception = org.junit.jupiter.api.Assertions.assertThrows(BusinessException.class,
+                () -> itemService.search(keyword, category, page, size));
+
+        // Verify the BusinessException
+        assertThat(exception.getKey()).isEqualTo(CoreConstant.Exception.FIND_ELEMENTS);
     }
 
 
