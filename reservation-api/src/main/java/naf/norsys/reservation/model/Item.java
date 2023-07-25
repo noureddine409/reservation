@@ -10,12 +10,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.*;
 import java.util.List;
 
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@Builder
-@AllArgsConstructor
 @Entity
 public class Item extends GenericEntity {
 
@@ -31,6 +30,13 @@ public class Item extends GenericEntity {
     private List<EvaluationComment> evaluationComments;
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations;
+
+    @Builder
+    public Item(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String name, String description, GenericEnum.ItemCategory category, User createdBy) {
+        super(id, createdAt, updatedAt);
+        this.name = name;
+        this.description = description;
+        this.category = category;
+        this.createdBy = createdBy;
+    }
 }
-
-
