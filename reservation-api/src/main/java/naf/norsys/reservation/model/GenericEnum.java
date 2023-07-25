@@ -6,10 +6,19 @@ public class GenericEnum {
         MALE,
         FEMALE
     }
+    public enum ItemStatus{
+       AVAILABLE,
+        UNAVAILABLE
 
+    }
 
     public enum ItemCategory {
         APARTMENT,
         VEHICULE
+    }
+
+    public enum RoleName {
+        USER,
+        ADMIN
     }
 }
