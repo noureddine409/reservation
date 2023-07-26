@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "Reservation Management", description = "Web services for Reservation Management")
 public class ReservationController extends GenericController<Reservation, ReservationDto>{
 
-
     public ReservationController(ModelMapper modelMapper, ClassTypeProvider classTypeProvider, GenericService<Reservation> genericService) {
         super(modelMapper, classTypeProvider, genericService);
     }
