@@ -1,6 +1,6 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import React from 'react';
-import {ERROR_MESSAGES} from "../../common/constants";
+import {ERROR_MESSAGES,VALIDATION_RULES} from "../../common/constants";
 
 interface FormData {
     productName: string;
@@ -33,7 +33,7 @@ const AddProduct= () => {
                                 Product Name
                             </label>
                             <input
-                                className="form-control"
+                                className={`form-control ${errors.productName ? 'is-invalid' : ''}`}
                                 placeholder="Product name"
                                 {...register('productName', { required: true })}
                             />
@@ -45,7 +45,7 @@ const AddProduct= () => {
                                 Description
                             </label>
                             <textarea
-                                className="form-control"
+                                className={`form-control ${errors.description ? 'is-invalid' : ''}`}
                                 placeholder="Description "
                                 {...register('description', { required: true })}
                                 rows={5}
@@ -56,7 +56,8 @@ const AddProduct= () => {
                         <div>
                             <label htmlFor="productImage">Image of Product</label>
                             <input
-                                className="form-control"
+                                className={`form-control ${errors.productImage ? 'is-invalid' : ''}`}
+
                                 type="file"
                                 id="productImage"
                                 {...register('productImage', { required: true })}
