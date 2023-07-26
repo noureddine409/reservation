@@ -74,11 +74,12 @@ public class ItemControllerTest {
                     .build();
         });
         // Prepare request DTO
-        SearchItemDto searchItemDto = new SearchItemDto();
-        searchItemDto.setKeyword("Item");
-        searchItemDto.setCategory(GenericEnum.ItemCategory.APARTMENT);
-        searchItemDto.setPage(0);
-        searchItemDto.setSize(10);
+        SearchItemDto searchItemDto = SearchItemDto.builder()
+                .keyword("Item")
+                .category(GenericEnum.ItemCategory.APARTMENT)
+                .page(0)
+                .size(10)
+                .build();
 
         // Perform the request
         MvcResult mvcResult = mockMvc.perform(post("/api/v1/items/search")

@@ -1,8 +1,11 @@
 package naf.norsys.reservation.model;
 
 import lombok.*;
-import javax.persistence.*;
-import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 @Getter
 @Setter
@@ -13,10 +16,10 @@ import java.util.List;
 public class Role extends GenericEntity {
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, unique = true)
     private GenericEnum.RoleName name;
 
-     @OneToMany(mappedBy = "role")
-     private List<User> users;
+
 
 }
 

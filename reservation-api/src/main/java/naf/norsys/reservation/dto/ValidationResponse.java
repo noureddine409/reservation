@@ -2,8 +2,7 @@ package naf.norsys.reservation.dto;
 
 import lombok.*;
 
-@Getter
-@Setter
+@Getter @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

@@ -61,7 +61,6 @@ public abstract class GenericController <T extends GenericEntity, D extends Gene
 
     @PutMapping("/{id}")
     public ResponseEntity<D> update(@PathVariable("id") Long id, @Valid @RequestBody D dto) throws ElementNotFoundException {
-        dto.setId(id);
         T entity = genericService.update(id, convertToEntity(dto));
         return new ResponseEntity<>(convertToDto(entity), HttpStatus.OK);
     }
