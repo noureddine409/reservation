@@ -10,8 +10,7 @@ import java.util.Objects;
 import static naf.norsys.reservation.common.CoreConstant.Exception.*;
 import static naf.norsys.reservation.common.CoreConstant.Pagination.*;
 
-@Setter
-@AllArgsConstructor
+@AllArgsConstructor @Setter
 @NoArgsConstructor
 @Builder
 public class SearchItemDto {

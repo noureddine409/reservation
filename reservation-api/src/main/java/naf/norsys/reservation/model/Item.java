@@ -26,9 +26,9 @@ public class Item extends GenericEntity {
     @OneToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "created_by_id")
     private User createdBy;
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<EvaluationComment> evaluationComments;
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<Reservation> reservations;
 
     @Builder

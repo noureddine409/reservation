@@ -21,6 +21,7 @@ public class Reservation extends GenericEntity{
     @JoinColumn(name = "user_id")
     private User user;
     @ManyToOne
+    @JoinColumn(name = "item_id")
     private Item item;
 
 }

@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import naf.norsys.reservation.model.GenericEnum;
-import naf.norsys.reservation.model.User;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -20,10 +19,10 @@ public class ItemDto extends GenericDto{
     private String description;
     private GenericEnum.ItemCategory category;
 
-    private User createdBy;
+    private UserDto createdBy;
 
     @Builder
-    public ItemDto(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String name, String description, GenericEnum.ItemCategory category, User createdBy) {
+    public ItemDto(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String name, String description, GenericEnum.ItemCategory category, UserDto createdBy) {
         super(id, createdAt, updatedAt);
         this.name = name;
         this.description = description;
