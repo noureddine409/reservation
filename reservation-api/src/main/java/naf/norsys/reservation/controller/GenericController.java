@@ -69,7 +69,4 @@ public abstract class GenericController <T extends GenericEntity, D extends Gene
     public ResponseEntity<Boolean> delete(@PathVariable("id") Long id) throws ElementNotFoundException {
         return new ResponseEntity<>(genericService.delete(id), HttpStatus.OK);
     }
-
-
-
 }
