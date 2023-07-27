@@ -28,18 +28,13 @@ public class ReservationServiceImpl extends GenericServiceImpl<Reservation> impl
         final Long reservationId = reservation.getItem().getId();
         final LocalDateTime startDate = reservation.getStartDate();
         final LocalDateTime endDate = reservation.getEndDate();
-        final boolean available = checkAvailability(reservationId, startDate, endDate);
+        final boolean available = reservationRepository.checkAvailability(reservationId, startDate, endDate);
         if (!available) {
             throw new ItemAvailabilityException(null, new ItemAvailabilityException(),
                     CoreConstant.Exception.NOT_AVAILABLE, new Object[]{reservationId,
                     startDate,
                     endDate});
-
         }
-        return super.save(reservation);
-    }
-
-    private Boolean checkAvailability(Long itemId, LocalDateTime startDate, LocalDateTime endDate) {
-        return reservationRepository.checkAvailability(itemId, startDate, endDate);
+        return reservationRepository.save(reservation);
     }
 }
