@@ -25,13 +25,13 @@ public class ReservationServiceImpl extends GenericServiceImpl<Reservation> impl
 
     @Override
     public Reservation save(Reservation reservation) throws ElementAlreadyExistsException {
-        final Long reservationId = reservation.getItem().getId();
+        final Long itemId = reservation.getItem().getId();
         final LocalDateTime startDate = reservation.getStartDate();
         final LocalDateTime endDate = reservation.getEndDate();
-        final boolean available = reservationRepository.checkAvailability(reservationId, startDate, endDate);
+        boolean available = reservationRepository.checkAvailability(itemId, startDate, endDate);
         if (!available) {
             throw new ItemAvailabilityException(null, new ItemAvailabilityException(),
-                    CoreConstant.Exception.NOT_AVAILABLE, new Object[]{reservationId,
+                    CoreConstant.Exception.NOT_AVAILABLE, new Object[]{itemId,
                     startDate,
                     endDate});
         }

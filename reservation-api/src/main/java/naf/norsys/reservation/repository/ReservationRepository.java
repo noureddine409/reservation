@@ -12,7 +12,6 @@ public interface ReservationRepository extends GenericRepository<Reservation> {
     default Specification<Reservation> existingReservations(Long itemId, LocalDateTime startDate, LocalDateTime endDate) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.and(
                 criteriaBuilder.equal(root.get("item").get("id"), itemId),
-                criteriaBuilder.equal(root.get("item").get("status"), AVAILABLE),
                 criteriaBuilder.or(
                         criteriaBuilder.between(root.get("startDate"), startDate, endDate),
                         criteriaBuilder.between(root.get("endDate"), startDate, endDate)
