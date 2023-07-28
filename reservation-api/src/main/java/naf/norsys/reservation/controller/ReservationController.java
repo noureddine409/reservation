@@ -14,6 +14,7 @@ import naf.norsys.reservation.utils.ClassTypeProvider;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,8 +38,9 @@ public class ReservationController extends GenericController<Reservation, Reserv
     }
 
     @Override
+    @PostMapping
     public ResponseEntity<ReservationDto> save(@RequestBody ReservationDto dto) throws ElementAlreadyExistsException {
-        final Item item = itemService.findById(dto.getItem().getId());
+        final Item item = itemService.checkItemStatus(dto.getItem().getId());
         final User user = userService.findById(dto.getUser().getId());
         Reservation reservationEntity = convertToEntity(dto);
         reservationEntity.setUser(user);

@@ -82,7 +82,7 @@ public class ReservationControllerTest {
                 .andReturn();
 
         // Verify that the services were called with the correct arguments
-        verify(itemService, times(1)).findById(1L);
+        verify(itemService, times(1)).checkItemStatus(1L);
         verify(userService, times(1)).findById(1L);
         verify(reservationService, times(1)).save(any(Reservation.class));
     }
