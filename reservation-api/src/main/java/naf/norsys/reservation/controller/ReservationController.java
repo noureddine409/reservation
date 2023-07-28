@@ -2,6 +2,7 @@ package naf.norsys.reservation.controller;
 
 import io.swagger.annotations.Api;
 import naf.norsys.reservation.dto.ReservationDto;
+import naf.norsys.reservation.dto.ReservationSearchDto;
 import naf.norsys.reservation.exception.ElementAlreadyExistsException;
 import naf.norsys.reservation.model.Item;
 import naf.norsys.reservation.model.Reservation;
@@ -18,6 +19,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/reservations")
@@ -46,5 +50,14 @@ public class ReservationController extends GenericController<Reservation, Reserv
         reservationEntity.setUser(user);
         reservationEntity.setItem(item);
         return new ResponseEntity<>(convertToDto(reservationService.save(reservationEntity)), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<List<ReservationDto>> search(@RequestBody @Valid ReservationSearchDto dto) {
+        final List<Reservation> reservations = reservationService.findByTimeSlot(dto.getItemId(),
+                dto.getPeriod().getStart(), dto.getPeriod().getEnd());
+        final List<ReservationDto> reservationDtoList = convertListToDto(reservations);
+
+        return new ResponseEntity<>(reservationDtoList, HttpStatus.OK);
     }
 }
