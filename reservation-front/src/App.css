@@ -1054,4 +1054,20 @@ button[type=submit] {
 .error-message {
     color: #f53f3f;
 }
+.button-container {
+    position: relative; /* Le parent doit être positionné pour que 'position: absolute' fonctionne correctement */
+    gap: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+.right-button {
+    position:  absolute ; /* Use 'absolute' if you want the button to be positioned relative to its closest positioned ancestor */ /* Adjust the value to move the button horizontally */
+    bottom: 20px; /* Adjust the value to move the button vertically */
+    right: 10px;
 
+}
+.full-width-image {
+    grid-column: 1 / -1;
+    width: 100%;
+    height: auto;
+}

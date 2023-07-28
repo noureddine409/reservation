@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 type CardProps = {
     item: {
         imgSrc: string;
@@ -25,7 +26,7 @@ export const Card = ({
                         <p className="card-text">
                             {item.description}
                         </p>
-                        <a href="/#" className="btn btn-primary">Reserver</a>
+                        <Link to="/product-details" className="btn btn-primary">Reserver</Link>
                     </div>
                 </div>
             </div>
