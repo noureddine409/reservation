@@ -2,10 +2,12 @@ package naf.norsys.reservation.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import naf.norsys.reservation.dto.ItemDto;
+import naf.norsys.reservation.dto.PeriodDto;
 import naf.norsys.reservation.dto.ReservationDto;
 import naf.norsys.reservation.dto.UserDto;
 import naf.norsys.reservation.model.Item;
 import naf.norsys.reservation.model.Reservation;
+import naf.norsys.reservation.model.ReservationPeriod;
 import naf.norsys.reservation.model.User;
 import naf.norsys.reservation.service.ItemService;
 import naf.norsys.reservation.service.ReservationService;
@@ -77,8 +79,8 @@ public class ReservationControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.item.id").value(dto.getItem().getId()))
                 .andExpect(jsonPath("$.user.id").value(dto.getUser().getId()))
-                .andExpect(jsonPath("$.startDate").value(dto.getStartDate().toString()))
-                .andExpect(jsonPath("$.endDate").value(dto.getEndDate().toString()))
+                .andExpect(jsonPath("$.period.startDate").value(dto.getPeriod().getStartDate().toString()))
+                .andExpect(jsonPath("$.period.endDate").value(dto.getPeriod().getEndDate().toString()))
                 .andReturn();
 
         // Verify that the services were called with the correct arguments
@@ -95,8 +97,11 @@ public class ReservationControllerTest {
         return ReservationDto.builder()
                 .user(user)
                 .item(item)
-                .startDate(LocalDateTime.of(2023, 8, 1, 12, 0))
-                .endDate(LocalDateTime.of(2023, 8, 10, 12, 0))
+                .period(PeriodDto.builder()
+                        .startDate(LocalDateTime.of(2023, 8, 1, 12, 0))
+                        .endDate(LocalDateTime.of(2023, 8, 10, 12, 0))
+                        .build())
+
                 .build();
     }
 
@@ -116,8 +121,10 @@ public class ReservationControllerTest {
                     .id(reservationDto.getId())
                     .user(User.builder().id(reservationDto.getUser().getId()).build())
                     .item(Item.builder().id(reservationDto.getUser().getId()).build())
-                    .startDate(reservationDto.getStartDate())
-                    .endDate(reservationDto.getEndDate())
+                    .period(ReservationPeriod.builder()
+                            .startDate(reservationDto.getPeriod().getStartDate())
+                            .endDate(reservationDto.getPeriod().getEndDate())
+                            .build())
                     .build();
         });
 
@@ -127,8 +134,11 @@ public class ReservationControllerTest {
                     .id(reservation.getId())
                     .user(UserDto.builder().id(1L).email("John@domain.me").build())
                     .item(ItemDto.builder().id(1L).name("Item A").build())
-                    .startDate(reservation.getStartDate())
-                    .endDate(reservation.getEndDate())
+                    .period(PeriodDto.builder()
+                            .startDate(reservation.getPeriod().getStartDate())
+                            .endDate(reservation.getPeriod().getEndDate())
+                            .build())
+
                     .build();
         });
 
@@ -136,8 +146,10 @@ public class ReservationControllerTest {
                 .id(1L)
                 .item(item)
                 .user(user)
-                .startDate(LocalDateTime.of(2023, 8, 1, 12, 0))
-                .endDate(LocalDateTime.of(2023, 8, 10, 12, 0))
+                .period(ReservationPeriod.builder()
+                        .startDate(LocalDateTime.of(2023, 8, 1, 12, 0))
+                        .endDate(LocalDateTime.of(2023, 8, 10, 12, 0))
+                        .build())
                 .build();
         savedReservation.setId(1L);
         savedReservation.setUser(user);

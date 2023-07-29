@@ -1,7 +1,11 @@
 package naf.norsys.reservation.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import naf.norsys.reservation.validation.AfterCurrentDate;
+import naf.norsys.reservation.validation.ValidPeriod;
 
 import java.time.LocalDateTime;
 
@@ -9,18 +13,16 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 public class ReservationDto extends GenericDto {
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime startDate;
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime endDate;
+    @ValidPeriod
+    @AfterCurrentDate
+    private PeriodDto period;
     private ItemDto item;
     private UserDto user;
 
     @Builder
-    public ReservationDto(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime startDate, LocalDateTime endDate, ItemDto item, UserDto user) {
+    public ReservationDto(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, PeriodDto period, ItemDto item, UserDto user) {
         super(id, createdAt, updatedAt);
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.period = period;
         this.item = item;
         this.user = user;
     }

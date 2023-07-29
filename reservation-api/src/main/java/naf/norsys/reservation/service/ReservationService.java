@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface ReservationService extends GenericService<Reservation>{
 
-    List<Reservation> findByTimeSlot(Long itemId, LocalDateTime start, LocalDateTime end) ;
+    List<Reservation> findByItemAndTimeSlot(Long itemId, LocalDateTime start, LocalDateTime end) ;
 
+    List<Reservation> findByUserAndTimeSlot(Long userId, LocalDateTime startDate, LocalDateTime endDate);
 }
