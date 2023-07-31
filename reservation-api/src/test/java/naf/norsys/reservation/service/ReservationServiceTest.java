@@ -5,6 +5,7 @@ import naf.norsys.reservation.exception.ElementAlreadyExistsException;
 import naf.norsys.reservation.exception.ItemAvailabilityException;
 import naf.norsys.reservation.model.Item;
 import naf.norsys.reservation.model.Reservation;
+import naf.norsys.reservation.model.ReservationPeriod;
 import naf.norsys.reservation.model.User;
 import naf.norsys.reservation.repository.ReservationRepository;
 import naf.norsys.reservation.service.impl.ReservationServiceImpl;
@@ -54,8 +55,10 @@ public class ReservationServiceTest {
                 .build();
 
         reservation = Reservation.builder()
-                .startDate(LocalDateTime.of(2023, 7, 1, 12, 0))
-                .endDate(LocalDateTime.of(2023, 7, 10, 12, 0))
+                .period(ReservationPeriod.builder()
+                        .startDate(LocalDateTime.of(2023, 7, 1, 12, 0))
+                        .endDate(LocalDateTime.of(2023, 7, 10, 12, 0))
+                        .build())
                 .user(user)
                 .item(item)
                 .build();
@@ -75,8 +78,8 @@ public class ReservationServiceTest {
 
         // Assert
         assertNotNull(savedReservation);
-        assertEquals(reservation.getStartDate(), savedReservation.getStartDate());
-        assertEquals(reservation.getEndDate(), savedReservation.getEndDate());
+        assertEquals(reservation.getPeriod().getStartDate(), savedReservation.getPeriod().getStartDate());
+        assertEquals(reservation.getPeriod().getEndDate(), savedReservation.getPeriod().getEndDate());
         assertEquals(reservation.getUser(), savedReservation.getUser());
         assertEquals(reservation.getItem(), savedReservation.getItem());
 

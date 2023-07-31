@@ -8,9 +8,11 @@ import naf.norsys.reservation.repository.GenericRepository;
 import naf.norsys.reservation.repository.ReservationRepository;
 import naf.norsys.reservation.service.ReservationService;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Service
@@ -26,8 +28,8 @@ public class ReservationServiceImpl extends GenericServiceImpl<Reservation> impl
     @Override
     public Reservation save(Reservation reservation) throws ElementAlreadyExistsException {
         final Long itemId = reservation.getItem().getId();
-        final LocalDateTime startDate = reservation.getStartDate();
-        final LocalDateTime endDate = reservation.getEndDate();
+        final LocalDateTime startDate = reservation.getPeriod().getStartDate();
+        final LocalDateTime endDate = reservation.getPeriod().getEndDate();
         boolean available = reservationRepository.checkAvailability(itemId, startDate, endDate);
         if (!available) {
             throw new ItemAvailabilityException(null, new ItemAvailabilityException(),
@@ -37,4 +39,15 @@ public class ReservationServiceImpl extends GenericServiceImpl<Reservation> impl
         }
         return reservationRepository.save(reservation);
     }
+
+    @Override
+    public List<Reservation> findByItemAndTimeSlot(Long itemId, LocalDateTime start, LocalDateTime end) {
+        Specification<Reservation> reservationSpecification = reservationRepository.existingReservationsByItem(itemId, start, end);
+        return reservationRepository.findAll(reservationSpecification);
+    }
+
+    @Override
+    public List<Reservation> findByUserAndTimeSlot(Long userId, LocalDateTime startDate, LocalDateTime endDate) {
+        Specification<Reservation> reservationSpecification = reservationRepository.existingReservationsByUser(userId, startDate, endDate);
+        return reservationRepository.findAll(reservationSpecification);    }
 }

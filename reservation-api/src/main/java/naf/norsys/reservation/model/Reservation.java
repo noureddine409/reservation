@@ -3,6 +3,7 @@ package naf.norsys.reservation.model;
 
 import lombok.*;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -14,10 +15,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Reservation extends GenericEntity{
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+public class Reservation extends GenericEntity {
 
+    @Embedded
+    private ReservationPeriod period;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -26,10 +27,9 @@ public class Reservation extends GenericEntity{
     private Item item;
 
     @Builder
-    public Reservation(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime startDate, LocalDateTime endDate, User user, Item item) {
+    public Reservation(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, ReservationPeriod period, User user, Item item) {
         super(id, createdAt, updatedAt);
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.period = period;
         this.user = user;
         this.item = item;
     }

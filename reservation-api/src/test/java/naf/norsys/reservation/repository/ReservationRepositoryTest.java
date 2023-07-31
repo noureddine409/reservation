@@ -1,6 +1,8 @@
 package naf.norsys.reservation.repository;
+
 import naf.norsys.reservation.model.Item;
 import naf.norsys.reservation.model.Reservation;
+import naf.norsys.reservation.model.ReservationPeriod;
 import naf.norsys.reservation.model.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,15 +54,19 @@ class ReservationRepositoryTest {
         item = itemRepository.save(item);
 
         Reservation reservation1 = Reservation.builder()
-                .startDate(LocalDateTime.of(2023, 7, 1, 12, 0))
-                .endDate(LocalDateTime.of(2023, 7, 10, 12, 0))
+                .period(ReservationPeriod.builder()
+                        .startDate(LocalDateTime.of(2023, 7, 1, 12, 0))
+                        .endDate(LocalDateTime.of(2023, 7, 10, 12, 0))
+                        .build())
                 .user(user)
                 .item(item)
                 .build();
 
         Reservation reservation2 = Reservation.builder()
-                .startDate(LocalDateTime.of(2023, 8, 1, 12, 0))
-                .endDate(LocalDateTime.of(2023, 8, 10, 12, 0))
+                .period(ReservationPeriod.builder()
+                        .startDate(LocalDateTime.of(2023, 8, 1, 12, 0))
+                        .endDate(LocalDateTime.of(2023, 8, 10, 12, 0))
+                        .build())
                 .user(user)
                 .item(item)
                 .build();
@@ -74,7 +80,7 @@ class ReservationRepositoryTest {
         Long itemId1 = item.getId();
         LocalDateTime startDate1 = LocalDateTime.of(2023, 7, 5, 12, 0);
         LocalDateTime endDate1 = LocalDateTime.of(2023, 7, 15, 12, 0);
-        Specification<Reservation> specification1 = reservationRepository.existingReservations(itemId1, startDate1, endDate1);
+        Specification<Reservation> specification1 = reservationRepository.existingReservationsByItem(itemId1, startDate1, endDate1);
         List<Reservation> reservations1 = reservationRepository.findAll(specification1);
         Assertions.assertEquals(1, reservations1.size());
 
@@ -82,7 +88,7 @@ class ReservationRepositoryTest {
         Long itemId2 = item.getId();
         LocalDateTime startDate2 = LocalDateTime.of(2023, 9, 5, 12, 0);
         LocalDateTime endDate2 = LocalDateTime.of(2023, 9, 15, 12, 0);
-        Specification<Reservation> specification2 = reservationRepository.existingReservations(itemId2, startDate2, endDate2);
+        Specification<Reservation> specification2 = reservationRepository.existingReservationsByItem(itemId2, startDate2, endDate2);
         List<Reservation> reservations2 = reservationRepository.findAll(specification2);
         Assertions.assertEquals(0, reservations2.size());
     }
