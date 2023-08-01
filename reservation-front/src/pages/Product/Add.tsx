@@ -1,8 +1,8 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import React from 'react';
-import { ERROR_MESSAGES } from "../../common/constants";
 import axios from 'axios';
 import {Item} from "../../model/item.model";
+import {ERROR_MESSAGES} from "../../common/constants";
 
 interface FormData {
     productName: string;
@@ -25,7 +25,8 @@ const AddProduct = () => {
             const item: Item = {
                 name: data.productName,
                 description:data.description,
-                image:data.productImage,
+                status: "AVAILABLE",
+                // image:data.productImage,
                 category:"APARTMENT",
             }
 
