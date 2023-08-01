@@ -30,6 +30,12 @@ public class ItemServiceImpl extends GenericServiceImpl<Item> implements ItemSer
     }
 
     @Override
+    public List<Item> findByUser(Long userId, int page, int size) {
+        final Pageable pageable = PageRequest.of(page, size);
+        return itemRepository.findAll(pageable).toList();
+    }
+
+    @Override
     public List<Item> search(String keyword, GenericEnum.ItemCategory category, int page, int size) throws BusinessException {
         try {
             Pageable pageable = PageRequest.of(page, size);
