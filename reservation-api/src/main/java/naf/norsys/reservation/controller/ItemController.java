@@ -13,10 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -47,6 +44,14 @@ public class ItemController extends GenericController<Item, ItemDto> {
         headers.add("Access-Control-Expose-Headers", "X-Total-Pages");
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(responseDto);
     }
+    @GetMapping
+    public ResponseEntity<List<ItemDto>> findByUser(@RequestParam int page, int size) throws BusinessException {
+        List<Item> items = itemService.findByUser(null, page, size);
+        return new ResponseEntity<>(convertListToDto(items), HttpStatus.OK);
+    }
+
+
+
 
 
 }

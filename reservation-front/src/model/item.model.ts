@@ -6,5 +6,5 @@ export interface Item extends GenericModel {
     description: string;
     category: string;
     status: string;
-    createdBy: User | null;
+    createdBy?: User | null;
 }

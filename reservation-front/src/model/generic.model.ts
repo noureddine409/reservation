@@ -1,5 +1,5 @@
 export interface GenericModel {
-    id: number;
-    createdAt: string;
+    id?: number;
+    createdAt?: string;
     updatedAt?: string;
 }

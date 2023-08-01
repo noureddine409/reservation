@@ -14,4 +14,5 @@ public interface ItemService extends GenericService<Item> {
 
     Item checkItemStatus(Long itemId) throws ItemAvailabilityException ;
 
+    List<Item> findByUser(Long userId, int page, int size);
 }

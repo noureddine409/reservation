@@ -12,6 +12,7 @@ import RegisterPage from './pages/Register';
 import ForgetPassword from './pages/ForgotPassword';
 import ErrorPage from './pages/Error';
 import SearchProductPage from "./pages/Product/Search";
+import ShowProduct from "./pages/Product/ShowProduct";
 import ProductDetails from "./pages/Product/ProductDetails";
 
 
@@ -44,8 +45,7 @@ const AppContent: React.FC<AppContentProps> = ({ toggleSideBar }) => {
 
     const shouldDisplayHeaderAndSidebar = () => {
         const { pathname } = location;
-        const allowedURLs = ['/', '/home',"/product-details", '/contact', '/f-a-q', '/profile', '/add-product', '/search-product'];
-
+        const allowedURLs = ['/', '/home', "/product-details",'/contact', '/f-a-q', '/profile', '/add-product', '/search-product','/show-product'];
         return allowedURLs.includes(pathname);
     };
 
@@ -60,6 +60,7 @@ const AppContent: React.FC<AppContentProps> = ({ toggleSideBar }) => {
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/add-product" element={<AddProduct/>} />
+                <Route path="/show-product" element={<ShowProduct/>} />
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/login" element={<LoginPage />} />
