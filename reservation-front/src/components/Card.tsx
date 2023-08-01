@@ -1,7 +1,7 @@
 import React from "react";
 type CardProps = {
     item: {
-        imgSrc: string;
+
         name: string;
         description: string;
         category: string;
@@ -16,11 +16,9 @@ export const Card = ({
 
         <div className="card mb-3">
             <div className="row g-0">
-                <div className="col-md-40">
-                    <img src={item.imgSrc} className="img-fluid rounded-start" alt={item.name} />
-                </div>
+
                 <div className="col-md-8">
-                    <div className="card-body">
+                    <div className="card-body" style={{ height: "150px" }}>
                         <h5 className="card-title">{item.name}</h5>
                         <p className="card-text">
                             {item.description}
