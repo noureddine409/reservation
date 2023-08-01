@@ -30,9 +30,9 @@ const SideBarComponent = () => {
                         data-bs-parent="#sidebar-nav"
                     >
                         <li>
-                            <Link to="/add-product">
+                            <Link to="/show-product">
                                 <i className="bi bi-circle"/>
-                                <span>Add product</span>
+                                <span>My Product</span>
                             </Link>
                         </li>
                         <li>
