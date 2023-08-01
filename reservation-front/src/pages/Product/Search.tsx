@@ -1,6 +1,6 @@
-import { Card } from "../../components/Card";
-import React, { useState, useEffect } from "react";
-import Select, { SingleValue } from "react-select";
+import {Card} from "../../components/Card";
+import React, {useEffect, useState} from "react";
+import Select, {SingleValue} from "react-select";
 import '../../App.css';
 import {
     DEFAULT_PAGE_NUMBER,
@@ -26,17 +26,25 @@ interface SearchParameter {
     totalPages: number
 }
 
-interface SearchDto {
-    keyword: string;
-    category: string | null;
-    page: number;
-    size: number;
+// interface SearchDto {
+//     keyword: string;
+//     category: string | null;
+//     page: number;
+//     size: number;
+// }
+
+interface Item {
+    id?: number
+    name: string,
+    description: string,
+    category: string,
+    status: string
 }
 
 
 
 const SearchProductPage = () => {
-    const [items,setItems]=useState([])
+    const [items,setItems]=useState<Item[]>([])
     const [searchParameter, setSearchParameter] = useState<SearchParameter>(
         {
             keyword: DEFAULT_SEARCH_KEYWORD,
@@ -47,32 +55,42 @@ const SearchProductPage = () => {
         }
     );
 
-    useEffect(() => {
-        const reqBody = {
-            keyword: searchParameter.keyword,
-            category: searchParameter.category.value,
-            page: searchParameter.page - 1,
-            size: searchParameter.size
-        }
-        handleSearch(reqBody);
-      }, []);
-
-    const handleSearch = async (reqBody: SearchDto) => {
+    const search = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/api/v1/items/search',reqBody , {
+            const reqBody = {
+                keyword: searchParameter.keyword,
+                category: searchParameter.category?.value,
+                page: searchParameter.page - 1,
+                size: searchParameter.size,
+            };
+            const response = await axios.post('http://localhost:8080/api/v1/items/search', reqBody, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
-            setItems(response.data);
-            setSearchParameter({
-                ...searchParameter,
-                totalPages: response.headers["x-total-pages"]
-            })
+            // Return the response data
+            return response;
         } catch (error) {
             console.error('Error fetching items:', error);
+            throw error; // Rethrow the error so that the calling code can handle it
         }
     };
+
+    useEffect(() => {
+        // Call the API whenever there's a change in the search parameters
+        search()
+            .then((response) => {
+                // Execute these updates after receiving the response
+                setItems(response.data);
+                setSearchParameter((prevSearchParam) => ({
+                    ...prevSearchParam,
+                    totalPages: response.headers["x-total-pages"],
+                }));
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [searchParameter.page, searchParameter.keyword, searchParameter.category]);
     const SearchHandleChange = (event: React.FormEvent<HTMLInputElement>) => {
         const keyword = event.currentTarget.value;
         setSearchParameter({
@@ -93,24 +111,14 @@ const SearchProductPage = () => {
         }
     }
 
-    const lastIndex = searchParameter.page * searchParameter.size;
-    const firstIndex = lastIndex - searchParameter.size;
 
     function previousPage() {
         if (searchParameter.page > 1) {
-            const page = searchParameter.page - 1
             setSearchParameter({
                 ...searchParameter,
                 page: searchParameter.page - 1,
             });
-            const reqBody = {
-                keyword: searchParameter.keyword,
-                category: searchParameter.category.value,
-                page: page ,
-                size: searchParameter.size
             }
-            handleSearch(reqBody)
-        }
     }
 
     const changeCurrentPage = (pageNumber: number) => {
@@ -145,9 +153,7 @@ const SearchProductPage = () => {
         }
 
         // Create an array of page numbers using Array.from and the map function
-        const pageNumbers = Array.from({ length: endPage - startPage + 1 }, (_, index) => startPage + index);
-
-        return pageNumbers;
+        return Array.from({length: endPage - startPage + 1}, (_, index) => startPage + index);
     };
 
 
@@ -188,9 +194,8 @@ const SearchProductPage = () => {
                     <div className="row">
                         {/* Use filteredData instead of data in the mapping */}
                         {items
-                            .slice(firstIndex, lastIndex)
-                            .map((item, index) => (
-                                <div key={index} className="col-md-4">
+                            .map((item) => (
+                                <div key={item.id!} className="col-md-4">
                                     {/* Custom card styles to ensure fixed size and text overflow */}
                                     <div className="card-container">
                                         <Card item={item} />
@@ -203,7 +208,7 @@ const SearchProductPage = () => {
             <nav>
                 <ul className="pagination">
                     <li className="page-item">
-                        <a className="page-link" onClick={previousPage}>
+                        <a href="#/" className="page-link" onClick={previousPage}>
                             Previous
                         </a>
                     </li>
@@ -212,13 +217,13 @@ const SearchProductPage = () => {
                             className={`page-item ${searchParameter.page === pageNumber ? "active" : ""}`}
                             key={pageNumber}
                         >
-                            <a className="page-link" onClick={() => changeCurrentPage(pageNumber)}>
+                            <a href="#/" className="page-link" onClick={() => changeCurrentPage(pageNumber)}>
                                 {pageNumber}
                             </a>
                         </li>
                     ))}
                     <li className="page-item">
-                        <a className="page-link" onClick={nextPage}>
+                        <a href="#/" className="page-link" onClick={nextPage}>
                             Next
                         </a>
                     </li>
