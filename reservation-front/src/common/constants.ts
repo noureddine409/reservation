@@ -21,17 +21,10 @@ export const VALIDATION_RULES = {
 
 
 export const options = [
+    {value: null, label: "All Categories"},
     { value: 'APARTMENT', label: 'Apartment' },
-    { value: 'VEHICULE', label: 'vehicule' },
+    { value: 'VEHICULE', label: 'vehicule' }
 ];
-
-export const categoryMap = new Map (
-    [
-        ['Apartment', 'APARTMENT'],
-        ['vehicule','VEHICULE'],
-        ['All Category',null]
-    ]
-)
 
 export const DEFAULT_SEARCH_KEYWORD = ""
 export const DEFAULT_SEARCH_CATEGORY = {

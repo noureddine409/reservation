@@ -22,4 +22,9 @@ interface Period {
     endDate: string;
 }
 
+export interface SelectedCategory {
+    label: string
+    value: string|null
+}
+
 

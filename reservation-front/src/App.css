@@ -1071,3 +1071,9 @@ button[type=submit] {
     width: 100%;
     height: auto;
 }
+
+.page-link:hover {
+    color: #717ff5;
+    text-decoration: none;
+    cursor: pointer;
+}
