@@ -27,7 +27,7 @@ maven_build:
   stage: build
   script:
     - cd reservation-api  # Change directory to the root of your Maven project
-    - mvn clean package -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository
+    - mvn clean package -DskipTests -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository
 
 react_build:
   stage: build

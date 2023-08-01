@@ -2,6 +2,8 @@ package naf.norsys.reservation.service.impl;
 
 import naf.norsys.reservation.common.CoreConstant;
 import naf.norsys.reservation.exception.BusinessException;
+import naf.norsys.reservation.exception.ElementNotFoundException;
+import naf.norsys.reservation.exception.ItemAvailabilityException;
 import naf.norsys.reservation.model.GenericEnum;
 import naf.norsys.reservation.model.Item;
 import naf.norsys.reservation.repository.GenericRepository;
@@ -14,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static naf.norsys.reservation.model.GenericEnum.ItemStatus.UNAVAILABLE;
 
 @Service
 public class ItemServiceImpl extends GenericServiceImpl<Item> implements ItemService {
@@ -33,5 +37,15 @@ public class ItemServiceImpl extends GenericServiceImpl<Item> implements ItemSer
         } catch (DataAccessException e) {
             throw new BusinessException(null, e, CoreConstant.Exception.FIND_ELEMENTS, null);
         }
+    }
+
+    @Override
+    public Item checkItemStatus(Long itemId) throws ItemAvailabilityException, ElementNotFoundException {
+        final Item item = this.findById(itemId);
+        if(UNAVAILABLE.equals(item.getStatus())){
+            throw new ItemAvailabilityException(null, new ItemAvailabilityException(),
+                    CoreConstant.Exception.INVALID_STATUS, new Object[]{itemId});
+        }
+        return item;
     }
 }

@@ -39,6 +39,15 @@ public class GenericGlobalExceptionHandler extends ResponseEntityExceptionHandle
     }
 
     @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        List<ValidationResponse> validations = ex.getBindingResult().getFieldErrors().stream()
+                .map(fieldError -> ValidationResponse.builder()
+                        .field(fieldError.getField())
+                        .message(getMessage(fieldError))
+                        .build())
+                .collect(Collectors.toList());
+        return ResponseEntity.badRequest().body(validations);     }
+    @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ErrorResponse.builder()
@@ -59,16 +68,6 @@ public class GenericGlobalExceptionHandler extends ResponseEntityExceptionHandle
     public ResponseEntity<ErrorResponse> handleException(final BadRequestException e) {
         return getResponseEntity(BAD_REQUEST, e);
     }
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        List<ValidationResponse> validations = ex.getBindingResult().getFieldErrors().stream()
-                .map(fieldError -> ValidationResponse.builder()
-                        .field(fieldError.getField())
-                        .message(getMessage(fieldError))
-                        .build())
-                .collect(Collectors.toList());
-        return ResponseEntity.badRequest().body(validations);     }
-
 
 
     @ExceptionHandler(value = UnauthorizedException.class)
@@ -89,6 +88,12 @@ public class GenericGlobalExceptionHandler extends ResponseEntityExceptionHandle
         return getResponseEntity(FORBIDDEN, e);
     }
 
+    @ExceptionHandler(value = ItemAvailabilityException.class)
+    @ResponseStatus(FORBIDDEN)
+    public ResponseEntity<ErrorResponse> handleException(final ItemAvailabilityException e) {
+        return getResponseEntity(CONFLICT, e);
+    }
+
     @ExceptionHandler(value = ElementAlreadyExistsException.class)
     @ResponseStatus(FOUND)
     public ResponseEntity<ErrorResponse> handleException(final ElementAlreadyExistsException e) {
@@ -101,7 +106,12 @@ public class GenericGlobalExceptionHandler extends ResponseEntityExceptionHandle
         return getResponseEntity(CONFLICT, e);
     }
 
-
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    @ResponseStatus(BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleException(final IllegalArgumentException e) {
+        LOG.warn("Warning", e.getMessage());
+        return ResponseEntity.status(BAD_REQUEST).body(ErrorResponse.builder().code(BAD_REQUEST.value()).status(BAD_REQUEST).message(e.getMessage()).build());
+    }
 
     @ExceptionHandler(IOException.class)
     @ResponseStatus(INTERNAL_SERVER_ERROR)
@@ -114,9 +124,6 @@ public class GenericGlobalExceptionHandler extends ResponseEntityExceptionHandle
                         .build());
     }
 
-
-
-
     private ResponseEntity<ErrorResponse> getResponseEntity(final HttpStatus status, final BusinessException e) {
         if (Objects.isNull(e.getKey())) {
             // default message
@@ -126,15 +133,6 @@ public class GenericGlobalExceptionHandler extends ResponseEntityExceptionHandle
         return ResponseEntity.status(status)
                 .body(ErrorResponse.builder().code(status.value()).status(status).message(getMessage(e)).build());
     }
-
-    @ExceptionHandler(value = IllegalArgumentException.class)
-    @ResponseStatus(BAD_REQUEST)
-    public ResponseEntity<ErrorResponse> handleException(final IllegalArgumentException e) {
-        LOG.warn("Warning", e.getMessage());
-        return ResponseEntity.status(BAD_REQUEST).body(ErrorResponse.builder().code(BAD_REQUEST.value()).status(BAD_REQUEST).message(e.getMessage()).build());
-    }
-
-
 
     // message from properties
     private String getMessage(final BusinessException e) {

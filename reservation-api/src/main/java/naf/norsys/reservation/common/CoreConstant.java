@@ -10,6 +10,8 @@ public class CoreConstant {
         public static final String ALREADY_EXISTS = "message.exception.already.exists.element";
         public static final String DELETE_ELEMENT = "message.exception.delete.element";
         public static final String FIND_ELEMENTS = "message.exception.find.elements";
+        public static final String NOT_AVAILABLE = "message.exception.element.availability";
+        public static final String INVALID_STATUS = "message.exception.element.availability.invalid-status";
         public static final String PAGINATION_PAGE_NUMBER = "message.exception.pagination.page.min";
         public static final String PAGINATION_PAGE_SIZE_MIN = "message.exception.pagination.size.min";
         public static final String PAGINATION_PAGE_SIZE_MAX = "message.exception.pagination.size.max";

@@ -5,6 +5,7 @@ import javax.persistence.*;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,11 +13,19 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Builder
 @Table(name = "users")
 public class User extends GenericEntity {
+    @Builder
+    public User(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String firstName, String lastName, String email, String password, Set<Role> roles, List<Reservation> reservations) {
+        super(id, createdAt, updatedAt);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+        this.reservations = reservations;
+    }
 
     private String firstName;
     private String lastName;
