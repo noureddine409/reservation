@@ -1,17 +1,22 @@
-import {ItemReservationSearch, Reservation, UserReservationSearch} from "../../model/reservation.model";
-import {GenericService} from "../generic.service";
+import axios from "axios";
+import {UserReservationSearch} from "../../model/reservation.model";
+const baseUrl: string = process.env.REACT_APP_API_URL!;
 
-class ReservationService extends GenericService{
 
-    async createReservation(reservation: Reservation): Promise<Reservation> {
-        return this.post<Reservation>('reservations', reservation);
+
+const reservationService = {
+    findByUser: async (search: UserReservationSearch) => {
+        try {
+            return await axios.post(`${baseUrl}/reservations/users`, search, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+        } catch (error) {
+            console.error('Error fetching items:', error);
+            throw error; // Rethrow the error so that the calling code can handle it
+        }
     }
 
-    async searchReservationsByItem(search: ItemReservationSearch): Promise<Reservation[]> {
-        return this.post<Reservation[]>('reservations/items', search);
-    }
-
-    async searchReservationsByUser(search: UserReservationSearch): Promise<Reservation[]> {
-        return this.post<Reservation[]>('reservations/users', search);
-    }
 }
+export default reservationService;
