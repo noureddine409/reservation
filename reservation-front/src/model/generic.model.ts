@@ -3,3 +3,8 @@ export interface GenericModel {
     createdAt?: string;
     updatedAt?: string;
 }
+
+export interface Page {
+    page: number,
+    size: number
+}

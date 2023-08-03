@@ -1,16 +1,20 @@
+import React, { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import React from 'react';
-import {Item} from "../../model/item.model";
-import {ERROR_MESSAGES} from "../../common/constants";
+import { Item } from '../../model/item.model';
 import ItemService from "../../services/item-service/item.service";
 
 interface FormData {
+    id: number;
     productName: string;
     description: string;
     productImage: FileList;
 }
 
-const AddProduct = () => {
+interface EditProductProps {
+    product: Item;
+}
+
+const EditProduct: React.FC<EditProductProps> = ({ product }) => {
     const {
         register,
         handleSubmit,
@@ -18,35 +22,49 @@ const AddProduct = () => {
         reset,
     } = useForm<FormData>();
 
+    const [formData, setFormData] = useState({
+        id: product.id,
+        name: product.name,
+        status: product.status,
+        category: product.category,
+        description: product.description,
+        // Add other form fields if required
+    });
+
+    // This useEffect will update the state whenever the `product` prop changes
+    useEffect(() => {
+        setFormData({
+            id: product.id,
+            name: product.name,
+            status: product.status,
+            category: product.category,
+            description: product.description,
+            // Update other form fields if required
+        });
+        // We also use the `reset` function provided by react-hook-form to reset the form
+        reset({ productName: product.name, description: product.description });
+    }, [product, reset]);
 
     const onSubmit: SubmitHandler<FormData> = async (data) => {
-        try {
-            // Create a FormData object to send the file along with other form data
-            const item: Item = {
-                name: data.productName,
-                description:data.description,
-                status: "AVAILABLE",
-                // image:data.productImage,
-                category:"APARTMENT",
+
+        const item: Item = {
+            id: formData.id,
+            name: data.productName,
+            description: data.description,
+            status: 'AVAILABLE',
+            // image: data.productImage,
+            category: 'APARTMENT',
+        };
+        ItemService.update(formData.id!, item).then(
+            (response)=> {
+                alert("product updated successfully " + response.data);
             }
-
-            // Make the POST request to the API
-            ItemService.save(item).then(
-                (response)=> {
-                    // Todo add response.data to item list in the parent component
-                })
-                .catch(
-                    (error) => {
-                        console.error(error)
-                    }
-                )
-            reset();
-        } catch (error) {
-            console.error('Error adding product:', error);
-        }
+        ).catch(
+            (error) => console.error(error)
+        )
     };
-    return (
 
+    return (
         <div className="col-xl">
             <div className="card p-4">
                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -58,8 +76,8 @@ const AddProduct = () => {
                             className={`form-control ${errors.productName ? 'is-invalid' : ''}`}
                             placeholder="Product name"
                             {...register('productName', { required: true })}
+                            defaultValue={formData.name}
                         />
-                        {errors.productName && <p className="error-message">{ERROR_MESSAGES.required}</p>}
                     </div>
                     <br />
                     <div>
@@ -71,30 +89,27 @@ const AddProduct = () => {
                             placeholder="Description "
                             {...register('description', { required: true })}
                             rows={5}
+                            defaultValue={formData.description}
                         />
-                        {errors.description && <p className="error-message">{ERROR_MESSAGES.required}</p>}
                     </div>
                     <br />
                     <div>
                         <label htmlFor="productImage">Image of Product</label>
                         <input
                             className={`form-control ${errors.productImage ? 'is-invalid' : ''}`}
-
                             type="file"
                             id="productImage"
                             {...register('productImage', { required: true })}
                         />
-                        {errors.productImage && <p className="error-message">{ERROR_MESSAGES.required}</p>}
                     </div>
                     <br />
                     <div className="col-md-12 text-center">
-                        <button type="submit">ADD PRODUCT</button>
+                        <button type="submit">EDIT PRODUCT</button>
                     </div>
                 </form>
             </div>
         </div>
-
     );
 };
 
-export default AddProduct;
+export default EditProduct;
