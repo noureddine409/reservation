@@ -17,7 +17,7 @@ export interface ItemReservationSearch {
     itemId: number;
     period: Period;
 }
-interface Period {
+export interface Period {
     startDate: string;
     endDate: string;
 }
