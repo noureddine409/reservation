@@ -5,10 +5,7 @@ import naf.norsys.reservation.dto.ItemDto;
 import naf.norsys.reservation.dto.PeriodDto;
 import naf.norsys.reservation.dto.ReservationDto;
 import naf.norsys.reservation.dto.UserDto;
-import naf.norsys.reservation.model.Item;
-import naf.norsys.reservation.model.Reservation;
-import naf.norsys.reservation.model.ReservationPeriod;
-import naf.norsys.reservation.model.User;
+import naf.norsys.reservation.model.*;
 import naf.norsys.reservation.service.ItemService;
 import naf.norsys.reservation.service.ReservationService;
 import naf.norsys.reservation.service.UserService;
@@ -92,14 +89,18 @@ public class ReservationControllerTest {
     // Helper method to create a sample ReservationDto for testing
     private ReservationDto createSampleReservationDto() {
         UserDto user = UserDto.builder().id(1L).email("John@domain.me").build();
-        ItemDto item = ItemDto.builder().id(1L).name("Item A").build();
+        ItemDto item = ItemDto.builder().id(1L).name("Item A")
+                .status(GenericEnum.ItemStatus.AVAILABLE)
+                .description("description")
+                .category(GenericEnum.ItemCategory.VEHICULE)
+                .build();
 
         return ReservationDto.builder()
                 .user(user)
                 .item(item)
                 .period(PeriodDto.builder()
-                        .startDate(LocalDateTime.of(2023, 8, 1, 12, 0))
-                        .endDate(LocalDateTime.of(2023, 8, 10, 12, 0))
+                        .startDate(LocalDateTime.of(2030, 8, 1, 12, 0))
+                        .endDate(LocalDateTime.of(2030, 8, 10, 12, 0))
                         .build())
 
                 .build();
@@ -147,8 +148,8 @@ public class ReservationControllerTest {
                 .item(item)
                 .user(user)
                 .period(ReservationPeriod.builder()
-                        .startDate(LocalDateTime.of(2023, 8, 1, 12, 0))
-                        .endDate(LocalDateTime.of(2023, 8, 10, 12, 0))
+                        .startDate(LocalDateTime.of(2030, 8, 1, 12, 0))
+                        .endDate(LocalDateTime.of(2030, 8, 10, 12, 0))
                         .build())
                 .build();
         savedReservation.setId(1L);
