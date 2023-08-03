@@ -12,8 +12,8 @@ import RegisterPage from './pages/Register';
 import ForgetPassword from './pages/ForgotPassword';
 import ErrorPage from './pages/Error';
 import SearchProductPage from "./pages/Product/Search";
-import ShowProduct from "./pages/Product/ShowProduct";
 import ProductDetails from "./pages/Product/ProductDetails";
+import ShowProduct from "./pages/Product/ShowProduct";
 
 
 const App = () => {
