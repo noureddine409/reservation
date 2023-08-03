@@ -1,6 +1,5 @@
 package naf.norsys.reservation.controller;
 
-import io.swagger.annotations.Api;
 import jakarta.validation.Valid;
 import naf.norsys.reservation.dto.ItemReservationSearchDto;
 import naf.norsys.reservation.dto.ReservationDto;
@@ -26,7 +25,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/reservations")
-@Api(tags = "Reservation Management", description = "Web services for Reservation Management")
 public class ReservationController extends GenericController<Reservation, ReservationDto> {
 
     private final ItemService itemService;

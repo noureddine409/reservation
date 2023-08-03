@@ -1,7 +1,6 @@
 package naf.norsys.reservation.controller;
 
 
-import io.swagger.annotations.Api;
 import jakarta.validation.Valid;
 import naf.norsys.reservation.dto.UserDto;
 import naf.norsys.reservation.exception.ElementAlreadyExistsException;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/users")
-@Api(tags = "User Management", description = "Web services for user Management")
 public class UserController extends GenericController<User, UserDto> {
     private final UserService userService;
 
