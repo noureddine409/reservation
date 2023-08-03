@@ -1,21 +1,22 @@
-import {GenericService} from "../generic.service";
-import {Item} from "../../model/item.model";
+import {SearchItemDto} from "../../model/item.model";
+import axios from "axios";
 
-export class ItemService extends GenericService {
+const baseUrl: string = process.env.REACT_APP_API_URL!;
 
-    public async saveItem(dto: Item): Promise<Item> {
-        return this.post<Item>('reservations', dto);
+const ItemService = {
+    search: async (search: SearchItemDto) => {
+        try {
+            return await axios.post(`${baseUrl}/items/search`, search, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+        } catch (error) {
+            console.error('Error fetching items:', error);
+            throw error; // Rethrow the error so that the calling code can handle it
+        }
     }
 
-    public async updateItem(id: number, dto: Item): Promise<Item> {
-        return this.put<Item>(`reservations/${id}`, dto);
-    }
-
-    public async getItemById(id: number): Promise<Item> {
-        return this.get<Item>(`reservations/${id}`);
-    }
-
-    public async deleteItem(id: number): Promise<boolean> {
-        return this.delete(`reservations/${id}`);
-    }
 }
+
+export default ItemService;

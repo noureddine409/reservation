@@ -4,7 +4,7 @@ const baseUrl: string = process.env.REACT_APP_API_URL!;
 
 
 
-const reservationService = {
+const ReservationService = {
     findByUser: async (search: UserReservationSearch) => {
         try {
             return await axios.post(`${baseUrl}/reservations/users`, search, {
@@ -19,4 +19,5 @@ const reservationService = {
     }
 
 }
-export default reservationService;
+
+export default ReservationService;
