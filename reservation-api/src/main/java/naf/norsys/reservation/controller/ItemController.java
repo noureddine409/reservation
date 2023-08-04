@@ -1,7 +1,7 @@
 package naf.norsys.reservation.controller;
 
 
-import io.swagger.annotations.Api;
+
 import naf.norsys.reservation.dto.ItemDto;
 import naf.norsys.reservation.dto.SearchItemDto;
 import naf.norsys.reservation.exception.BusinessException;
@@ -19,8 +19,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/items")
-@Api(tags = "Item Management", description = "Web services for item (product) Management")
-
 public class ItemController extends GenericController<Item, ItemDto> {
 
     private final ItemService itemService;

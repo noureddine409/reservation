@@ -1,9 +1,9 @@
 package naf.norsys.reservation.validation;
 
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 import naf.norsys.reservation.validation.validator.PeriodValidator;
 
-import javax.validation.Constraint;
-import javax.validation.Payload;
 import java.lang.annotation.*;
 
 @Documented

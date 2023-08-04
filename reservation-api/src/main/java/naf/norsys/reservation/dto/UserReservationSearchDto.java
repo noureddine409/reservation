@@ -1,9 +1,8 @@
 package naf.norsys.reservation.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import naf.norsys.reservation.validation.ValidPeriod;
-
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter

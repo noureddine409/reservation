@@ -1,10 +1,10 @@
 package naf.norsys.reservation.repository;
 
+import jakarta.persistence.criteria.Join;
 import naf.norsys.reservation.model.Reservation;
 import naf.norsys.reservation.model.ReservationPeriod;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.Join;
 import java.time.LocalDateTime;
 
 public interface ReservationRepository extends GenericRepository<Reservation> {
