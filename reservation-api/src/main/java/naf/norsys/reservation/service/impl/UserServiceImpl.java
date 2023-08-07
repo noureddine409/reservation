@@ -31,13 +31,13 @@ public class UserServiceImpl extends GenericServiceImpl<User> implements UserSer
     @Value("${dev.account.password}")
     private String devPassword;
 
-    @Value("{admin.account.first-name}")
+    @Value("${admin.account.first-name}")
     private String adminFirstName;
-    @Value("{admin.account.last-name}")
+    @Value("${admin.account.last-name}")
     private String adminLastName;
-    @Value("{admin.account.email}")
+    @Value("${admin.account.email}")
     private String adminEmail;
-    @Value("{admin.account.password}")
+    @Value("${admin.account.password}")
     private String adminPassword;
 
     private final UserRepository userRepository;
