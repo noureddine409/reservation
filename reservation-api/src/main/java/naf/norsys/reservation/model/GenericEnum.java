@@ -22,4 +22,10 @@ public class GenericEnum {
         USER,
         ADMIN
     }
+
+    public enum JwtTokenType {
+        ACCESS,
+        REFRESH,
+        RESET
+    }
 }

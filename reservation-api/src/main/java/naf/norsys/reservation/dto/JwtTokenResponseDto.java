@@ -1,6 +1,5 @@
 package naf.norsys.reservation.dto;
 
-
 import lombok.*;
 
 @Getter
@@ -8,8 +7,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserLoginDto {
+public class JwtTokenResponseDto {
 
-    private String email;
-    private String password;
+    private JwtToken accessToken;
+    private JwtToken refreshToken;
+
+
 }
