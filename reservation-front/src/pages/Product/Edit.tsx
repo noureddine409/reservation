@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Item } from '../../model/item.model';
@@ -12,9 +13,9 @@ interface FormData {
 
 interface EditProductProps {
     product: Item;
+    updateProduct: (editedProduct: Item) => void;
 }
-
-const EditProduct: React.FC<EditProductProps> = ({ product }) => {
+const EditProduct: React.FC<EditProductProps> = ({ product, updateProduct }) => {
     const {
         register,
         handleSubmit,
@@ -52,17 +53,21 @@ const EditProduct: React.FC<EditProductProps> = ({ product }) => {
             name: data.productName,
             description: data.description,
             status: 'AVAILABLE',
-            // image: data.productImage,
+            //image: data.productImage,
             category: 'APARTMENT',
         };
         ItemService.update(formData.id!, item).then(
             (response)=> {
-                alert("product updated successfully " + response.data);
+                alert("Product updated successfully " + response.data);
+                updateProduct(response.data); // Assuming the updated product is returned from the API response
             }
         ).catch(
             (error) => console.error(error)
         )
+
+
     };
+
 
     return (
         <div className="col-xl">
