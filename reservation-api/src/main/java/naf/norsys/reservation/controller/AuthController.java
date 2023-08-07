@@ -1,15 +1,16 @@
 package naf.norsys.reservation.controller;
 
 
-import naf.norsys.reservation.dto.JwtToken;
-import naf.norsys.reservation.dto.JwtTokenResponseDto;
-import naf.norsys.reservation.dto.UserLoginDto;
+import naf.norsys.reservation.dto.*;
+import naf.norsys.reservation.exception.ElementAlreadyExistsException;
 import naf.norsys.reservation.exception.ElementNotFoundException;
 import naf.norsys.reservation.exception.UnauthorizedException;
 import naf.norsys.reservation.model.GenericEnum;
 import naf.norsys.reservation.model.User;
 import naf.norsys.reservation.service.UserService;
 import naf.norsys.reservation.utils.JwtProvider;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,14 +30,17 @@ public class AuthController {
 
     private final UserService userService;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtProvider jwtProvider, UserService userService) {
+    private final ModelMapper modelMapper;
+
+    public AuthController(AuthenticationManager authenticationManager, JwtProvider jwtProvider, UserService userService, ModelMapper modelMapper) {
         this.authenticationManager = authenticationManager;
         this.jwtProvider = jwtProvider;
         this.userService = userService;
+        this.modelMapper = modelMapper;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtTokenResponseDto> login( @RequestBody UserLoginDto userLoginDto)
+    public ResponseEntity<JwtTokenResponseDto> login(@RequestBody UserLoginDto userLoginDto)
             throws UnauthorizedException, ElementNotFoundException {
 
         Authentication authToken =
@@ -68,4 +72,14 @@ public class AuthController {
                                 .build()
                 );
     }
+
+
+    @PostMapping("/register")
+    public ResponseEntity<UserDto> saveUser(@RequestBody UserRegisterDto userDto) throws ElementAlreadyExistsException {
+        User convertedUser = modelMapper.map(userDto, User.class);
+        User savedUser = userService.save(convertedUser);
+        return new ResponseEntity<>(modelMapper.map(savedUser, UserDto.class), HttpStatus.CREATED);
+
+    }
+
 }

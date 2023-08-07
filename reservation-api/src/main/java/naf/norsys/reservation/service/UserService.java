@@ -5,4 +5,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public interface UserService extends GenericService<User>{
     User findByEmail(String username);
-}
+
+    void saveDev();
+
+    void saveAdmin();
+    }

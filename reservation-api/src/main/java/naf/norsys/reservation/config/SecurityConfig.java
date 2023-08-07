@@ -1,7 +1,6 @@
 
 package naf.norsys.reservation.config;
 
-
 import naf.norsys.reservation.exception.BusinessException;
 import naf.norsys.reservation.security.JwtAuthorizationFilter;
 import naf.norsys.reservation.utils.JwtProvider;
@@ -25,8 +24,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static java.util.concurrent.TimeUnit.DAYS;
+import static naf.norsys.reservation.model.GenericEnum.RoleName.DEV;
 import static org.springframework.security.config.http.SessionCreationPolicy.IF_REQUIRED;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -60,13 +61,17 @@ public class SecurityConfig {
 
         @Bean
         public SecurityFilterChain jwtFilterChain(HttpSecurity http) throws Exception {
+
+            AntPathRequestMatcher[] antPathMatchers = jwtAuthWhiteList.stream()
+                    .map(AntPathRequestMatcher::new)
+                    .toArray(AntPathRequestMatcher[]::new);
             http
                     .cors(AbstractHttpConfigurer::disable)
                     .csrf(AbstractHttpConfigurer::disable)
                     .sessionManagement((session) -> session.sessionCreationPolicy(STATELESS))
-                    .securityMatcher("/api/**")
+                    .securityMatcher("/api/v1/**")
                     .authorizeHttpRequests((authorize) -> authorize
-                            .requestMatchers(new AntPathRequestMatcher("/api/v1/auth/**")).permitAll()
+                            .requestMatchers(antPathMatchers).permitAll()
                             .anyRequest().authenticated()
                     )
                     .addFilterBefore(new JwtAuthorizationFilter(jwtProvider, jwtAuthWhiteList, handlerExceptionResolver), UsernamePasswordAuthenticationFilter.class);
@@ -81,8 +86,8 @@ public class SecurityConfig {
         @Value("${form.auth.white-list}")
         private List<String> formAuthWhiteList;
 
-        //@Value("${form.auth.block-list}")
-        //private List<String> formAuthBlockList;
+        @Value("${form.auth.block-list}")
+        private List<String> formAuthBlockList;
 
         @Value("${form.login.remember-me.key}")
         private String rememberMeKey;
@@ -96,35 +101,43 @@ public class SecurityConfig {
         @Value("${form.logout.cookies-to-clear}")
         private String[] formLogoutCookiesToClear;
 
-//        @Bean
-//        public SecurityFilterChain formFilterChain(HttpSecurity http) throws Exception {
-//
-//            http
-//                    .csrf(AbstractHttpConfigurer::disable)
-//                    .sessionManagement((session) -> session.sessionCreationPolicy(IF_REQUIRED))
-//                    .securityMatcher(formAuthWhiteList.toArray(String[]::new))
-//                    .authorizeHttpRequests((authorize) -> {
-//                        try {
-//                            authorize
-//                                    .requestMatchers(formAuthWhiteList.toArray(AntPathRequestMatcher[]::new)).permitAll()
-//                                    .anyRequest().authenticated();
-//                        } catch (Exception e) {
-//                            throw new BusinessException(e.getMessage(), e.getCause(), null, null);
-//                        }
-//                    })
-//                    .formLogin((form) -> form.defaultSuccessUrl(formSuccessUrl))
-//                    .rememberMe(rememberMe -> rememberMe
-//                            .key(rememberMeKey)
-//                            .tokenValiditySeconds((int) DAYS.toSeconds(rememberMeTokenValidityInDays))
-//                    )
-//                    .logout((logout) -> logout
-//                            .logoutSuccessUrl(formSuccessUrl)
-//                            .invalidateHttpSession(true)
-//                            .deleteCookies(formLogoutCookiesToClear)
-//                    );
-//
-//            return http.build();
-//        }
+        @Bean
+        public SecurityFilterChain formFilterChain(HttpSecurity http) throws Exception {
+            AntPathRequestMatcher[] formWhiteListAntPathMatchers = formAuthWhiteList.stream()
+                    .map(AntPathRequestMatcher::new)
+                    .toArray(AntPathRequestMatcher[]::new);
+            AntPathRequestMatcher[] formBlockListAntPathMatchers = formAuthBlockList.stream()
+                    .map(AntPathRequestMatcher::new)
+                    .toArray(AntPathRequestMatcher[]::new);
+
+
+            http
+                    .csrf(AbstractHttpConfigurer::disable)
+                    .sessionManagement((session) -> session.sessionCreationPolicy(IF_REQUIRED))
+                    .securityMatcher(Stream.concat(formAuthWhiteList.stream(), formAuthBlockList.stream()).toArray(String[]::new))
+                    .authorizeHttpRequests((authorize) -> {
+                        try {
+                            authorize
+                                    .requestMatchers(formWhiteListAntPathMatchers).permitAll()
+                                    .requestMatchers(formBlockListAntPathMatchers).hasRole(DEV.name())
+                                    .anyRequest().authenticated();
+                        } catch (Exception e) {
+                            throw new BusinessException(e.getMessage(), e.getCause(), null, null);
+                        }
+                    })
+                    .formLogin((form) -> form.defaultSuccessUrl(formSuccessUrl))
+                    .rememberMe(rememberMe -> rememberMe
+                            .key(rememberMeKey)
+                            .tokenValiditySeconds((int) DAYS.toSeconds(rememberMeTokenValidityInDays))
+                    )
+                    .logout((logout) -> logout
+                            .logoutSuccessUrl(formSuccessUrl)
+                            .invalidateHttpSession(true)
+                            .deleteCookies(formLogoutCookiesToClear)
+                    );
+
+            return http.build();
+        }
 
     }
 
@@ -151,4 +164,6 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
+
 }
