@@ -1,9 +1,12 @@
 package naf.norsys.reservation.controller;
 
 
+import com.auth0.jwt.interfaces.DecodedJWT;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import naf.norsys.reservation.common.CoreConstant;
 import naf.norsys.reservation.dto.*;
+import naf.norsys.reservation.exception.BusinessException;
 import naf.norsys.reservation.exception.ElementAlreadyExistsException;
 import naf.norsys.reservation.exception.ElementNotFoundException;
 import naf.norsys.reservation.exception.UnauthorizedException;
@@ -65,6 +68,34 @@ public class AuthController {
         userService.update(connectedUser.getId(), connectedUser);
         return ResponseEntity.ok().body(JwtTokenResponseDto.builder().accessToken(accessToken).refreshToken(refreshToken).build());
     }
+
+    @PostMapping("/token")
+    public ResponseEntity<JwtTokenResponseDto> refreshToken(HttpServletRequest request) throws BusinessException {
+
+        String refreshToken = jwtProvider.extractTokenFromRequest(request);
+
+        DecodedJWT decodedRefreshToken = jwtProvider.getDecodedJWT(refreshToken, GenericEnum.JwtTokenType.REFRESH);
+        Long userId = Long.valueOf(decodedRefreshToken.getSubject());
+        String refreshTokenId = decodedRefreshToken.getId();
+
+        User user = userService.findById(userId);
+
+        try {
+            if (!refreshTokenId.equals(user.getRefreshTokenId()))
+                throw new UnauthorizedException(null, new UnauthorizedException(), CoreConstant.Exception.AUTHORIZATION_INVALID_TOKEN, null);
+        } catch (NullPointerException e) {
+            throw new BusinessException(e.getMessage(), e.getCause(), null, null);
+        }
+
+        JwtToken newAccessToken = jwtProvider.generateToken(user, GenericEnum.JwtTokenType.ACCESS);
+        JwtToken newRefreshToken = jwtProvider.generateToken(user, GenericEnum.JwtTokenType.REFRESH);
+
+        user.setRefreshTokenId(jwtProvider.getDecodedJWT(newRefreshToken.getToken(), GenericEnum.JwtTokenType.REFRESH).getId());
+        userService.update(userId, user);
+
+        return ResponseEntity.ok().body(JwtTokenResponseDto.builder().accessToken(newAccessToken).refreshToken(newRefreshToken).build());
+    }
+
 
 
 
