@@ -1,6 +1,8 @@
 package naf.norsys.reservation.controller;
 
 
+import jakarta.validation.Valid;
+import naf.norsys.reservation.common.CoreConstant;
 import naf.norsys.reservation.dto.*;
 import naf.norsys.reservation.exception.ElementAlreadyExistsException;
 import naf.norsys.reservation.exception.ElementNotFoundException;
@@ -40,18 +42,16 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtTokenResponseDto> login(@RequestBody UserLoginDto userLoginDto)
-            throws UnauthorizedException, ElementNotFoundException {
+    public ResponseEntity<JwtTokenResponseDto> login(@RequestBody @Valid UserLoginDto userLoginDto) throws UnauthorizedException, ElementNotFoundException {
 
-        Authentication authToken =
-                new UsernamePasswordAuthenticationToken(userLoginDto.getEmail(), userLoginDto.getPassword());
+        Authentication authToken = new UsernamePasswordAuthenticationToken(userLoginDto.getEmail(), userLoginDto.getPassword());
 
         Authentication authResult;
 
         try {
             authResult = authenticationManager.authenticate(authToken);
         } catch (org.springframework.security.core.AuthenticationException e) {
-            throw new UnauthorizedException(null, e.getCause(), "", null);
+            throw new UnauthorizedException(null, e.getCause(), CoreConstant.Exception.AUTHENTICATION_BAD_CREDENTIALS, null);
         }
 
         User authenticatedUser = (User) authResult.getPrincipal();
@@ -63,15 +63,10 @@ public class AuthController {
         User connectedUser = userService.findById(authenticatedUser.getId());
         connectedUser.setRefreshTokenId(refreshTokenId);
         userService.update(connectedUser.getId(), connectedUser);
-        return ResponseEntity
-                .ok()
-                .body(
-                        JwtTokenResponseDto.builder()
-                                .accessToken(accessToken)
-                                .refreshToken(refreshToken)
-                                .build()
-                );
+        return ResponseEntity.ok().body(JwtTokenResponseDto.builder().accessToken(accessToken).refreshToken(refreshToken).build());
     }
+
+
 
 
     @PostMapping("/register")
