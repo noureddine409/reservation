@@ -49,7 +49,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         try {
 
-            String accessToken = jwtProvider.extractTokenFromRequest(request);
+            String accessToken = jwtProvider.extractTokenFromRequest(request, GenericEnum.JwtTokenType.ACCESS);
 
             DecodedJWT decodedJWT = jwtProvider.getDecodedJWT(accessToken, GenericEnum.JwtTokenType.ACCESS);
 

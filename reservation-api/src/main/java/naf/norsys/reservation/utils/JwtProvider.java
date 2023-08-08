@@ -7,6 +7,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import naf.norsys.reservation.common.CoreConstant;
 import naf.norsys.reservation.dto.JwtToken;
@@ -14,17 +15,15 @@ import naf.norsys.reservation.exception.BusinessException;
 import naf.norsys.reservation.exception.UnauthorizedException;
 import naf.norsys.reservation.model.GenericEnum;
 import naf.norsys.reservation.model.User;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -60,7 +59,7 @@ public class JwtProvider {
                 .withIssuedAt(creationDate);
 
         try {
-            switch(tokenType) {
+            switch (tokenType) {
                 case ACCESS -> {
                     secret = accessTokenSecret;
                     expiryDate = LocalDateTime.now().plusMinutes(accessTokenExpirationInMins)
@@ -119,24 +118,44 @@ public class JwtProvider {
         }
     }
 
-    public String extractTokenFromRequest(HttpServletRequest request) throws UnauthorizedException {
-        final String bearerPrefix = "Bearer ";
+    public Cookie generateTokenCookie(JwtToken token, GenericEnum.JwtTokenType tokenType) throws BusinessException {
 
-        String authorizationHeader = request.getHeader("Authorization");
-
-        if ( Objects.isNull(authorizationHeader) || authorizationHeader.isEmpty() )
-            throw new UnauthorizedException(null, new UnauthorizedException(), CoreConstant.Exception.AUTHORIZATION_MISSING_HEADER, null);
-
-        if (! authorizationHeader.startsWith(bearerPrefix))
-            throw new UnauthorizedException(null, new UnauthorizedException(), CoreConstant.Exception.AUTHORIZATION_INVALID_HEADER, null);
-
-        String token = authorizationHeader.replace(bearerPrefix, Strings.EMPTY);
-
-        if (Objects.isNull(token) || token.isEmpty())
-            throw new UnauthorizedException(null, new UnauthorizedException(), CoreConstant.Exception.AUTHORIZATION_MISSING_TOKEN, null);
-
-        return token;
+        Cookie cookie = new Cookie(tokenType.name().toLowerCase() + "_token", token.getToken());
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        cookie.setMaxAge((int) Duration.between(token.getCreatedAt(), token.getExpiresIn()).getSeconds()); // Calculate remaining seconds
+        return cookie;
     }
 
+    public String extractTokenFromRequest(HttpServletRequest request, GenericEnum.JwtTokenType tokenType) throws UnauthorizedException {
+        Cookie[] cookies = request.getCookies();
+
+        if (Objects.isNull(cookies) || cookies.length==0) {
+            throw new UnauthorizedException(null, new UnauthorizedException(), CoreConstant.Exception.AUTHORIZATION_MISSING_COOKIE, null);
+        }
+
+        String tokenName = (tokenType == GenericEnum.JwtTokenType.ACCESS) ? "access_token" :
+                (tokenType == GenericEnum.JwtTokenType.REFRESH) ? "refresh_token" : null;
+
+        if (tokenName != null) {
+            Optional<Cookie> tokenCookie = Arrays.stream(cookies)
+                    .filter(cookie -> cookie.getName().equalsIgnoreCase(tokenName))
+                    .findFirst();
+
+            if (tokenCookie.isPresent()) {
+                return tokenCookie.get().getValue();
+            } else {
+                throw new UnauthorizedException(null, new UnauthorizedException(), CoreConstant.Exception.AUTHORIZATION_MISSING_TOKEN, null);
+            }
+
+
+        } else {
+            throw new BusinessException("Invalid token type", new BusinessException(), null, null);
+        }
+
+    }
 
 }
+
+
+

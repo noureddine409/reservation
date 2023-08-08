@@ -21,6 +21,7 @@ public class CoreConstant {
         public static final String AUTHORIZATION_MISSING_HEADER = "message.exception.authorization.missing.header";
         public static final String AUTHORIZATION_INVALID_HEADER = "message.exception.authorization.invalid.header";
         public static final String AUTHENTICATION_NULL_PRINCIPAL  = "message.exception.authentication.null.pricipal";
+        public static final String AUTHORIZATION_MISSING_COOKIE = "Authorization cookie is missing";
 
 
 

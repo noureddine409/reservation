@@ -2,7 +2,9 @@ package naf.norsys.reservation.controller;
 
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import naf.norsys.reservation.common.CoreConstant;
 import naf.norsys.reservation.dto.*;
@@ -45,57 +47,74 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtTokenResponseDto> login(@RequestBody @Valid UserLoginDto userLoginDto) throws UnauthorizedException, ElementNotFoundException {
-
+    public ResponseEntity<Void> login(@RequestBody @Valid UserLoginDto userLoginDto, HttpServletResponse response) throws UnauthorizedException, ElementNotFoundException {
         Authentication authToken = new UsernamePasswordAuthenticationToken(userLoginDto.getEmail(), userLoginDto.getPassword());
-
-        Authentication authResult;
-
-        try {
-            authResult = authenticationManager.authenticate(authToken);
-        } catch (org.springframework.security.core.AuthenticationException e) {
-            throw new UnauthorizedException(null, e.getCause(), CoreConstant.Exception.AUTHENTICATION_BAD_CREDENTIALS, null);
-        }
+        Authentication authResult = authenticateToken(authToken);
 
         User authenticatedUser = (User) authResult.getPrincipal();
+        generateAndSetTokens(authenticatedUser, GenericEnum.JwtTokenType.ACCESS, response);
+        generateAndSetTokens(authenticatedUser, GenericEnum.JwtTokenType.REFRESH, response);
 
-        JwtToken accessToken = jwtProvider.generateToken(authenticatedUser, GenericEnum.JwtTokenType.ACCESS);
-        JwtToken refreshToken = jwtProvider.generateToken(authenticatedUser, GenericEnum.JwtTokenType.REFRESH);
-        String refreshTokenId = jwtProvider.getDecodedJWT(refreshToken.getToken(), GenericEnum.JwtTokenType.REFRESH).getId();
-
-        User connectedUser = userService.findById(authenticatedUser.getId());
-        connectedUser.setRefreshTokenId(refreshTokenId);
-        userService.update(connectedUser.getId(), connectedUser);
-        return ResponseEntity.ok().body(JwtTokenResponseDto.builder().accessToken(accessToken).refreshToken(refreshToken).build());
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/token")
-    public ResponseEntity<JwtTokenResponseDto> refreshToken(HttpServletRequest request) throws BusinessException {
-
-        String refreshToken = jwtProvider.extractTokenFromRequest(request);
-
+    public ResponseEntity<Void> refreshToken(HttpServletRequest request, HttpServletResponse response) throws BusinessException {
+        String refreshToken = jwtProvider.extractTokenFromRequest(request, GenericEnum.JwtTokenType.REFRESH);
         DecodedJWT decodedRefreshToken = jwtProvider.getDecodedJWT(refreshToken, GenericEnum.JwtTokenType.REFRESH);
-        Long userId = Long.valueOf(decodedRefreshToken.getSubject());
-        String refreshTokenId = decodedRefreshToken.getId();
 
+        Long userId = Long.valueOf(decodedRefreshToken.getSubject());
         User user = userService.findById(userId);
 
-        try {
-            if (!refreshTokenId.equals(user.getRefreshTokenId()))
-                throw new UnauthorizedException(null, new UnauthorizedException(), CoreConstant.Exception.AUTHORIZATION_INVALID_TOKEN, null);
-        } catch (NullPointerException e) {
-            throw new BusinessException(e.getMessage(), e.getCause(), null, null);
-        }
+        validateRefreshToken(user, decodedRefreshToken.getId());
 
-        JwtToken newAccessToken = jwtProvider.generateToken(user, GenericEnum.JwtTokenType.ACCESS);
-        JwtToken newRefreshToken = jwtProvider.generateToken(user, GenericEnum.JwtTokenType.REFRESH);
+        generateAndSetTokens(user, GenericEnum.JwtTokenType.ACCESS, response);
+        generateAndSetTokens(user, GenericEnum.JwtTokenType.REFRESH, response);
 
-        user.setRefreshTokenId(jwtProvider.getDecodedJWT(newRefreshToken.getToken(), GenericEnum.JwtTokenType.REFRESH).getId());
-        userService.update(userId, user);
-
-        return ResponseEntity.ok().body(JwtTokenResponseDto.builder().accessToken(newAccessToken).refreshToken(newRefreshToken).build());
+        return ResponseEntity.ok().build();
     }
 
+    private Authentication authenticateToken(Authentication authToken) throws UnauthorizedException {
+        try {
+            return authenticationManager.authenticate(authToken);
+        } catch (org.springframework.security.core.AuthenticationException e) {
+            throw new UnauthorizedException(null, e.getCause(), CoreConstant.Exception.AUTHENTICATION_BAD_CREDENTIALS, null);
+        }
+    }
+
+    private void generateAndSetTokens(User user, GenericEnum.JwtTokenType tokenType, HttpServletResponse response) {
+        JwtToken token = jwtProvider.generateToken(user, tokenType);
+        String refreshTokenId = jwtProvider.getDecodedJWT(token.getToken(), tokenType).getId();
+
+        user.setRefreshTokenId(refreshTokenId);
+        userService.update(user.getId(), user);
+
+        Cookie tokenCookie = jwtProvider.generateTokenCookie(token, tokenType);
+        response.addCookie(tokenCookie);
+
+    }
+
+    private void validateRefreshToken(User user, String refreshTokenId) throws BusinessException {
+        if (user.getRefreshTokenId() == null || !user.getRefreshTokenId().equals(refreshTokenId)) {
+            throw new UnauthorizedException(null, new UnauthorizedException(), CoreConstant.Exception.AUTHORIZATION_INVALID_TOKEN, null);
+        }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response) throws BusinessException {
+        // Clear the cookies
+        deleteTokenCookie(response, "access_token");
+        deleteTokenCookie(response, "refresh_token");
+
+        return ResponseEntity.ok().build();
+    }
+    private void deleteTokenCookie(HttpServletResponse response, String tokenName) {
+        Cookie tokenCookie = new Cookie(tokenName, null);
+        tokenCookie.setHttpOnly(true);
+        tokenCookie.setPath("/");
+        tokenCookie.setMaxAge(0);
+        response.addCookie(tokenCookie);
+    }
 
 
 
