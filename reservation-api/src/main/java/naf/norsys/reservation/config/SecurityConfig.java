@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -66,7 +67,7 @@ public class SecurityConfig {
                     .map(AntPathRequestMatcher::new)
                     .toArray(AntPathRequestMatcher[]::new);
             http
-                    .cors(AbstractHttpConfigurer::disable)
+                    .cors(Customizer.withDefaults())
                     .csrf(AbstractHttpConfigurer::disable)
                     .sessionManagement((session) -> session.sessionCreationPolicy(STATELESS))
                     .securityMatcher("/api/v1/**")
@@ -159,6 +160,7 @@ public class SecurityConfig {
         //or any domain that you want to restrict to
         configuration.setAllowedHeaders(corsAllowedHeathers);
         configuration.setAllowedMethods(corsAllowedMethods);
+        configuration.setAllowCredentials(Boolean.TRUE);
         //Add the method support as you like
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
