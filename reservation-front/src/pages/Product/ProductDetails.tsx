@@ -1,6 +1,7 @@
 import React from 'react';
 import Calendar from "../../components/Calendar";
 import {useLocation} from "react-router-dom";
+import {Item} from "../../model/item.model";
 
 
 
@@ -15,8 +16,8 @@ const ProductDetails = ()=> {
     // };
 
         const location = useLocation();
-        const { state } = location;
-        const { item } = state;
+
+        const item: Item = location.state;
     return (
         <main id="main" className="main">
             <div className="pagetitle">
@@ -29,7 +30,7 @@ const ProductDetails = ()=> {
                         <div className="row">
                             <div className="card mb-3">
 
-                                <img src={item.imgSrc} className="full-width-image " alt={item.name} />
+                                <img src="https://kreconcept.fr/wp-content/uploads/2022/11/KRE_bg_espace_cuisine.jpg" className="full-width-image " alt={item.name} />
 
                                 <div>
                                     <h5 className="card-title">{item.name}
