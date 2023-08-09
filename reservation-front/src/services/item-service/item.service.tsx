@@ -1,13 +1,14 @@
 import { Item, SearchItemDto } from "../../model/item.model";
 import axios, { AxiosResponse } from "axios";
 import { Page } from "../../model/generic.model";
+import httpClient from "../../middleware/auth";
 
 const baseUrl: string = process.env.REACT_APP_API_URL!;
 
 const ItemService = {
     search: async (search: SearchItemDto) => {
         try {
-            return await axios.post(`${baseUrl}/items/search`, search, {
+            return await httpClient.post("/items/search", search, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -19,7 +20,7 @@ const ItemService = {
     },
     findByUser: async (pageable: Page): Promise<Item[]> => {
         try {
-            const response: AxiosResponse<Item[]> = await axios.get(`${baseUrl}/items?page=${pageable.page}&size=${pageable.size}`, {
+            const response: AxiosResponse<Item[]> = await httpClient.get("/items?page=${pageable.page}&size=${pageable.size}", {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -32,7 +33,7 @@ const ItemService = {
     },
     delete: async (id: number) => {
         try{
-            const response: AxiosResponse<Item[]> = await axios.delete(`${baseUrl}/items/${id}`, {
+            const response: AxiosResponse<Item[]> = await httpClient.delete("/items/${id}", {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -46,7 +47,7 @@ const ItemService = {
     },
     update: async (itemId: number, item: Item)=> {
         try {
-            return await axios.put(`${baseUrl}/items/${itemId}`, item, {
+            return await httpClient.put("/items/${itemId}", item, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -58,7 +59,7 @@ const ItemService = {
     },
     save: async (item: Item)=> {
         try {
-            return await axios.post(`${baseUrl}/items}`, item, {
+            return await httpClient.post("/items}", item, {
                 headers: {
                     'Content-Type': 'application/json',
                 },

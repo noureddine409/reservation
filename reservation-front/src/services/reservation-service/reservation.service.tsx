@@ -1,5 +1,6 @@
 import axios from "axios";
 import {UserReservationSearch} from "../../model/reservation.model";
+import httpClient from "../../middleware/auth";
 const baseUrl: string = process.env.REACT_APP_API_URL!;
 
 
@@ -7,7 +8,7 @@ const baseUrl: string = process.env.REACT_APP_API_URL!;
 const ReservationService = {
     findByUser: async (search: UserReservationSearch) => {
         try {
-            return await axios.post(`${baseUrl}/reservations/users`, search, {
+            return await httpClient.post("/reservations/users", search, {
                 headers: {
                     'Content-Type': 'application/json',
                 },

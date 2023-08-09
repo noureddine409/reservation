@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import {ERROR_MESSAGES, VALIDATION_RULES} from "../common/constants";
+import AuthentificationService from '../services/auth-service/auth.service';
 
 interface LoginFormValues {
     username:string;
@@ -17,10 +18,19 @@ const LoginPage = () => {
         reset,
     } = useForm<LoginFormValues>();
 
-    const onSubmit: SubmitHandler<LoginFormValues> = (data) => {
-        // Handle form submission logic here
-        console.log(data);
-        reset();
+    const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
+        const LoginDto = {
+            email: data.username,
+            password: data.password
+        }
+        try {
+            await AuthentificationService.login(LoginDto);
+            // TODO: Redirect to a protected page ( home) upon successful login
+            window.location.href = "/"; // Redirect to home page
+        } catch (error) {
+            // TODO: Handle login error ( show error message)
+        }
+        //reset();
     };
 
     return (
@@ -62,8 +72,8 @@ const LoginPage = () => {
                                                             minLength: (v) =>
                                                                 VALIDATION_RULES.minLength(5)(v) ||
                                                                 ERROR_MESSAGES.minLength.replace('{min}', '5'),
-                                                            pattern: (v) =>
-                                                                VALIDATION_RULES.namePattern.test(v) || ERROR_MESSAGES.username,
+                                                           /* pattern: (v) =>
+                                                                VALIDATION_RULES.namePattern.test(v) || ERROR_MESSAGES.username,*/
                                                         },
                                                     })}
                                                 />
