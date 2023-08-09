@@ -1097,5 +1097,9 @@ button[type=submit] {
 }
 
 
-
+.page-link:hover {
+    color: #717ff5;
+    text-decoration: none;
+    cursor: pointer;
+}
 

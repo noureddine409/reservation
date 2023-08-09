@@ -1,9 +1,8 @@
 package naf.norsys.reservation.model;
 
+import jakarta.persistence.Embeddable;
 import lombok.*;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
 import java.time.LocalDateTime;
 
 @Getter

@@ -5,7 +5,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import Fullcalendar from "@fullcalendar/react";
 import {Period, Reservation, UserReservationSearch} from "../model/reservation.model";
 import {formatDateToString} from "../utils/dateTime-conversion";
-import reservationService from "../services/reservation-service/reservation.service";
+import ReservationService from "../services/reservation-service/reservation.service";
 
 const HomePage = () => {
 
@@ -18,7 +18,7 @@ const HomePage = () => {
             userId: 1,
             period: currentPeriod!
         }
-        reservationService.findByUser(requestBody).then((response) => {
+        ReservationService.findByUser(requestBody).then((response) => {
             setReservations(response.data);
         }).catch((error) => {
             console.log(error);

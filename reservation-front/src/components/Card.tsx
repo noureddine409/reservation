@@ -1,47 +1,35 @@
 import React from "react";
-import {Link, useNavigate} from "react-router-dom";
-import {Interface} from "readline";
-import {Button} from "react-bootstrap";
+import {useNavigate} from "react-router-dom";
+import {Item} from "../model/item.model";
 
-
-interface ItemData {
-    imgSrc: string;
-    name: string;
-    description: string;
-    category: string;
-    status: string;
+interface CardProps {
+    item: Item
 }
-type CardProps = {
-    item: ItemData;
-};
-export const Card = ({
-                         item
-                     }: CardProps) => {
+
+const Card = (props: CardProps) => {
     const navigate = useNavigate();
 
     const handleReserveClick = () => {
-        navigate("/product-details", { state: { item } });
+        navigate("/product-details", { state: props.item  });
     };
     return (
-
-        <div className="card mb-3">
+    <div className="card mb-3">
             <div className="row g-0">
                 <div className="col-md-40">
-                    <img src={item.imgSrc} className="img-fluid rounded-start" alt={item.name} />
+                    <img src="https://kreconcept.fr/wp-content/uploads/2022/11/KRE_bg_espace_cuisine.jpg" className="img-fluid rounded-start" alt={props.item.name} />
                 </div>
                 <div className="col-md-8">
                     <div className="card-body">
-                        <h5 className="card-title">{item.name}</h5>
+                        <h5 className="card-title">{props.item.name}</h5>
                         <p className="card-text">
-                            {item.description}
+                            {props.item.description}
                         </p>
-
-                        <Button onClick={handleReserveClick} className="btn btn-primary">Reserver</Button>
+                        <div onClick={handleReserveClick} className="btn btn-primary">Book Now</div>
                     </div>
                 </div>
             </div>
         </div>
-
-
     );
 };
+
+export default Card;

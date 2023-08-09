@@ -1,11 +1,11 @@
 package naf.norsys.reservation.repository;
 
+import jakarta.persistence.criteria.Predicate;
 import naf.norsys.reservation.model.GenericEntity;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-import javax.persistence.criteria.Predicate;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
