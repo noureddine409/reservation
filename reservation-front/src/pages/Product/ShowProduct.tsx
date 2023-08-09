@@ -22,7 +22,7 @@ const ShowProduct: React.FC = () => {
             description: "sq",
             status: "AVAILABLE",
             category: "APARTMENT",
-            name: "zzz"
+            name: "zzz",
         }
     );
     const handleDelete = async (productId: number) => {
@@ -116,6 +116,7 @@ const ShowProduct: React.FC = () => {
                                         <tr>
                                             <th scope="col">Image</th>
                                             <th scope="col">Name</th>
+                                            <th scope="col">Category</th>
                                             <th scope="col">Description</th>
                                             <th scope="col">Action</th>
                                         </tr>
@@ -125,6 +126,7 @@ const ShowProduct: React.FC = () => {
                                             <tr key={product.id}>
                                                 <td><img src="https://kreconcept.fr/wp-content/uploads/2022/11/KRE_bg_espace_cuisine.jpg" alt="Product" width="100" height="100" /></td>
                                                 <td>{product.name}</td>
+                                                <td>{product.category}</td>
                                                 <td>{product.description}</td>
                                                 <td>
                                                     <button type="button" className="btn btn-link" onClick={() => handleDelete(product.id!)}>
