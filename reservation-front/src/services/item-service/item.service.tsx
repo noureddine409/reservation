@@ -36,8 +36,9 @@ const ItemService = {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-            });
+            }); alert("Product deleted successfully ");
             return response.data; // Extract the data property from the AxiosResponse
+
         }
         catch (error) {
             console.error('Error fetching items:', error);
@@ -58,7 +59,7 @@ const ItemService = {
     },
     save: async (item: Item)=> {
         try {
-            return await axios.post(`${baseUrl}/items}`, item, {
+            return await axios.post(`${baseUrl}/items`, item, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -68,7 +69,6 @@ const ItemService = {
             throw error; // Rethrow the error so that the calling code can handle it
         }
     }
-
 };
 
 export default ItemService;

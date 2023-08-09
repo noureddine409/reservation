@@ -4,13 +4,17 @@ import {Item} from "../../model/item.model";
 import {ERROR_MESSAGES} from "../../common/constants";
 import ItemService from "../../services/item-service/item.service";
 
+interface AddProductProps {
+    updateProductList: (newProduct: Item) => void;
+}
+
 interface FormData {
     productName: string;
     description: string;
     productImage: FileList;
 }
 
-const AddProduct = () => {
+const AddProduct: React.FC<AddProductProps> = ({ updateProductList }) => {
     const {
         register,
         handleSubmit,
@@ -21,7 +25,6 @@ const AddProduct = () => {
 
     const onSubmit: SubmitHandler<FormData> = async (data) => {
         try {
-            // Create a FormData object to send the file along with other form data
             const item: Item = {
                 name: data.productName,
                 description:data.description,
@@ -30,10 +33,9 @@ const AddProduct = () => {
                 category:"APARTMENT",
             }
 
-            // Make the POST request to the API
             ItemService.save(item).then(
                 (response)=> {
-                    // Todo add response.data to item list in the parent component
+                    updateProductList(response.data);
                 })
                 .catch(
                     (error) => {
@@ -44,6 +46,8 @@ const AddProduct = () => {
         } catch (error) {
             console.error('Error adding product:', error);
         }
+
+
     };
     return (
 
