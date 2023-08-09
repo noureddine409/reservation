@@ -16,6 +16,7 @@ import ProductDetails from "./pages/Product/ProductDetails";
 import ShowProduct from "./pages/Product/ShowProduct";
 
 
+
 const App = () => {
     const [sideBarToggled, setSideBarToggled] = useState(false);
 
@@ -69,6 +70,8 @@ const AppContent: React.FC<AppContentProps> = ({toggleSideBar}) => {
                 <Route path="/forget-password" element={<ForgetPassword />} />
                 <Route path="/search-product" element={<SearchProductPage/>} />
                 <Route path="/product-details" element={<ProductDetails/>} />
+
+
                 <Route path="*" element={<ErrorPage />} />
             </Routes>
         </>
