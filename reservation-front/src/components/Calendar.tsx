@@ -4,7 +4,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { formatDateToString } from "../utils/dateTime-conversion";
-import { ItemReservationSearch, Period, Reservation, UserReservationSearch } from "../model/reservation.model";
+import { ItemReservationSearch, Period, Reservation } from "../model/reservation.model";
 import reservationService from "../services/reservation-service/reservation.service";
 import { DateClickArg } from "@fullcalendar/interaction";
 import ReservationPopup from "./ReservationPopup";
