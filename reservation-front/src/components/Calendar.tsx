@@ -1,45 +1,82 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Fullcalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import { formatDateToString } from "../utils/dateTime-conversion";
+import { ItemReservationSearch, Period, Reservation, UserReservationSearch } from "../model/reservation.model";
+import reservationService from "../services/reservation-service/reservation.service";
+import { DateClickArg } from "@fullcalendar/interaction";
+import ReservationPopup from "./ReservationPopup";
+
 
 const Calendar = () => {
-    const handleEventClick = (info:any) => {
-        alert('Event: ' + info.event.title);
-        alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-        alert('View: ' + info.view.type);
+    const [reservations, setReservations] = useState<Reservation[]>([]);
+    const [currentPeriod, setCurrentPeriod] = useState<Period | undefined>();
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+    const [isPopupOpen, setPopupOpen] = useState(false); // Ensure this state is defined
 
-        // change the border color just for fun
-        info.el.style.borderColor = 'red';
+    useEffect(() => {
+        const requestBody: ItemReservationSearch = {
+            itemId: 1,
+            period: currentPeriod!,
+        };
+        reservationService
+            .findByItem(requestBody)
+            .then((response) => {
+                setReservations(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [currentPeriod]);
+
+    const convertToEvents = (reservations: Reservation[]) => {
+        return reservations.map((reservation) => {
+            return {
+                title: reservation.item.name,
+                start: reservation.period.startDate,
+                end: reservation.period.endDate,
+            };
+        });
     };
+
+    const handleDateClick = (arg: DateClickArg) => { // Utiliser DateClickArg
+        const date = arg.date; // Récupérer la date à partir de l'objet DateClickArg
+        setSelectedDate(date);
+        setPopupOpen(true);
+    };
+
+
 
     return (
         <div>
             <Fullcalendar
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                initialView={"dayGridMonth"}
-                selectable={true}
+                initialView="dayGridMonth"
                 headerToolbar={{
-
-                    start: "today prev,next", // will normally be on the left. if RTL, will be on the right
+                    start: "today prev,next",
                     center: "title",
-                    end: "dayGridMonth,timeGridWeek,timeGridDay", // will normally be on the right. if RTL, will be on the left
+                    end: "timeGridWeek",
                 }}
-                events={[
-                    { title: 'Cuisine réserver', date: '2023-07-18T12:00:00' },
-                    { title: 'Salle de réuinion réserver', date: '2023-07-20T15:00:00' },
-                    { title: 'Salle de réuinion réserver', date: '2023-08-20T15:00:00' },
-                    // Ajoutez plus d'événements ici
-                ]}
-                eventClick={handleEventClick} // Add the event click handler here
-                select={(val)=> alert(val.start.toJSON())}
-                // dateClick={handleDateClick}
-                // eventClick={handleEventClick}
-                height={"90vh"}
+                height="90vh"
+                events={convertToEvents(reservations)}
+                datesSet={(args) => {
+                    setCurrentPeriod({
+                        startDate: formatDateToString(args.start),
+                        endDate: formatDateToString(args.end),
+                    });
+                }}
+                dateClick={handleDateClick}
             />
+            {isPopupOpen && (
+                <ReservationPopup
+                    selectedDate={selectedDate}
+                    onClose={() => setPopupOpen(false)}
+                />
+            )}
         </div>
     );
-}
+};
 
 export default Calendar;

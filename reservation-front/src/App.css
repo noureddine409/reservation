@@ -969,7 +969,7 @@ li a {
     font-size: 15px;
     font-weight: 600;
     color: #4154f1;
-    transition: 0.3;
+    /*transition: 0.3;*/
     background: #f6f9ff;
     padding: 10px 15px;
     border-radius: 4px;
@@ -1020,7 +1020,7 @@ li a {
     font-size: 14px;
     font-weight: 600;
     color: #012970;
-    transition: 0.3;
+    /*transition: 0.3;*/
     padding: 10px 0 10px 40px;
     transition: 0.3s;
 }
@@ -1071,3 +1071,31 @@ button[type=submit] {
     width: 100%;
     height: auto;
 }
+/* Styling for the popup */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000
+}
+
+.popup-inner {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+/* Styling for the form */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+
+
+

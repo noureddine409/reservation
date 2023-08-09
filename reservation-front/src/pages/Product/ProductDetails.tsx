@@ -1,17 +1,22 @@
 import React from 'react';
 import Calendar from "../../components/Calendar";
+import {useLocation} from "react-router-dom";
 
 
 
 
 const ProductDetails = ()=> {
-    const item = {
-        imgSrc: 'https://kreconcept.fr/wp-content/uploads/2022/11/KRE_bg_espace_cuisine.jpg',
-        name: 'Kitchen',
-        description: 'You can reserve your kitchen at your convenience. Please select a date and time that suits you best, and we will ensure it\'s available for your use.',
-        category: 'Room',
-        status: 'Available',
-    };
+    // const item = {
+    //     imgSrc: 'https://kreconcept.fr/wp-content/uploads/2022/11/KRE_bg_espace_cuisine.jpg',
+    //     name: 'Kitchen',
+    //     description: 'You can reserve your kitchen at your convenience. Please select a date and time that suits you best, and we will ensure it\'s available for your use.',
+    //     category: 'Room',
+    //     status: 'Available',
+    // };
+
+        const location = useLocation();
+        const { state } = location;
+        const { item } = state;
     return (
         <main id="main" className="main">
             <div className="pagetitle">
