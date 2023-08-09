@@ -1,8 +1,8 @@
 package naf.norsys.reservation.model;
 
+import jakarta.persistence.Embeddable;
 import lombok.*;
 
-import javax.persistence.Embeddable;
 
 @Getter
 @Setter
