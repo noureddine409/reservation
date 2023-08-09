@@ -7,31 +7,35 @@ const httpClient = axios.create({
 });
 
 // should not intercept for /auth
+httpClient.interceptors.request.use(
+    (config) => {
+        if (config.url?.includes("/auth")) {
+            return config;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
 
-// Add a response interceptor
 httpClient.interceptors.response.use(
     (response) => {
         return response;
     },
     async (error) => {
         const originalRequest = error.config;
-
-        // TODO: Handle token refresh and redirection for unauthorized access
         if (error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
 
             try {
-                await AuthentificationService.refresh().then(
-                    response => {
-                        return httpClient(originalRequest);
-                    }
-                )
+                const refreshedResponse = await AuthentificationService.refresh();
+                return refreshedResponse;
             } catch (refreshError) {
-                // Handle token refresh failure
-                // Call logout service and redirect to login
-                AuthentificationService.logout(); 
+                await AuthentificationService.logout();
 
-                window.location.href = "/login"; // Redirect to login page
+                // Redirect to login page
+                window.location.href = "/login";
                 throw refreshError;
             }
         }

@@ -6,25 +6,25 @@ const AuthentificationService = {
     login: async (loginDto: LoginDto) => {
         try {
             const response = await httpClient.post("/auth/login", loginDto);
-            return response; // Return the response data (if needed)
+            return response;
         } catch (error) {
-            throw error; // Handle the error or rethrow it for the caller to handle
+            throw error; 
         }
     },
     refresh: async () => {
         try {
             const response = await httpClient.post("/auth/token");
-            return response; // Return the response data (if needed)
+            return response; 
         } catch (error) {
-            throw error; // Handle the error or rethrow it for the caller to handle
+            throw error; 
         }
     },
     logout: async () => {
         try {
             const response = await httpClient.post("/auth/logout");
-            return response; // Return the response data (if needed)
+            return response.data; 
         } catch (error) {
-            throw error; // Handle the error or rethrow it for the caller to handle
+            throw error; 
         }
     },
 };
