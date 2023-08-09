@@ -1,6 +1,7 @@
 package naf.norsys.reservation.repository;
 
 
+import jakarta.persistence.criteria.Predicate;
 import naf.norsys.reservation.common.CoreConstant;
 import naf.norsys.reservation.model.GenericEnum;
 import naf.norsys.reservation.model.Item;
@@ -9,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

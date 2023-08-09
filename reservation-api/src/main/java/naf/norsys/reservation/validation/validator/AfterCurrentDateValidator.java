@@ -1,11 +1,11 @@
 package naf.norsys.reservation.validation.validator;
 
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;
 import naf.norsys.reservation.dto.PeriodDto;
 import naf.norsys.reservation.validation.AfterCurrentDate;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 import java.time.LocalDateTime;
 
 

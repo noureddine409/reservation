@@ -1,5 +1,7 @@
 package naf.norsys.reservation.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,8 +9,6 @@ import lombok.Setter;
 import naf.norsys.reservation.model.GenericEnum;
 import naf.norsys.reservation.model.Parameter;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
