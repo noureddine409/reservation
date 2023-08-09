@@ -1,11 +1,12 @@
 package naf.norsys.reservation.controller;
 
-
 import io.swagger.annotations.Api;
 import naf.norsys.reservation.dto.ItemDto;
+import naf.norsys.reservation.dto.ParameterDto;
 import naf.norsys.reservation.dto.SearchItemDto;
 import naf.norsys.reservation.exception.BusinessException;
 import naf.norsys.reservation.model.Item;
+import naf.norsys.reservation.model.Parameter;
 import naf.norsys.reservation.service.GenericService;
 import naf.norsys.reservation.service.ItemService;
 import naf.norsys.reservation.utils.ClassTypeProvider;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/items")

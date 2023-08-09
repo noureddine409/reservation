@@ -4,7 +4,6 @@ import naf.norsys.reservation.exception.BusinessException;
 import naf.norsys.reservation.exception.ItemAvailabilityException;
 import naf.norsys.reservation.model.GenericEnum.ItemCategory;
 import naf.norsys.reservation.model.Item;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 

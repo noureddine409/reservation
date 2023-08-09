@@ -27,6 +27,10 @@ public abstract class GenericController <T extends GenericEntity, D extends Gene
         this.genericService = genericService;
     }
 
+    public ModelMapper getModelMapper() {
+        return modelMapper;
+    }
+
     protected Class<?>[] getClasses(){
         return classTypeProvider.getClasses(this, GenericController.class);
     }
