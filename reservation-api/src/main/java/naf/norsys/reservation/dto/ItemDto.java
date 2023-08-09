@@ -7,8 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import naf.norsys.reservation.model.GenericEnum;
+import naf.norsys.reservation.model.Parameter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Getter
@@ -28,13 +30,17 @@ public class ItemDto extends GenericDto{
 
     private UserDto createdBy;
 
+    private List<ParameterDto> params;
+
+
     @Builder
-    public ItemDto(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String name, String description, GenericEnum.ItemCategory category, GenericEnum.ItemStatus status, UserDto createdBy) {
+    public ItemDto(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String name, String description, GenericEnum.ItemCategory category, GenericEnum.ItemStatus status, UserDto createdBy, List<ParameterDto> params) {
         super(id, createdAt, updatedAt);
         this.name = name;
         this.description = description;
         this.category = category;
         this.status = status;
         this.createdBy = createdBy;
+        this.params=params;
     }
 }

@@ -8,6 +8,13 @@ export interface Item extends GenericModel {
     category: string;
     status: string;
     createdBy?: User | null;
+    params?: Parameter[];
+
+}
+
+export interface Parameter {
+    key: string,
+    value: string
 }
 
 export interface SearchItemDto {
