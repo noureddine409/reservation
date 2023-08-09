@@ -58,7 +58,7 @@ const ItemService = {
     },
     save: async (item: Item)=> {
         try {
-            return await axios.post(`${baseUrl}/items}`, item, {
+            return await axios.post(`${baseUrl}/items`, item, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
