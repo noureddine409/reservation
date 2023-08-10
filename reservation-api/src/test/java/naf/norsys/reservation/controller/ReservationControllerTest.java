@@ -1,21 +1,17 @@
 package naf.norsys.reservation.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import naf.norsys.reservation.dto.ItemDto;
-import naf.norsys.reservation.dto.PeriodDto;
-import naf.norsys.reservation.dto.ReservationDto;
-import naf.norsys.reservation.dto.UserDto;
+import naf.norsys.reservation.dto.*;
 import naf.norsys.reservation.model.*;
 import naf.norsys.reservation.service.ItemService;
 import naf.norsys.reservation.service.ReservationService;
-import naf.norsys.reservation.service.UserService;
-import naf.norsys.reservation.utils.ClassTypeProvider;
+import naf.norsys.reservation.utils.AuthenticationHelper;
+import naf.norsys.reservation.utils.MapHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -35,17 +31,18 @@ public class ReservationControllerTest {
     @Mock
     private ItemService itemService;
 
-    @Mock
-    private UserService userService;
+
 
     @Mock
     private ReservationService reservationService;
 
     @Mock
-    private ClassTypeProvider classTypeProvider;
+    private MapHelper mapHelper;
 
     @Mock
-    private ModelMapper modelMapper;
+    private AuthenticationHelper authenticationHelper;
+
+
 
     @InjectMocks
     private ReservationController reservationController;
@@ -65,13 +62,15 @@ public class ReservationControllerTest {
         // Arrange
         ReservationDto dto = createSampleReservationDto();
 
+        ReservationRequestDto requestDto = createSampleReservationRequestDto();
+
         // Mock the behavior of the services
         mockServiceBehavior();
 
         // Act & Assert
         mockMvc.perform(post("/api/v1/reservations")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
+                        .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.item.id").value(dto.getItem().getId()))
@@ -82,11 +81,21 @@ public class ReservationControllerTest {
 
         // Verify that the services were called with the correct arguments
         verify(itemService, times(1)).checkItemStatus(1L);
-        verify(userService, times(1)).findById(1L);
+        verify(authenticationHelper, times(1)).getCurrentUser();
         verify(reservationService, times(1)).save(any(Reservation.class));
     }
 
     // Helper method to create a sample ReservationDto for testing
+
+    private ReservationRequestDto createSampleReservationRequestDto() {
+        return ReservationRequestDto.builder()
+                .itemId(1L)
+                .period(PeriodDto.builder()
+                        .startDate(LocalDateTime.of(2030, 8, 1, 12, 0))
+                        .endDate(LocalDateTime.of(2030, 8, 10, 12, 0))
+                        .build())
+                .build();
+    }
     private ReservationDto createSampleReservationDto() {
         UserDto user = UserDto.builder().id(1L).email("John@domain.me").build();
         ItemDto item = ItemDto.builder().id(1L).name("Item A")
@@ -108,15 +117,14 @@ public class ReservationControllerTest {
 
     // Helper method to mock the behavior of the services
     private void mockServiceBehavior() {
-        when(classTypeProvider.getClasses(any(), any())).thenReturn(new Class[]{Reservation.class, ReservationDto.class});
 
         Item item = Item.builder().id(1L).name("Item A").build();
         when(itemService.findById(anyLong())).thenReturn(item);
 
         User user = User.builder().id(1L).email("John@domain.me").build();
-        when(userService.findById(anyLong())).thenReturn(user);
+        when(authenticationHelper.getCurrentUser()).thenReturn(user);
 
-        when(modelMapper.map(any(), eq(Reservation.class))).thenAnswer(invocation -> {
+        when(mapHelper.convertToEntity(any(), eq(Reservation.class))).thenAnswer(invocation -> {
             ReservationDto reservationDto = invocation.getArgument(0);
             return Reservation.builder()
                     .id(reservationDto.getId())
@@ -129,7 +137,7 @@ public class ReservationControllerTest {
                     .build();
         });
 
-        when(modelMapper.map(any(), eq(ReservationDto.class))).thenAnswer(invocation -> {
+        when(mapHelper.convertToDto(any(), eq(ReservationDto.class))).thenAnswer(invocation -> {
             Reservation reservation = invocation.getArgument(0);
             return ReservationDto.builder()
                     .id(reservation.getId())
@@ -142,6 +150,20 @@ public class ReservationControllerTest {
 
                     .build();
         });
+
+        doAnswer(invocation -> {
+            Reservation reservation = invocation.getArgument(1);
+            ReservationRequestDto reservationRequestDto = invocation.getArgument(0);
+            reservation.setPeriod(
+                    ReservationPeriod.builder()
+                            .startDate(reservationRequestDto.getPeriod().getStartDate())
+                            .endDate(reservationRequestDto.getPeriod().getEndDate())
+                            .build()
+            );
+            return null;
+        }).when(mapHelper).map(any(), any());
+
+
 
         Reservation savedReservation = Reservation.builder()
                 .id(1L)

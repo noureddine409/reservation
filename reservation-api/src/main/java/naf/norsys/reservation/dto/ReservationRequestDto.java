@@ -1,7 +1,8 @@
 package naf.norsys.reservation.dto;
 
-import jakarta.validation.constraints.NotNull;
+
 import lombok.*;
+import naf.norsys.reservation.validation.AfterCurrentDate;
 import naf.norsys.reservation.validation.ValidPeriod;
 
 @Getter
@@ -9,8 +10,12 @@ import naf.norsys.reservation.validation.ValidPeriod;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserReservationSearchDto {
-    @NotNull
+public class ReservationRequestDto {
+
     @ValidPeriod
+    @AfterCurrentDate
     private PeriodDto period;
+
+    private Long itemId;
+
 }

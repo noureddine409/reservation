@@ -32,7 +32,7 @@ public class ItemServiceImpl extends GenericServiceImpl<Item> implements ItemSer
     @Override
     public List<Item> findByUser(Long userId, int page, int size) {
         final Pageable pageable = PageRequest.of(page, size);
-        return itemRepository.findAll(pageable).toList();
+        return itemRepository.findByCreatedBy_id(userId, pageable);
     }
 
     @Override

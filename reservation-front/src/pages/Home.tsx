@@ -9,7 +9,6 @@ import ReservationService from "../services/reservation-service/reservation.serv
 
 const HomePage = () => {
 
-
     const [reservations, setReservations] = useState<Reservation[]>([])
 
     const [currentPeriod, setCurrentPeriod] = useState<Period>()
@@ -17,7 +16,6 @@ const HomePage = () => {
     useEffect(() => {
         if (!currentPeriod) return;
         const requestBody: UserReservationSearch = {
-            userId: 1,
             period: currentPeriod!
         }
         ReservationService.findByUser(requestBody).then((response) => {

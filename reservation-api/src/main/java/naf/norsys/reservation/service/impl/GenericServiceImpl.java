@@ -94,4 +94,8 @@ public class GenericServiceImpl<T extends GenericEntity> implements GenericServi
         final long count = genericRepository.count();
         return (int) Math.ceil((double) count / pageSize) ;
     }
+
+    public ModelMapper getModelMapper() {
+        return modelMapper;
+    }
 }
