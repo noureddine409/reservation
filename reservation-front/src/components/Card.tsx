@@ -1,5 +1,5 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {Item} from "../model/item.model";
 
 interface CardProps {
@@ -7,9 +7,13 @@ interface CardProps {
 }
 
 const Card = (props: CardProps) => {
-    return (
+    const navigate = useNavigate();
 
-        <div className="card mb-3">
+    const handleReserveClick = () => {
+        navigate("/product-details", { state: props.item  });
+    };
+    return (
+    <div className="card mb-3">
             <div className="row g-0">
                 <div className="col-md-40">
                     <img src="https://kreconcept.fr/wp-content/uploads/2022/11/KRE_bg_espace_cuisine.jpg" className="img-fluid rounded-start" alt={props.item.name} />
@@ -20,7 +24,7 @@ const Card = (props: CardProps) => {
                         <p className="card-text">
                             {props.item.description}
                         </p>
-                        <Link to="/product-details" className="btn btn-primary">Book Now</Link>
+                        <div onClick={handleReserveClick} className="btn btn-primary">Book Now</div>
                     </div>
                 </div>
             </div>

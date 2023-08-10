@@ -1,18 +1,17 @@
-import AuthenticationService from "../services/auth-service/auth.service";
 import axios from "axios";
+import AuthenticationService from "../services/auth-service/auth.service";
 
-export const uninterceptedAxios = axios.create(
-    {
-        baseURL: process.env.REACT_APP_API_URL!,
-        withCredentials: true,
-    }
-);
-
-
-const httpClient = axios.create({
+const axiosConfig = {
     baseURL: process.env.REACT_APP_API_URL!,
     withCredentials: true,
-});
+    headers: {
+        'Content-Type': 'application/json',
+    }
+}
+
+export const uninterceptedAxios = axios.create(axiosConfig);
+
+const httpClient = axios.create(axiosConfig);
 
 httpClient.interceptors.response.use(
     (response) => {

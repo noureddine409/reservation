@@ -16,6 +16,7 @@ import ProductDetails from "./pages/Product/ProductDetails";
 import ShowProduct from "./pages/Product/ShowProduct";
 
 
+
 const App = () => {
     const [sideBarToggled, setSideBarToggled] = useState(false);
 
@@ -24,12 +25,11 @@ const App = () => {
     };
 
 
-
     return (
         <div className={sideBarToggled ? 'toggle-sidebar' : ''}>
 
             <Router>
-                <AppContent toggleSideBar={toggleSideBar} sideBarToggled={sideBarToggled} />
+                <AppContent toggleSideBar={toggleSideBar} sideBarToggled={sideBarToggled}/>
             </Router>
         </div>
     );
@@ -40,12 +40,12 @@ interface AppContentProps {
     sideBarToggled: boolean;
 }
 
-const AppContent: React.FC<AppContentProps> = ({ toggleSideBar }) => {
+const AppContent: React.FC<AppContentProps> = ({toggleSideBar}) => {
     const location = useLocation();
 
     const shouldDisplayHeaderAndSidebar = () => {
-        const { pathname } = location;
-        const allowedURLs = ['/', '/home', "/product-details",'/contact', '/f-a-q', '/profile', '/add-product', '/search-product','/show-product'];
+        const {pathname} = location;
+        const allowedURLs = ['/', '/home', "/product-details", '/contact', '/f-a-q', '/profile', '/add-product', '/search-product', '/show-product'];
         return allowedURLs.includes(pathname);
     };
 
@@ -53,13 +53,15 @@ const AppContent: React.FC<AppContentProps> = ({ toggleSideBar }) => {
         <>
             {shouldDisplayHeaderAndSidebar() && (
                 <>
-                    <HeaderComponent change={toggleSideBar} />
-                    <SideBarComponent />
+                    <HeaderComponent change={toggleSideBar}/>
+                    <SideBarComponent/>
                 </>
             )}
             <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/add-product" element={<AddProduct/>} />
+                <Route path="/" element={<HomePage/>}/>
+                <Route path="/add-product" element={<AddProduct updateProductList={function(): void {
+                    throw new Error('Function not implemented.');
+                } }/>} />
                 <Route path="/show-product" element={<ShowProduct/>} />
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
@@ -68,6 +70,8 @@ const AppContent: React.FC<AppContentProps> = ({ toggleSideBar }) => {
                 <Route path="/forget-password" element={<ForgetPassword />} />
                 <Route path="/search-product" element={<SearchProductPage/>} />
                 <Route path="/product-details" element={<ProductDetails/>} />
+
+
                 <Route path="*" element={<ErrorPage />} />
             </Routes>
         </>

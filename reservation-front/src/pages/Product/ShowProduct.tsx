@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import AddProduct from "./Add";
 import EditProduct from "./Edit";
@@ -5,9 +6,11 @@ import {Item} from "../../model/item.model";
 import ItemService from "../../services/item-service/item.service";
 import {DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE} from "../../common/constants";
 import Pagination from "../../components/Pagination";
+import Modal from '../../components/Modal';
 
 
 const ShowProduct: React.FC = () => {
+
     const [pageable, setPageable] = useState({
         page: DEFAULT_PAGE_NUMBER,
         size: DEFAULT_PAGE_SIZE
@@ -19,7 +22,7 @@ const ShowProduct: React.FC = () => {
             description: "sq",
             status: "AVAILABLE",
             category: "APARTMENT",
-            name: "zzz"
+            name: "zzz",
         }
     );
     const handleDelete = async (productId: number) => {
@@ -33,7 +36,7 @@ const ShowProduct: React.FC = () => {
             (error) => {
                 console.log(error);
             }
-    )
+        )
     };
 
 
@@ -80,6 +83,17 @@ const ShowProduct: React.FC = () => {
             page: pageNumber,
         });
     }
+    const updateProductList = (newProduct: Item) => {
+        setProducts((prevProducts) => [...prevProducts, newProduct]);
+    };
+    const updateProduct = (editedProduct: Item) => {
+        setProducts((prevProducts) =>
+            prevProducts.map((product) =>
+                product.id === editedProduct.id ? editedProduct : product
+            )
+        );
+    };
+
 
     return (
         <main id="main" className="main">
@@ -94,29 +108,15 @@ const ShowProduct: React.FC = () => {
                                     <div className="modal-body">
                                         <button type="submit" data-bs-toggle="modal" data-bs-target="#AddProductModal">ADD PRODUCT</button>
                                     </div><br/>
-
-
-                                    <div className="modal fade" id="AddProductModal" tabIndex={1} >
-                                        <div className="modal-dialog modal-xl">
-                                            <div className="modal-content">
-                                                <div className="modal-header">
-                                                    <h5 className="modal-title">Add a new product</h5>
-                                                    <button type="button" className="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                </div>
-                                                <div className="modal-body ">
-                                                    <AddProduct></AddProduct>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-
+                                                <Modal id="AddProductModal" title="Add a new product">
+                                                    <AddProduct updateProductList={updateProductList} />
+                                                </Modal>
                                     <table className="table datatable">
                                         <thead>
                                         <tr>
                                             <th scope="col">Image</th>
                                             <th scope="col">Name</th>
+                                            <th scope="col">Category</th>
                                             <th scope="col">Description</th>
                                             <th scope="col">Action</th>
                                         </tr>
@@ -124,8 +124,9 @@ const ShowProduct: React.FC = () => {
                                         <tbody>
                                         {products.map((product) => (
                                             <tr key={product.id}>
-                                                <td></td>
+                                                <td><img src="https://kreconcept.fr/wp-content/uploads/2022/11/KRE_bg_espace_cuisine.jpg" alt="Product" width="100" height="100" /></td>
                                                 <td>{product.name}</td>
+                                                <td>{product.category}</td>
                                                 <td>{product.description}</td>
                                                 <td>
                                                     <button type="button" className="btn btn-link" onClick={() => handleDelete(product.id!)}>
@@ -139,22 +140,9 @@ const ShowProduct: React.FC = () => {
                                         ))}
                                         </tbody>
                                     </table>
-                                    <div className="modal fade" id="EditProductModal" tabIndex={1} >
-                                        <div className="modal-dialog modal-xl">
-                                            <div className="modal-content">
-                                                <div className="modal-header">
-                                                    <h5 className="modal-title">Add a new product</h5>
-                                                    <button type="button" className="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                </div>
-                                                <div className="modal-body ">
-                                                    <EditProduct product={productToUpdate!}/>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-
+                                    <Modal id="EditProductModal" title="Edit product">
+                                        <EditProduct product={productToUpdate} updateProduct={updateProduct} />
+                                    </Modal>
                                 </div>
                             </div>
                         </div>

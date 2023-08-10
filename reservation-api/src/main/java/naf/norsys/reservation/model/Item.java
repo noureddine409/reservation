@@ -29,13 +29,19 @@ public class Item extends GenericEntity {
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<Reservation> reservations;
 
+    @ElementCollection
+    @CollectionTable(name = "item_parameters", joinColumns = @JoinColumn(name = "item_id"))
+    private List<Parameter> params;
+
     @Builder
-    public Item(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String name, String description, GenericEnum.ItemCategory category, User createdBy, GenericEnum.ItemStatus status) {
+    public Item(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String name, String description, GenericEnum.ItemCategory category, User createdBy,
+                GenericEnum.ItemStatus status, List<Parameter> params) {
         super(id, createdAt, updatedAt);
         this.name = name;
         this.description = description;
         this.category = category;
         this.createdBy = createdBy;
         this.status=status;
+        this.params = params;
     }
 }

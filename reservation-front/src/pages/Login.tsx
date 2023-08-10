@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {ERROR_MESSAGES, VALIDATION_RULES} from "../common/constants";
-import AuthenticationService from '../services/auth-service/auth.service';
+import AuthenticationService from "../services/auth-service/auth.service";
 
 
 interface LoginFormValues {
@@ -27,9 +27,9 @@ const LoginPage = () => {
             password: data.password,
         };
         await AuthenticationService.login(loginDto).then(
-            (response)=> navigate("/")
+            ()=> navigate("/")
         ).catch(
-            error => {
+            () => {
                 setLoginError("Invalid username or password")
                 reset();
             });
