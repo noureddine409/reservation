@@ -7,7 +7,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import naf.norsys.reservation.common.CoreConstant;
-import naf.norsys.reservation.dto.*;
+import naf.norsys.reservation.dto.JwtToken;
+import naf.norsys.reservation.dto.UserDto;
+import naf.norsys.reservation.dto.UserLoginDto;
+import naf.norsys.reservation.dto.UserRegisterDto;
 import naf.norsys.reservation.exception.BusinessException;
 import naf.norsys.reservation.exception.ElementAlreadyExistsException;
 import naf.norsys.reservation.exception.ElementNotFoundException;
@@ -47,15 +50,15 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody @Valid UserLoginDto userLoginDto, HttpServletResponse response) throws UnauthorizedException, ElementNotFoundException {
+    public ResponseEntity<UserDto> login(@RequestBody @Valid UserLoginDto userLoginDto, HttpServletResponse response) throws UnauthorizedException, ElementNotFoundException {
         Authentication authToken = new UsernamePasswordAuthenticationToken(userLoginDto.getEmail(), userLoginDto.getPassword());
         Authentication authResult = authenticateToken(authToken);
 
         User authenticatedUser = (User) authResult.getPrincipal();
         generateAndSetTokens(authenticatedUser, GenericEnum.JwtTokenType.ACCESS, response);
         generateAndSetTokens(authenticatedUser, GenericEnum.JwtTokenType.REFRESH, response);
-
-        return ResponseEntity.ok().build();
+        UserDto userDto = modelMapper.map(authenticatedUser, UserDto.class);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
     @PostMapping("/token")
