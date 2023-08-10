@@ -6,11 +6,7 @@ import interceptedAxios from "../../middleware/axios-auth-config";
 const ItemService = {
     search: async (search: SearchItemDto) => {
         try {
-            return await interceptedAxios.post("/items/search", search, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+            return await interceptedAxios.post("/items/search", search);
         } catch (error) {
             console.error('Error fetching items:', error);
             throw error; // Rethrow the error so that the calling code can handle it
@@ -18,25 +14,15 @@ const ItemService = {
     },
     findByUser: async (pageable: Page): Promise<Item[]> => {
         try {
-            const response: AxiosResponse<Item[]> = await interceptedAxios.get(`/items?page=${pageable.page}&size=${pageable.size}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+            const response: AxiosResponse<Item[]> = await interceptedAxios.get(`/items?page=${pageable.page}&size=${pageable.size}`);
             return response.data; // Extract the data property from the AxiosResponse
         } catch (error) {
-            console.error('Error fetching items:', error);
             throw error; // Rethrow the error so that the calling code can handle it
         }
     },
     delete: async (id: number) => {
         try {
-            const response: AxiosResponse<Item[]> = await interceptedAxios.delete(`/items/${id}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            alert("Product deleted successfully ");
+            const response: AxiosResponse<Item[]> = await interceptedAxios.delete(`/items/${id}`);
             return response.data;
 
         } catch (error) {
