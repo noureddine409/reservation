@@ -228,7 +228,6 @@ const HeaderComponent = ({change}: HeaderProps) => {
                         <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                             <li className="dropdown-header">
                                 <h6>{auth.authenticatedUser?.firstName} {auth.authenticatedUser?.lastName} </h6>
-                                <span>Web Designer</span>
                             </li>
                             <li>
                                 <hr className="dropdown-divider"/>
