@@ -6,7 +6,7 @@ import AuthenticationService from "../services/auth-service/auth.service";
 
 
 interface LoginFormValues {
-    username: string;
+    email: string;
     password: string;
 
 }
@@ -23,11 +23,11 @@ const LoginPage = () => {
 
     const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
         const loginDto = {
-            email: data.username,
+            email: data.email,
             password: data.password,
         };
         await AuthenticationService.login(loginDto).then(
-            ()=> navigate("/")
+            () => navigate("/")
         ).catch(
             () => {
                 setLoginError("Invalid username or password")
@@ -69,9 +69,9 @@ const LoginPage = () => {
                                                 User name
                                             </label>
                                             <input
-                                                className={`form-control ${errors.username ? 'is-invalid' : ''}`}
+                                                className={`form-control ${errors.email ? 'is-invalid' : ''}`}
                                                 placeholder="User name"
-                                                {...register('username', {
+                                                {...register('email', {
                                                     required: {
                                                         value: true,
                                                         message: ERROR_MESSAGES.required,
@@ -80,16 +80,16 @@ const LoginPage = () => {
                                                         minLength: (v) =>
                                                             VALIDATION_RULES.minLength(5)(v) ||
                                                             ERROR_MESSAGES.minLength.replace('{min}', '5'),
-                                                        /* pattern: (v) =>
-                                                             VALIDATION_RULES.namePattern.test(v) || ERROR_MESSAGES.username,*/
+                                                        pattern: (v) =>
+                                                            VALIDATION_RULES.emailPattern.test(v) || ERROR_MESSAGES.email,
                                                     },
                                                 })}
                                             />
-                                            {errors.username?.type === "required" &&
+                                            {errors.email?.type === "required" &&
                                                 <p className="error-message">{ERROR_MESSAGES.required}</p>}
-                                            {errors.username?.type === "minLength" &&
+                                            {errors.email?.type === "minLength" &&
                                                 <p className="error-message">{ERROR_MESSAGES.minLength.replace('{min}', '5')}</p>}
-                                            {errors.username?.type === "pattern" &&
+                                            {errors.email?.type === "pattern" &&
                                                 <p className="error-message">{ERROR_MESSAGES.username}</p>}
 
                                             <label htmlFor="your email" className="form-label">

@@ -1,12 +1,11 @@
-
 export const ERROR_MESSAGES = {
     required: 'This field is required.',
     minLength: 'Please enter at least {min} characters.',
     maxLength: 'Please enter at most {max} characters.',
     pattern: 'Invalid input.',
     email: 'Invalid email address.',
-    name:'Invalid name',
-    username:'Invalid username',
+    name: 'Invalid name',
+    username: 'Invalid username',
     password: 'Invalid password. Password must contain at least 8 characters, one uppercase letter, one lowercase letter, and one digit.',
     passwordMatch: 'Passwords do not match.',
 };
@@ -19,20 +18,20 @@ export const VALIDATION_RULES = {
 };
 
 
-
-export const options = [
+export const CATEGORY_OPTIONS = [
     {value: null, label: "All Categories"},
-    { value: 'APARTMENT', label: 'Apartment' },
-    { value: 'VEHICULE', label: 'vehicule' }
+    {value: 'APARTMENT', label: 'Apartment'},
+    {value: 'VEHICULE', label: 'vehicule'}
+    // TODO add more categories (add them also to backend)
 ];
 
 export const DEFAULT_SEARCH_KEYWORD = ""
 export const DEFAULT_SEARCH_CATEGORY = {
-    label:"",
+    label: "",
     value: null
-  }
+}
 export const DEFAULT_PAGE_NUMBER = 1
-export const DEFAULT_PAGE_SIZE =6
-export const DEFAULT_TOTAL_PAGES =1
+export const DEFAULT_PAGE_SIZE = 6
+export const DEFAULT_TOTAL_PAGES = 1
 
 

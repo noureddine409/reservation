@@ -4,16 +4,18 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import Fullcalendar from "@fullcalendar/react";
 import {Period, Reservation, UserReservationSearch} from "../model/reservation.model";
-import {formatDateToString} from "../utils/dateTime-conversion";
+import {convertToEvents, formatDateToString} from "../utils/reservationUtils";
 import ReservationService from "../services/reservation-service/reservation.service";
 
 const HomePage = () => {
+
 
     const [reservations, setReservations] = useState<Reservation[]>([])
 
     const [currentPeriod, setCurrentPeriod] = useState<Period>()
 
     useEffect(() => {
+        if (!currentPeriod) return;
         const requestBody: UserReservationSearch = {
             userId: 1,
             period: currentPeriod!
@@ -26,15 +28,7 @@ const HomePage = () => {
     }, [currentPeriod]);
 
 
-    const convertToEvents = (reservations: Reservation[]) => {
-        return reservations.map(reservation => {
-            return {
-                title: reservation.item.name,
-                start: reservation.period.startDate,
-                end: reservation.period.endDate,
-            };
-        });
-    }
+
 
 
     return (
@@ -42,7 +36,6 @@ const HomePage = () => {
             <div className="pagetitle">
                 <h1>Calendar</h1>
             </div>
-            {/* End Page Title */}
             <section className="section">
                 <div className="row">
 
@@ -51,9 +44,9 @@ const HomePage = () => {
                             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                             initialView={"dayGridMonth"}
                             headerToolbar={{
-                                start: "today prev,next", // will normally be on the left. if RTL, will be on the right
+                                start: "today prev,next",
                                 center: "title",
-                                end: "dayGridMonth,timeGridWeek,timeGridDay", // will normally be on the right. if RTL, will be on the left
+                                end: "dayGridMonth,timeGridWeek,timeGridDay",
                             }}
                             height={"90vh"}
                             events={

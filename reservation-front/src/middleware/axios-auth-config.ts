@@ -1,7 +1,7 @@
 import axios from "axios";
 import AuthenticationService from "../services/auth-service/auth.service";
 
-const axiosConfig = {
+const defaultAxiosConfig = {
     baseURL: process.env.REACT_APP_API_URL!,
     withCredentials: true,
     headers: {
@@ -9,21 +9,21 @@ const axiosConfig = {
     }
 }
 
-export const uninterceptedAxios = axios.create(axiosConfig);
+export const axiosInstance = axios.create(defaultAxiosConfig);
 
-const httpClient = axios.create(axiosConfig);
+const interceptedAxios = axios.create(defaultAxiosConfig);
 
-httpClient.interceptors.response.use(
+interceptedAxios.interceptors.response.use(
     (response) => {
         return response;
     },
     async (error) => {
-        const originalRequest = error.config;
-        if (error.response.status === 401 && !originalRequest._retry) {
-            originalRequest._retry = true;
+        const retryConfig = error.config;
+        if (error.response.status === 401 && !retryConfig._retry) {
+            retryConfig._retry = true;
             await AuthenticationService.refresh().then(
                 () => {
-                    httpClient(originalRequest)
+                    interceptedAxios(retryConfig)
                 }
             ).catch(
                 error => Promise.reject(error)
@@ -34,4 +34,4 @@ httpClient.interceptors.response.use(
     }
 );
 
-export default httpClient;
+export default interceptedAxios;
