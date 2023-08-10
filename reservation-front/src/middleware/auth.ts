@@ -1,23 +1,18 @@
-import AuthentificationService from "../services/auth-service/auth.service";
+import AuthenticationService from "../services/auth-service/auth.service";
 import axios from "axios";
+
+export const uninterceptedAxios = axios.create(
+    {
+        baseURL: process.env.REACT_APP_API_URL!,
+        withCredentials: true,
+    }
+);
+
 
 const httpClient = axios.create({
     baseURL: process.env.REACT_APP_API_URL!,
     withCredentials: true,
 });
-
-// should not intercept for /auth
-httpClient.interceptors.request.use(
-    (config) => {
-        if (config.url?.includes("/auth")) {
-            return config;
-        }
-        return config;
-    },
-    (error) => {
-        return Promise.reject(error);
-    }
-);
 
 httpClient.interceptors.response.use(
     (response) => {
@@ -27,17 +22,13 @@ httpClient.interceptors.response.use(
         const originalRequest = error.config;
         if (error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
-
-            try {
-                const refreshedResponse = await AuthentificationService.refresh();
-                return refreshedResponse;
-            } catch (refreshError) {
-                await AuthentificationService.logout();
-
-                // Redirect to login page
-                window.location.href = "/login";
-                throw refreshError;
-            }
+            await AuthenticationService.refresh().then(
+                () => {
+                    httpClient(originalRequest)
+                }
+            ).catch(
+                error => Promise.reject(error)
+            )
         }
 
         return Promise.reject(error);

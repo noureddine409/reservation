@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { ERROR_MESSAGES, VALIDATION_RULES } from "../common/constants";
-import AuthentificationService from '../services/auth-service/auth.service';
+import React, {useState} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
+import {SubmitHandler, useForm} from 'react-hook-form';
+import {ERROR_MESSAGES, VALIDATION_RULES} from "../common/constants";
+import AuthenticationService from '../services/auth-service/auth.service';
+
 
 interface LoginFormValues {
     username: string;
@@ -11,9 +12,10 @@ interface LoginFormValues {
 }
 
 const LoginPage = () => {
+    const navigate = useNavigate();
     const {
         handleSubmit,
-        formState: { errors },
+        formState: {errors},
         register,
         reset,
     } = useForm<LoginFormValues>();
@@ -24,14 +26,14 @@ const LoginPage = () => {
             email: data.username,
             password: data.password,
         };
-        try {
-            await AuthentificationService.login(loginDto);
-            window.location.href = "/";
-        } catch (error) {
-            setLoginError("Invalid username or password"); // Set login error message
-        }
-        reset();
-    };
+        await AuthenticationService.login(loginDto).then(
+            (response)=> navigate("/")
+        ).catch(
+            error => {
+                setLoginError("Invalid username or password")
+                reset();
+            });
+    }
 
 
     return (
@@ -39,10 +41,13 @@ const LoginPage = () => {
             <div className="container">
                 <section className="section register  align-items-center justify-content-center py-4">
                     <div className="row justify-content-center">
-                        <div className="col-lg-6 col-md-6 d-flex flex-column align-items-center justify-content-center">
+                        <div
+                            className="col-lg-6 col-md-6 d-flex flex-column align-items-center justify-content-center">
                             <div className="d-flex justify-content-center py-4">
                                 <Link to="/" className="logo d-flex align-items-center w-auto">
-                                    <img src="https://www.norsys.fr/sites/all/modules/custom/norsys_base/images/4-logo3.png" alt="" />
+                                    <img
+                                        src="https://www.norsys.fr/sites/all/modules/custom/norsys_base/images/4-logo3.png"
+                                        alt=""/>
 
                                     <span className="d-none d-lg-block">Norsys</span>
                                 </Link>
@@ -80,9 +85,12 @@ const LoginPage = () => {
                                                     },
                                                 })}
                                             />
-                                            {errors.username?.type === "required" && <p className="error-message">{ERROR_MESSAGES.required}</p>}
-                                            {errors.username?.type === "minLength" && <p className="error-message">{ERROR_MESSAGES.minLength.replace('{min}', '5')}</p>}
-                                            {errors.username?.type === "pattern" && <p className="error-message">{ERROR_MESSAGES.username}</p>}
+                                            {errors.username?.type === "required" &&
+                                                <p className="error-message">{ERROR_MESSAGES.required}</p>}
+                                            {errors.username?.type === "minLength" &&
+                                                <p className="error-message">{ERROR_MESSAGES.minLength.replace('{min}', '5')}</p>}
+                                            {errors.username?.type === "pattern" &&
+                                                <p className="error-message">{ERROR_MESSAGES.username}</p>}
 
                                             <label htmlFor="your email" className="form-label">
                                                 Password
@@ -105,8 +113,10 @@ const LoginPage = () => {
                                                     },
                                                 })}
                                             />
-                                            {errors.password?.type === "required" && <p className="error-message">{ERROR_MESSAGES.required}</p>}
-                                            {errors.password?.type === "pattern" && <p className="error-message">{ERROR_MESSAGES.password}</p>}
+                                            {errors.password?.type === "required" &&
+                                                <p className="error-message">{ERROR_MESSAGES.required}</p>}
+                                            {errors.password?.type === "pattern" &&
+                                                <p className="error-message">{ERROR_MESSAGES.password}</p>}
 
 
                                         </div>
@@ -125,7 +135,8 @@ const LoginPage = () => {
                                             </div>
                                         </div>
                                         <div className="col-12">
-                                            {loginError && <p className="error-message">{loginError}</p>} {/* Display error message */}
+                                            {loginError &&
+                                                <p className="error-message">{loginError}</p>} {/* Display error message */}
                                         </div>
                                         <div className="col-12">
                                             <button className="btn btn-primary w-100" type="submit">

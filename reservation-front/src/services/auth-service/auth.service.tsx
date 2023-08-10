@@ -1,32 +1,28 @@
-import axios from "axios";
-import { LoginDto } from "../../model/user.model";
-import httpClient from "../../middleware/auth";
+import {LoginDto} from "../../model/user.model";
+import {uninterceptedAxios} from "../../middleware/auth";
 
-const AuthentificationService = {
+const AuthenticationService = {
     login: async (loginDto: LoginDto) => {
         try {
-            const response = await httpClient.post("/auth/login", loginDto);
-            return response;
+            return  await uninterceptedAxios.post("/auth/login", loginDto);
         } catch (error) {
             throw error; 
         }
     },
     refresh: async () => {
         try {
-            const response = await httpClient.post("/auth/token");
-            return response; 
+            return await uninterceptedAxios.post("/auth/token");
         } catch (error) {
             throw error; 
         }
     },
     logout: async () => {
         try {
-            const response = await httpClient.post("/auth/logout");
-            return response.data; 
+            return await uninterceptedAxios.post("/auth/logout");
         } catch (error) {
             throw error; 
         }
     },
 };
 
-export default AuthentificationService;
+export default AuthenticationService;
