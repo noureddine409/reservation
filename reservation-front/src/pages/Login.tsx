@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {SubmitHandler, useForm} from 'react-hook-form';
-import {ERROR_MESSAGES, VALIDATION_RULES} from "../common/constants";
+import {AUTHENTICATED_USER_KEY, ERROR_MESSAGES, VALIDATION_RULES} from "../common/constants";
 import AuthenticationService from "../services/auth-service/auth.service";
+import {useAuth} from "../context/authContext";
 
 
 interface LoginFormValues {
@@ -13,6 +14,7 @@ interface LoginFormValues {
 
 const LoginPage = () => {
     const navigate = useNavigate();
+    const auth = useAuth(); // Use the AuthContext
     const {
         handleSubmit,
         formState: {errors},
@@ -27,7 +29,12 @@ const LoginPage = () => {
             password: data.password,
         };
         await AuthenticationService.login(loginDto).then(
-            () => navigate("/")
+            (response) => {
+                const authenticatedUser = response.data;
+                localStorage.setItem(AUTHENTICATED_USER_KEY, JSON.stringify(authenticatedUser));
+                auth.setAuthenticatedUser(authenticatedUser)
+                navigate("/")
+            }
         ).catch(
             () => {
                 setLoginError("Invalid username or password")

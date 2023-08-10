@@ -16,7 +16,6 @@ import ProductDetails from "./pages/Product/ProductDetails";
 import ShowProduct from "./pages/Product/ShowProduct";
 
 
-
 const App = () => {
     const [sideBarToggled, setSideBarToggled] = useState(false);
 
@@ -42,7 +41,6 @@ interface AppContentProps {
 
 const AppContent: React.FC<AppContentProps> = ({toggleSideBar}) => {
     const location = useLocation();
-
     const shouldDisplayHeaderAndSidebar = () => {
         const {pathname} = location;
         const allowedURLs = ['/', '/home', "/product-details", '/contact', '/f-a-q', '/profile', '/add-product', '/search-product', '/show-product'];

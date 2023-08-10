@@ -1,6 +1,8 @@
 import React from 'react';
 import {Link, useNavigate} from "react-router-dom"
 import authService from "../services/auth-service/auth.service";
+import {AUTHENTICATED_USER_KEY} from "../common/constants";
+import {useAuth} from "../context/authContext";
 
 interface HeaderProps {
     change: () => void;
@@ -9,6 +11,7 @@ interface HeaderProps {
 const HeaderComponent = ({change}: HeaderProps) => {
 
     const navigate = useNavigate()
+    const auth = useAuth();
 
     const handleChange = () => {
         change();
@@ -16,7 +19,9 @@ const HeaderComponent = ({change}: HeaderProps) => {
 
     const handleLogout = () => {
         authService.logout().then(
-            (response) => {
+            () => {
+                localStorage.removeItem(AUTHENTICATED_USER_KEY)
+                auth.setAuthenticatedUser(null);
                 navigate("/login")
             }
         )
@@ -216,13 +221,13 @@ const HeaderComponent = ({change}: HeaderProps) => {
                                 className="rounded-circle"
                             />
                             <span className="d-none d-md-block dropdown-toggle ps-2">
-              K. Anderson
+              {auth.authenticatedUser?.firstName} {auth.authenticatedUser?.lastName}
             </span>
                         </a>
                         {/* End Profile Iamge Icon */}
                         <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                             <li className="dropdown-header">
-                                <h6>Kevin Anderson</h6>
+                                <h6>{auth.authenticatedUser?.firstName} {auth.authenticatedUser?.lastName} </h6>
                                 <span>Web Designer</span>
                             </li>
                             <li>
