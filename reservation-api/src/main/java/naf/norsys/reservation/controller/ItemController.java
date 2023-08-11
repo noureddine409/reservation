@@ -3,6 +3,7 @@ package naf.norsys.reservation.controller;
 
 import jakarta.validation.Valid;
 import naf.norsys.reservation.dto.ItemDto;
+import naf.norsys.reservation.dto.ItemPatchDto;
 import naf.norsys.reservation.dto.SearchItemDto;
 import naf.norsys.reservation.exception.BusinessException;
 import naf.norsys.reservation.exception.ElementAlreadyExistsException;
@@ -53,14 +54,13 @@ public class ItemController {
         return new ResponseEntity<>(itemDto, HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ItemDto> update(@PathVariable("id") Long id, @Valid @RequestBody ItemDto dto) throws ElementNotFoundException {
+    @PatchMapping("/{id}")
+    public ResponseEntity<ItemDto> update(@PathVariable("id") Long id, @Valid @RequestBody ItemPatchDto patch) throws ElementNotFoundException {
         final Item item = itemService.findById(id);
         if (isNotOwner(item)) {
             throw new ResourceOwnershipException(new ResourceOwnershipException(), AUTHORIZATION_RESOURCE_OWNERSHIP, null);
         }
-        final Item entity = mapHelper.convertToEntity(dto, Item.class);
-        final Item saved = itemService.update(id, entity);
+        final Item saved = itemService.patch(id, patch);
         final ItemDto itemDto = mapHelper.convertToDto(saved, ItemDto.class);
         return new ResponseEntity<>(itemDto, HttpStatus.OK);
     }
@@ -79,6 +79,7 @@ public class ItemController {
         Item item = mapHelper.convertToEntity(dto, Item.class);
         final User currentUser = authenticationHelper.getCurrentUser();
         item.setCreatedBy(currentUser);
+        item.setId(null);
         final Item saved = itemService.save(item);
         final ItemDto itemDto = mapHelper.convertToDto(saved, ItemDto.class);
         return new ResponseEntity<>(itemDto, HttpStatus.CREATED);

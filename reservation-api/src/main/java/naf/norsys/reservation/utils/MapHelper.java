@@ -45,5 +45,4 @@ public class MapHelper {
         modelMapper.map(sourceObject, destinationObject);
     }
 
-
 }

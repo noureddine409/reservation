@@ -31,7 +31,7 @@ const ItemService = {
     },
     update: async (itemId: number, item: Item) => {
         try {
-            return await interceptedAxios.put(`/items/${itemId}`, item);
+            return await interceptedAxios.patch(`/items/${itemId}`, item);
         } catch (error) {
             throw error;
         }
