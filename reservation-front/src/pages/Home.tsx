@@ -9,6 +9,7 @@ import ReservationService from "../services/reservation-service/reservation.serv
 
 const HomePage = () => {
 
+
     const [reservations, setReservations] = useState<Reservation[]>([])
 
     const [currentPeriod, setCurrentPeriod] = useState<Period>()
