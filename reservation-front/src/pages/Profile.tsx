@@ -1,6 +1,9 @@
 import React from 'react';
+import {useAuth} from "../context/authContext";
 
 const ProfilePage = () => {
+
+    const auth = useAuth()
     return (
         <main id="main" className="main">
             <div className="pagetitle">
@@ -15,9 +18,9 @@ const ProfilePage = () => {
                                 <img
                                     alt="Profile"
                                     className="rounded-circle"
+                                    src="https://t3.ftcdn.net/jpg/03/46/83/96/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg"
                                 />
-                                <h2>Kevin Anderson</h2>
-                                <h3>Web Designer</h3>
+                                <h2>{auth.authenticatedUser?.firstName} {auth.authenticatedUser?.lastName} </h2>
                                 <div className="social-links mt-2">
                                     <a href="/#" className="twitter">
                                         <i className="bi bi-twitter" />
@@ -92,17 +95,7 @@ const ProfilePage = () => {
                                         <h5 className="card-title">Profile Details</h5>
                                         <div className="row">
                                             <div className="col-lg-3 col-md-4 label ">Full Name</div>
-                                            <div className="col-lg-9 col-md-8">Kevin Anderson</div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-lg-3 col-md-4 label">Company</div>
-                                            <div className="col-lg-9 col-md-8">
-                                                Lueilwitz, Wisoky and Leuschke
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-lg-3 col-md-4 label">Job</div>
-                                            <div className="col-lg-9 col-md-8">Web Designer</div>
+                                            <div className="col-lg-9 col-md-8">{auth.authenticatedUser?.firstName} {auth.authenticatedUser?.lastName}</div>
                                         </div>
                                         <div className="row">
                                             <div className="col-lg-3 col-md-4 label">Country</div>
@@ -123,7 +116,7 @@ const ProfilePage = () => {
                                         <div className="row">
                                             <div className="col-lg-3 col-md-4 label">Email</div>
                                             <div className="col-lg-9 col-md-8">
-                                                k.anderson@example.com
+                                                {auth.authenticatedUser?.email}
                                             </div>
                                         </div>
                                     </div>
@@ -141,7 +134,7 @@ const ProfilePage = () => {
                                                     Profile Image
                                                 </label>
                                                 <div className="col-md-8 col-lg-9">
-                                                    <img alt="Profile" />
+                                                    <img alt="Profile" src="https://t3.ftcdn.net/jpg/03/46/83/96/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg" />
                                                     <div className="pt-2">
                                                         <a
                                                             href="/#"

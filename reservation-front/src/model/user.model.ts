@@ -12,3 +12,7 @@ export interface User extends GenericModel {
     bio?: string;
     enabled?: boolean;
 }
+ export interface LoginDto{
+    email: string;
+    password: string;
+ }

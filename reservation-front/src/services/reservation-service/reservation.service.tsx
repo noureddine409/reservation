@@ -1,32 +1,20 @@
-import axios from "axios";
 import {ItemReservationSearch, UserReservationSearch} from "../../model/reservation.model";
-const baseUrl: string = process.env.REACT_APP_API_URL!;
-
+import interceptedAxios from "../../middleware/axios-auth-config";
 
 
 const ReservationService = {
     findByUser: async (search: UserReservationSearch) => {
         try {
-            return await axios.post(`${baseUrl}/reservations/users`, search, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+            return await interceptedAxios.post("/reservations/users", search);
         } catch (error) {
-            console.error('Error fetching items:', error);
-            throw error; // Rethrow the error so that the calling code can handle it
+            throw error;
         }
     },
     findByItem: async (search: ItemReservationSearch) => {
         try {
-            return await axios.post(`${baseUrl}/reservations/items`, search, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+            return await interceptedAxios.post("/reservations/items", search);
         } catch (error) {
-            console.error('Error fetching items:', error);
-            throw error; // Rethrow the error so that the calling code can handle it
+            throw error;
         }
     }
 

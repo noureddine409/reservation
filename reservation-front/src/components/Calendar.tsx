@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import Fullcalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction";
-import { formatDateToString } from "../utils/dateTime-conversion";
-import { ItemReservationSearch, Period, Reservation } from "../model/reservation.model";
+import interactionPlugin, {DateClickArg} from "@fullcalendar/interaction";
+import {convertToEvents, formatDateToString} from "../utils/reservationUtils";
+import {ItemReservationSearch, Period, Reservation} from "../model/reservation.model";
 import reservationService from "../services/reservation-service/reservation.service";
-import { DateClickArg } from "@fullcalendar/interaction";
 import ReservationPopup from "./ReservationPopup";
 
 
@@ -31,15 +30,7 @@ const Calendar = () => {
             });
     }, [currentPeriod]);
 
-    const convertToEvents = (reservations: Reservation[]) => {
-        return reservations.map((reservation) => {
-            return {
-                title: reservation.item.name,
-                start: reservation.period.startDate,
-                end: reservation.period.endDate,
-            };
-        });
-    };
+
 
     const handleDateClick = (arg: DateClickArg) => { // Utiliser DateClickArg
         const date = arg.date; // Récupérer la date à partir de l'objet DateClickArg
