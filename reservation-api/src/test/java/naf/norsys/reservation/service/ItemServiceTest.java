@@ -8,13 +8,13 @@ import naf.norsys.reservation.model.GenericEnum;
 import naf.norsys.reservation.model.Item;
 import naf.norsys.reservation.repository.ItemRepository;
 import naf.norsys.reservation.service.impl.ItemServiceImpl;
+import naf.norsys.reservation.utils.MapHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
@@ -35,7 +35,7 @@ public class ItemServiceTest {
     private ItemRepository itemRepository;
 
     @Mock
-    private ModelMapper modelMapper;
+    private MapHelper mapHelper;
 
     @InjectMocks
     private ItemServiceImpl itemService;
@@ -66,7 +66,7 @@ public class ItemServiceTest {
         verify(itemRepository, times(1)).save(existingEntity);
 
         // Verify that the modelMapper.map method is called once with the correct entities
-        verify(modelMapper, times(1)).map(updatedEntity, existingEntity);
+        verify(mapHelper, times(1)).map(updatedEntity, existingEntity);
     }
 
     @Test
@@ -149,7 +149,7 @@ public class ItemServiceTest {
         assertThrows(ElementNotFoundException.class, () -> itemService.update(nonExistingEntityId, updatedEntity));
 
         // Verify that the modelMapper.map method is not called since there's no item to update
-        verify(modelMapper, never()).map(any(), any());
+        verify(mapHelper, never()).map(any(), any());
 
         // Verify that the itemRepository.save method is not called since there's no item to update
         verify(itemRepository, never()).save(any());
