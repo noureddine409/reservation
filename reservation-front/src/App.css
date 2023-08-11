@@ -106,6 +106,7 @@
 
 .dropdown-menu .dropdown-item:hover {
     background-color: #f6f9ff;
+    cursor: pointer;
 }
 
 @media (min-width: 768px) {
@@ -178,7 +179,7 @@
     margin-bottom: 30px;
     border: none;
     border-radius: 5px;
-    box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
+    box-shadow: 0 0 30px rgba(1, 41, 112, 0.1);
 }
 
 .card-header,
@@ -315,7 +316,7 @@
 /* Filter dropdown */
 .dashboard .filter {
     position: absolute;
-    right: 0px;
+    right: 0;
     top: 15px;
 }
 
@@ -571,7 +572,7 @@
     transition: all 0.5s;
     z-index: 997;
     height: 60px;
-    box-shadow: 0px 2px 20px rgba(1, 41, 112, 0.1);
+    box-shadow: 0 2px 20px rgba(1, 41, 112, 0.1);
     background-color: #fff;
     padding-left: 20px;
     /* Toggle Sidebar Button */
@@ -597,7 +598,7 @@
         left: 0;
         right: 0;
         padding: 20px;
-        box-shadow: 0px 0px 15px 0px rgba(1, 41, 112, 0.1);
+        box-shadow: 0 0 15px 0 rgba(1, 41, 112, 0.1);
         background: white;
         z-index: 9999;
         transition: 0.3s;
@@ -617,7 +618,6 @@
 }
 
 .header .search-form input {
-    border: 0;
     font-size: 14px;
     color: #012970;
     border: 1px solid rgba(1, 41, 112, 0.2);
@@ -893,7 +893,7 @@ li a {
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: #aab7cf transparent;
-    box-shadow: 0px 0px 20px rgba(1, 41, 112, 0.1);
+    box-shadow: 0 0 20px rgba(1, 41, 112, 0.1);
     background-color: #fff;
 }
 
