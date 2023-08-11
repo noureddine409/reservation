@@ -7,7 +7,7 @@ import naf.norsys.reservation.model.Reservation;
 import naf.norsys.reservation.repository.GenericRepository;
 import naf.norsys.reservation.repository.ReservationRepository;
 import naf.norsys.reservation.service.ReservationService;
-import org.modelmapper.ModelMapper;
+import naf.norsys.reservation.utils.MapHelper;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +20,9 @@ public class ReservationServiceImpl extends GenericServiceImpl<Reservation> impl
 
     private final ReservationRepository reservationRepository;
 
-    public ReservationServiceImpl(GenericRepository<Reservation> genericRepository, ModelMapper modelMapper, ReservationRepository reservationRepository) {
-        super(genericRepository, modelMapper);
+
+    public ReservationServiceImpl(GenericRepository<Reservation> genericRepository, ReservationRepository reservationRepository, MapHelper mapHelper) {
+        super(genericRepository, mapHelper);
         this.reservationRepository = reservationRepository;
     }
 

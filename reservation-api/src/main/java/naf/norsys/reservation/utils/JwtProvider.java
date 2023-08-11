@@ -145,6 +145,7 @@ public class JwtProvider {
             if (tokenCookie.isPresent()) {
                 return tokenCookie.get().getValue();
             } else {
+
                 throw new UnauthorizedException(null, new UnauthorizedException(), CoreConstant.Exception.AUTHORIZATION_MISSING_TOKEN, null);
             }
 

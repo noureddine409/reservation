@@ -15,9 +15,9 @@ const ItemService = {
     findByUser: async (pageable: Page): Promise<Item[]> => {
         try {
             const response: AxiosResponse<Item[]> = await interceptedAxios.get(`/items?page=${pageable.page}&size=${pageable.size}`);
-            return response.data; // Extract the data property from the AxiosResponse
+            return response.data;
         } catch (error) {
-            throw error; // Rethrow the error so that the calling code can handle it
+            throw error;
         }
     },
     delete: async (id: number) => {
@@ -31,7 +31,7 @@ const ItemService = {
     },
     update: async (itemId: number, item: Item) => {
         try {
-            return await interceptedAxios.put(`/items/${itemId}`, item);
+            return await interceptedAxios.patch(`/items/${itemId}`, item);
         } catch (error) {
             throw error;
         }

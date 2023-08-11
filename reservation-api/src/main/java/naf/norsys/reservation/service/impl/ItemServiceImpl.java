@@ -9,7 +9,7 @@ import naf.norsys.reservation.model.Item;
 import naf.norsys.reservation.repository.GenericRepository;
 import naf.norsys.reservation.repository.ItemRepository;
 import naf.norsys.reservation.service.ItemService;
-import org.modelmapper.ModelMapper;
+import naf.norsys.reservation.utils.MapHelper;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,16 +24,18 @@ public class ItemServiceImpl extends GenericServiceImpl<Item> implements ItemSer
 
     private final ItemRepository itemRepository;
 
-    public ItemServiceImpl(GenericRepository<Item> genericRepository, ModelMapper modelMapper, ItemRepository itemRepository) {
-        super(genericRepository, modelMapper);
+
+    public ItemServiceImpl(GenericRepository<Item> genericRepository, ItemRepository itemRepository, MapHelper mapHelper) {
+        super(genericRepository, mapHelper);
         this.itemRepository = itemRepository;
     }
 
     @Override
     public List<Item> findByUser(Long userId, int page, int size) {
         final Pageable pageable = PageRequest.of(page, size);
-        return itemRepository.findAll(pageable).toList();
+        return itemRepository.findByCreatedBy_id(userId, pageable);
     }
+
 
     @Override
     public List<Item> search(String keyword, GenericEnum.ItemCategory category, int page, int size) throws BusinessException {

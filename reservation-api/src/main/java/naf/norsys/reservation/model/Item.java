@@ -21,7 +21,7 @@ public class Item extends GenericEntity {
     private GenericEnum.ItemCategory category;
     private GenericEnum.ItemStatus status;
 
-    @OneToOne(cascade = {CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "created_by_id")
     private User createdBy;
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)

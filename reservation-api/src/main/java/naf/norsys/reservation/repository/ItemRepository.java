@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Objects;
 
 public interface ItemRepository extends GenericRepository<Item> {
+
+    List<Item> findByCreatedBy_id(Long userId, Pageable pageable) ;
     default List<Item> searchByKeywordAndCategory(String keyword, GenericEnum.ItemCategory category, Pageable pageable) {
         Specification<Item> spec = Specification.where(hasKeyword(keyword))
                 .and((root, query, cb) -> {

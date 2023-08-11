@@ -17,7 +17,6 @@ const HomePage = () => {
     useEffect(() => {
         if (!currentPeriod) return;
         const requestBody: UserReservationSearch = {
-            userId: 1,
             period: currentPeriod!
         }
         ReservationService.findByUser(requestBody).then((response) => {

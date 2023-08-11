@@ -7,7 +7,7 @@ import naf.norsys.reservation.model.Role;
 import naf.norsys.reservation.repository.GenericRepository;
 import naf.norsys.reservation.repository.RoleRepository;
 import naf.norsys.reservation.service.RoleService;
-import org.modelmapper.ModelMapper;
+import naf.norsys.reservation.utils.MapHelper;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,12 +18,11 @@ public class RoleServiceImpl extends GenericServiceImpl<Role> implements RoleSer
 
     private final RoleRepository roleRepository;
 
-
-    public RoleServiceImpl(GenericRepository<Role> genericRepository, ModelMapper modelMapper,
-                           RoleRepository roleRepository) {
-        super(genericRepository, modelMapper);
+    public RoleServiceImpl(GenericRepository<Role> genericRepository, RoleRepository roleRepository, MapHelper mapHelper) {
+        super(genericRepository, mapHelper);
         this.roleRepository = roleRepository;
     }
+
 
     @Override
     public Role save(GenericEnum.RoleName role) {

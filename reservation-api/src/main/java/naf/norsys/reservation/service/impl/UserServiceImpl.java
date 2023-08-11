@@ -3,15 +3,12 @@ package naf.norsys.reservation.service.impl;
 import naf.norsys.reservation.common.CoreConstant;
 import naf.norsys.reservation.exception.ElementAlreadyExistsException;
 import naf.norsys.reservation.exception.ElementNotFoundException;
-import naf.norsys.reservation.model.GenericEnum;
-import naf.norsys.reservation.model.Role;
+import naf.norsys.reservation.exception.UnauthorizedException;
 import naf.norsys.reservation.model.User;
 import naf.norsys.reservation.repository.GenericRepository;
 import naf.norsys.reservation.repository.UserRepository;
-import naf.norsys.reservation.service.RoleService;
 import naf.norsys.reservation.service.UserService;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Value;
+import naf.norsys.reservation.utils.MapHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,78 +18,38 @@ import static naf.norsys.reservation.common.CoreConstant.Exception.ALREADY_EXIST
 
 @Service
 public class UserServiceImpl extends GenericServiceImpl<User> implements UserService {
-
-    @Value("${dev.account.first-name}")
-    private String devFirstName;
-    @Value("${dev.account.last-name}")
-    private String devLastName;
-    @Value("${dev.account.email}")
-    private String devEmail;
-    @Value("${dev.account.password}")
-    private String devPassword;
-
-    @Value("${admin.account.first-name}")
-    private String adminFirstName;
-    @Value("${admin.account.last-name}")
-    private String adminLastName;
-    @Value("${admin.account.email}")
-    private String adminEmail;
-    @Value("${admin.account.password}")
-    private String adminPassword;
-
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
 
-    private final RoleService roleService;
+
+    public UserServiceImpl(GenericRepository<User> genericRepository, UserRepository userRepository, MapHelper mapHelper, PasswordEncoder passwordEncoder) {
+        super(genericRepository, mapHelper);
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
-    public User findByEmail(String email) {
+    public User findByEmail(String email) throws ElementNotFoundException {
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent()) return user.get();
         throw new ElementNotFoundException(null, new ElementNotFoundException(), CoreConstant.Exception.NOT_FOUND, new Object[]{email});
     }
 
-    @Override
-    public void saveDev() {
-        try {
-            User user = User.builder()
-                    .firstName(devFirstName)
-                    .lastName(devLastName)
-                    .email(devEmail)
-                    .password(devPassword)
-                    .build();
-            final Role role = roleService.findByName(GenericEnum.RoleName.DEV);
-            user.addRole(role);
-            this.save(user);
-        } catch (RuntimeException exception) {
-            LOG.info("developer accounts already created");
-        }
-    }
 
     @Override
-    public void saveAdmin() {
-        try {
-            User user = User.builder()
-                    .firstName(adminFirstName)
-                    .lastName(adminLastName)
-                    .email(adminEmail)
-                    .password(adminPassword)
-                    .build();
-            final Role role = roleService.findByName(GenericEnum.RoleName.ADMIN);
-            user.addRole(role);
-            this.save(user);
-        } catch (RuntimeException exception) {
-            LOG.info("admin accounts already created");
+    public User changePassword(Long userId, String currentPassword, String newPassword) throws ElementNotFoundException, UnauthorizedException {
+        User user = this.findById(userId);
+        if (!checkPassword(user, currentPassword)) {
+            throw new UnauthorizedException(new UnauthorizedException(), CoreConstant.Exception.INVALID_PASSWORD, null);
         }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        return userRepository.save(user);
     }
 
-    public UserServiceImpl(GenericRepository<User> genericRepository, ModelMapper modelMapper,
-                           UserRepository userRepository, PasswordEncoder passwordEncoder, RoleService roleService) {
-        super(genericRepository, modelMapper);
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.roleService = roleService;
+
+    private boolean checkPassword(User user, String password) {
+        return passwordEncoder.matches(password, user.getPassword());
     }
 
     @Override
