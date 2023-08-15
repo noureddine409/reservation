@@ -41,13 +41,11 @@ const ShowProduct: React.FC = () => {
 
 
     useEffect(() => {
-        // Function to fetch products from the API
         ItemService.findByUser({
             page: pageable.page -1,
             size: pageable.size
         })
             .then((response) => {
-                // Execute these updates after receiving the response
                 setProducts(response);
             })
             .catch((error) => {

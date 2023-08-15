@@ -20,7 +20,6 @@ interface FormData {
 
 
 const AddProduct: React.FC<AddProductProps> = ({ updateProductList }) => {
-
     const [params, setParams] = useState<Parameter[]>([]);
 
     const handleAdd = () => {
@@ -67,6 +66,7 @@ const AddProduct: React.FC<AddProductProps> = ({ updateProductList }) => {
                     }
                 )
             reset();
+            setParams([]);
         } catch (error) {
             console.error('Error adding product:', error);
         }

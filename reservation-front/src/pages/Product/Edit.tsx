@@ -20,7 +20,9 @@ interface EditProductProps {
     updateProduct: (editedProduct: Item) => void;
 }
 const EditProduct: React.FC<EditProductProps> = ({ product, updateProduct }) => {
-    const [params, setParams] = useState<Parameter[]>([]);
+
+    const [params, setParams] = useState<Parameter[]>(product.params || []);
+
 
     const handleAdd = () => {
         const newParam: Parameter = { key: '', value: '' };
@@ -31,6 +33,7 @@ const EditProduct: React.FC<EditProductProps> = ({ product, updateProduct }) => 
         const updatedParams = params.filter((_, i) => i !== index);
         setParams(updatedParams);
     };
+
 
 
     const {
@@ -57,8 +60,8 @@ const EditProduct: React.FC<EditProductProps> = ({ product, updateProduct }) => 
             category: product.category,
             description: product.description,
 
-
         });
+        setParams(product.params || []);
         reset({ productName: product.name, description: product.description });
     }, [product, reset]);
 
@@ -71,8 +74,10 @@ const EditProduct: React.FC<EditProductProps> = ({ product, updateProduct }) => 
             status: 'AVAILABLE',
             //image: data.productImage,
             category: 'APARTMENT',
+            params: params,
 
         };
+
         ItemService.update(formData.id!, item).then(
             (response)=> {
                 alert("Product updated successfully " + response.data);
@@ -81,7 +86,6 @@ const EditProduct: React.FC<EditProductProps> = ({ product, updateProduct }) => 
         ).catch(
             (error) => console.error(error)
         )
-
 
     };
 
@@ -118,8 +122,7 @@ const EditProduct: React.FC<EditProductProps> = ({ product, updateProduct }) => 
                     <label htmlFor="formFileSm" className="form-label">
                         Category
                     </label>
-                    <select className="form-control" >
-                        defaultvalue={formData.category}
+                    <select className="form-control" defaultValue={formData.category}>
                         <option value="1">APARTMENT</option>
                         <option value="2">VEHICULE</option>
                     </select> <br/>
