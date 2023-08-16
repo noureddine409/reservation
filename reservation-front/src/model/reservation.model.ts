@@ -6,7 +6,16 @@ export interface Reservation extends GenericModel {
     period: Period;
     item: Item;
     user: User;
+}export interface ReservationRequest extends GenericModel {
+    period: Period;
+    item: {
+        id: number
+    };
+    user: {
+        id: number
+    };
 }
+
 
 export interface UserReservationSearch {
     userId: number;

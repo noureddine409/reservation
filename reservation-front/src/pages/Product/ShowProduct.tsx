@@ -108,9 +108,9 @@ const ShowProduct: React.FC = () => {
                                     <div className="modal-body">
                                         <button type="submit" data-bs-toggle="modal" data-bs-target="#AddProductModal">ADD PRODUCT</button>
                                     </div><br/>
-                                                <Modal id="AddProductModal" title="Add a new product">
-                                                    <AddProduct updateProductList={updateProductList} />
-                                                </Modal>
+                                                {/*<Modal id="AddProductModal" title="Add a new product">*/}
+                                                {/*    <AddProduct updateProductList={updateProductList} />*/}
+                                                {/*</Modal>*/}
                                     <table className="table datatable">
                                         <thead>
                                         <tr>

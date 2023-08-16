@@ -59,9 +59,9 @@ const AppContent: React.FC<AppContentProps> = ({toggleSideBar}) => {
             )}
             <Routes>
                 <Route path="/" element={<HomePage/>}/>
-                <Route path="/add-product" element={<AddProduct updateProductList={function(): void {
-                    throw new Error('Function not implemented.');
-                } }/>} />
+                {/*<Route path="/add-product" element={<AddProduct updateProductList={function(): void {*/}
+                {/*    throw new Error('Function not implemented.');*/}
+                {/*} }/>} />*/}
                 <Route path="/show-product" element={<ShowProduct/>} />
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
