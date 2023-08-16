@@ -1,44 +1,36 @@
 import './App.css';
-import React, {useState} from 'react';
-import {BrowserRouter as Router, Route, Routes, useLocation} from 'react-router-dom';
-import HomePage from './pages/Home';
-import HeaderComponent from "./components/Header";
-import SideBarComponent from "./components/SideBar";
-import AddProduct from "./pages/Product/Add";
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import HeaderComponent from './components/Header';
+import SideBarComponent from './components/SideBar';
+import { routesConfig } from './routes/routes-config';
+import RouteGuardWrapper from './guards/RouteGuardWrapper';
 import ContactPage from './pages/Contact';
 import ProfilePage from './pages/Profile';
 import LoginPage from './pages/Login';
 import RegisterPage from './pages/Register';
 import ForgetPassword from './pages/ForgotPassword';
+import ProductDetails from './pages/Product/ProductDetails';
+import SearchProductPage from './pages/Product/Search';
 import ErrorPage from './pages/Error';
-import SearchProductPage from "./pages/Product/Search";
-import ProductDetails from "./pages/Product/ProductDetails";
-import ShowProduct from "./pages/Product/ShowProduct";
-
-
+import HomePage from './pages/Home';
+import ShowProduct from './pages/Product/ShowProduct';
 
 const App = () => {
     const [sideBarToggled, setSideBarToggled] = useState(false);
 
     const toggleSideBar = () => {
-        setSideBarToggled(!sideBarToggled);
+        setSideBarToggled((prev) => !prev);
     };
-
 
     return (
         <div className={sideBarToggled ? 'toggle-sidebar' : ''}>
-
             <Router>
-                <AppContent toggleSideBar={toggleSideBar} sideBarToggled={sideBarToggled}/>
+                <AppContent toggleSideBar={toggleSideBar} sideBarToggled={sideBarToggled} />
             </Router>
         </div>
     );
 };
-
-interface AppContentProps {
-    toggleSideBar: () => void;
-    sideBarToggled: boolean;
-}
 
 const AppContent: React.FC<AppContentProps> = ({toggleSideBar}) => {
     const location = useLocation();
@@ -77,5 +69,10 @@ const AppContent: React.FC<AppContentProps> = ({toggleSideBar}) => {
         </>
     );
 };
+
+interface AppContentProps {
+    toggleSideBar: () => void;
+    sideBarToggled: boolean;
+}
 
 export default App;

@@ -18,7 +18,6 @@ export interface Reservation extends GenericModel {
 
 
 export interface UserReservationSearch {
-    userId: number;
     period: Period;
 }
 

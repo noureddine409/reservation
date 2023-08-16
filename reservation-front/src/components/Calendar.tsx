@@ -2,11 +2,10 @@ import React, {useState, useEffect} from "react";
 import Fullcalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction";
-import {formatDateToString} from "../utils/dateTime-conversion";
 import {ItemReservationSearch, Period, Reservation, ReservationRequest} from "../model/reservation.model";
 import reservationService from "../services/reservation-service/reservation.service";
-import {DateClickArg} from "@fullcalendar/interaction";
+import interactionPlugin, {DateClickArg} from "@fullcalendar/interaction";
+import {convertToEvents, formatDateToString} from "../utils/reservationUtils";
 import ReservationPopup from "./ReservationPopup";
 import {DateSelectArg, EventClickArg} from "@fullcalendar/core";
 import {Item} from "../model/item.model";
@@ -39,15 +38,7 @@ const Calendar: React.FC<CalendarProps> = ({itemId}) => {
             });
     }, [currentPeriod, itemId]);
 
-    const convertToEvents = (reservations: Reservation[]) => {
-        return reservations.map((reservation) => {
-            return {
-                title: reservation.item.name,
-                start: reservation.period.startDate,
-                end: reservation.period.endDate,
-            };
-        });
-    };
+
 
     const handleDateClick = (arg: DateClickArg) => { // Utiliser DateClickArg
         const date = arg.date; // Récupérer la date à partir de l'objet DateClickArg

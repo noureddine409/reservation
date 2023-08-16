@@ -11,8 +11,6 @@ import naf.norsys.reservation.validation.ValidPeriod;
 @Builder
 public class UserReservationSearchDto {
     @NotNull
-    private Long userId;
-    @NotNull
     @ValidPeriod
     private PeriodDto period;
 }

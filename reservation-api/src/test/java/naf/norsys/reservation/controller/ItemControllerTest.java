@@ -1,19 +1,18 @@
 package naf.norsys.reservation.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import naf.norsys.reservation.dto.ItemDto;
 import naf.norsys.reservation.dto.SearchItemDto;
-import com.fasterxml.jackson.core.type.TypeReference;
 import naf.norsys.reservation.model.GenericEnum;
 import naf.norsys.reservation.model.Item;
 import naf.norsys.reservation.service.ItemService;
-import naf.norsys.reservation.utils.ClassTypeProvider;
+import naf.norsys.reservation.utils.MapHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -21,11 +20,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class ItemControllerTest {
 
@@ -33,10 +34,7 @@ public class ItemControllerTest {
     private ItemService itemService;
 
     @Mock
-    private ClassTypeProvider classTypeProvider;
-
-    @Mock
-    private ModelMapper modelMapper;
+    private MapHelper mapHelper;
 
     @InjectMocks
     private ItemController itemController;
@@ -62,16 +60,18 @@ public class ItemControllerTest {
         // Mock the service method
         when(itemService.search(anyString(), any(), anyInt(), anyInt())).thenReturn(items);
         when(itemService.getTotalPages(anyInt())).thenReturn(2); // Assuming 2 pages for this test
-        when(classTypeProvider.getClasses(any(), any())).thenReturn(new Class[]{Item.class, ItemDto.class});
-        when(modelMapper.map(any(), eq(ItemDto.class))).thenAnswer(invocation -> {
-            Item entity = invocation.getArgument(0);
-            return ItemDto.builder()
-                    .id(entity.getId())
-                    .name(entity.getName())
-                    .description(entity.getDescription())
-                    .category(entity.getCategory())
-                    .description(entity.getDescription())
-                    .build();
+        when(mapHelper.convertListToDto(any(), eq(ItemDto.class))).thenAnswer(invocation -> {
+            List<Item> entities = invocation.getArgument(0);
+            return entities.stream().map(
+                    entity -> ItemDto.builder()
+                            .id(entity.getId())
+                            .name(entity.getName())
+                            .description(entity.getDescription())
+                            .category(entity.getCategory())
+                            .description(entity.getDescription())
+                            .build()
+            ).collect(Collectors.toList());
+
         });
         // Prepare request DTO
         SearchItemDto searchItemDto = SearchItemDto.builder()

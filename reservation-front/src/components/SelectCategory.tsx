@@ -1,7 +1,7 @@
 import React from "react";
 import Select, {SingleValue} from "react-select";
 import {SelectedCategory} from "../model/reservation.model";
-import {options} from "../common/constants";
+import {CATEGORY_OPTIONS} from "../common/constants";
 
 
 interface SelectCategoryProps {
@@ -16,7 +16,7 @@ const SelectCategory: React.FC<SelectCategoryProps> = ({ onChange }) => {
     return (
         <div className="p-1">
             <Select
-                options={options}
+                options={CATEGORY_OPTIONS}
                 placeholder="Select une categorie"
                 aria-label="Select une categorie"
                 onChange={handleCategoryChange}

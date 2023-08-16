@@ -7,7 +7,7 @@ import naf.norsys.reservation.exception.ElementNotFoundException;
 import naf.norsys.reservation.model.GenericEntity;
 import naf.norsys.reservation.repository.GenericRepository;
 import naf.norsys.reservation.service.GenericService;
-import org.modelmapper.ModelMapper;
+import naf.norsys.reservation.utils.MapHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -21,11 +21,12 @@ import java.util.Optional;
 public class GenericServiceImpl<T extends GenericEntity> implements GenericService<T> {
     final Logger LOG = LoggerFactory.getLogger(GenericServiceImpl.class);
     private final GenericRepository<T> genericRepository;
-    private final ModelMapper modelMapper;
 
-    public GenericServiceImpl(GenericRepository<T> genericRepository, ModelMapper modelMapper) {
+    private final MapHelper mapHelper;
+
+    public GenericServiceImpl(GenericRepository<T> genericRepository, MapHelper mapHelper) {
         this.genericRepository = genericRepository;
-        this.modelMapper = modelMapper;
+        this.mapHelper = mapHelper;
     }
 
     @Override
@@ -38,13 +39,19 @@ public class GenericServiceImpl<T extends GenericEntity> implements GenericServi
         }
         T newEntity = foundEntity.get();
         entity.setCreatedAt(newEntity.getCreatedAt());
-        modelMapper.map(entity, newEntity);
+        mapHelper.map(entity, newEntity);
         newEntity.setId(id);
         newEntity.setUpdatedAt(LocalDateTime.now());
 
         return genericRepository.save(newEntity);
     }
 
+    @Override
+    public <S> T patch(Long id, S patch) throws ElementNotFoundException {
+        T entity = this.findById(id);
+        mapHelper.mapWithSkipNull(patch, entity);
+        return genericRepository.save(entity);
+    }
 
 
     @Override
@@ -94,4 +101,5 @@ public class GenericServiceImpl<T extends GenericEntity> implements GenericServi
         final long count = genericRepository.count();
         return (int) Math.ceil((double) count / pageSize) ;
     }
+
 }
