@@ -1,51 +1,47 @@
 import React from "react";
+import {Reservation} from "../model/reservation.model";
 
 interface ReservationPopupProps {
-    selectedDate: Date | null;
+
+    reservation: Reservation;
+    onSelect: (reservation: Reservation) => void;
     onClose: () => void;
+    onDelete: () => void;
+
 }
 
 const ReservationPopup: React.FC<ReservationPopupProps> = ({
-                                                               selectedDate,
+                                                               reservation,
+                                                               onSelect,
                                                                onClose,
+                                                               onDelete, // Ajoutez cette prop pour gérer la suppression
                                                            }) => {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        // Handle the form submission here...
-        // You can get the selected date and time values from the form fields
-        console.log("Selected Date:", selectedDate);
-        onClose();
+        // ... (Gérer la réservation ici)
     };
 
     return (
         <div className="popup">
             <div className="popup-inner">
-                <h3>Reserve {selectedDate?.toLocaleDateString()}</h3>
-                <form onSubmit={handleSubmit}>
-                    {/* Add your form fields for selecting end date and time here */}
-                    <div className="form-group">
-                        <label htmlFor="endDate">Booking end date:</label>
-                        <input type="date" id="endDate" className="form-control" />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="startTime"> Start Time :</label>
-                        <input type="time" id="startTime" className="form-control" />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="endTime">End Time :</label>
-                        <input type="time" id="endTime" className="form-control" />
-                    </div>
-                    <button type="submit" className="btn btn-primary">
-                        Réserver
-
-                    </button>
-                    <button className="btn btn-danger" onClick={onClose}>
-                        Annuler
-                    </button>
-                </form>
+                <div className="event" onClick={() => onSelect(reservation)}>
+                    <p>{reservation.item.name}</p>
+                    <p>
+                        {reservation.period.startDate} - {reservation.period.endDate}
+                    </p>
+                </div>
+                <h3>Réservation</h3>
+                <p>Produit : {reservation.item.name}</p>
+                <p>Date : {reservation.period.startDate} - {reservation.period.endDate}</p>
+                <button className="btn btn-danger" onClick={onDelete}>
+                    Supprimer
+                </button>
+                <button className="btn btn-secondary" onClick={onClose}>
+                    Fermer
+                </button>
             </div>
         </div>
     );
 };
 
-export default ReservationPopup;
+export default ReservationPopup

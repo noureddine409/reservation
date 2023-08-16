@@ -5,6 +5,16 @@ import HeaderComponent from './components/Header';
 import SideBarComponent from './components/SideBar';
 import { routesConfig } from './routes/routes-config';
 import RouteGuardWrapper from './guards/RouteGuardWrapper';
+import ContactPage from './pages/Contact';
+import ProfilePage from './pages/Profile';
+import LoginPage from './pages/Login';
+import RegisterPage from './pages/Register';
+import ForgetPassword from './pages/ForgotPassword';
+import ProductDetails from './pages/Product/ProductDetails';
+import SearchProductPage from './pages/Product/Search';
+import ErrorPage from './pages/Error';
+import HomePage from './pages/Home';
+import ShowProduct from './pages/Product/ShowProduct';
 
 const App = () => {
     const [sideBarToggled, setSideBarToggled] = useState(false);
@@ -22,29 +32,39 @@ const App = () => {
     );
 };
 
-const AppContent: React.FC<AppContentProps> = ({ toggleSideBar }) => {
+const AppContent: React.FC<AppContentProps> = ({toggleSideBar}) => {
     const location = useLocation();
+
     const shouldDisplayHeaderAndSidebar = () => {
-        const allowedURLs = ['/', '/home', '/product-details', '/contact', '/f-a-q', '/profile', '/add-product', '/search-product', '/show-product'];
-        return allowedURLs.includes(location.pathname);
+        const {pathname} = location;
+        const allowedURLs = ['/', '/home', "/product-details", '/contact', '/f-a-q', '/profile', '/add-product', '/search-product', '/show-product'];
+        return allowedURLs.includes(pathname);
     };
 
     return (
         <>
             {shouldDisplayHeaderAndSidebar() && (
                 <>
-                    <HeaderComponent change={toggleSideBar} />
-                    <SideBarComponent />
+                    <HeaderComponent change={toggleSideBar}/>
+                    <SideBarComponent/>
                 </>
             )}
             <Routes>
-                {routesConfig.map((route) => (
-                    <Route
-                        key={route.path}
-                        path={route.path}
-                        element={<RouteGuardWrapper guard={route.guard} component={route.component} />}
-                    />
-                ))}
+                <Route path="/" element={<HomePage/>}/>
+                {/*<Route path="/add-product" element={<AddProduct updateProductList={function(): void {*/}
+                {/*    throw new Error('Function not implemented.');*/}
+                {/*} }/>} />*/}
+                <Route path="/show-product" element={<ShowProduct/>} />
+                <Route path="/contact" element={<ContactPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/forget-password" element={<ForgetPassword />} />
+                <Route path="/search-product" element={<SearchProductPage/>} />
+                <Route path="/product-details" element={<ProductDetails/>} />
+
+
+                <Route path="*" element={<ErrorPage />} />
             </Routes>
         </>
     );
