@@ -35,7 +35,7 @@ clean-and-test:
     paths:
       - target/
     reports:
-      junit: target/surefire-reports/*.xml
+      junit: reservation-api/target/surefire-reports/*.xml
 
 compile:
   stage: build
