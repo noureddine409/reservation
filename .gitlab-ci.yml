@@ -49,6 +49,16 @@ install:
     - cd reservation-api  # Change directory to the root of your Maven project
     - mvn $MAVEN_CLI_OPTS install
 
+test-coverage:
+  stage: analyse
+  script:
+    - cd reservation-api  # Change directory to the root of your Maven project
+    - mvn jacoco:report
+  artifacts:
+    paths:
+      - ./target/site/jacoco
+
+
 sonarqube:
   stage: analyze
   script:
