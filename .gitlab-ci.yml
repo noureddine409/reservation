@@ -56,10 +56,11 @@ test-coverage:
     - mvn jacoco:report
   artifacts:
     paths:
-      - /target
+      - reservation-api/target/site/jacoco
     reports:
       coverage_report:
-        cobertura: reservation-api/target/site/jacoco/jacoco.xml
+        coverage_format: cobertura
+        path: reservation-api/target/site/jacoco/jacoco.xml
 
 sonarqube:
   stage: analyze
