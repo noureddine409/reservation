@@ -24,13 +24,12 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-public class ReservationControllerTest {
+class ReservationControllerTest {
 
     private MockMvc mockMvc;
 
     @Mock
     private ItemService itemService;
-
 
 
     @Mock
@@ -41,7 +40,6 @@ public class ReservationControllerTest {
 
     @Mock
     private AuthenticationHelper authenticationHelper;
-
 
 
     @InjectMocks
@@ -58,7 +56,7 @@ public class ReservationControllerTest {
     }
 
     @Test
-    public void testSaveReservation() throws Exception {
+    void testSaveReservation() throws Exception {
         // Arrange
         ReservationDto dto = createSampleReservationDto();
 
@@ -96,6 +94,7 @@ public class ReservationControllerTest {
                         .build())
                 .build();
     }
+
     private ReservationDto createSampleReservationDto() {
         UserDto user = UserDto.builder().id(1L).email("John@domain.me").build();
         ItemDto item = ItemDto.builder().id(1L).name("Item A")
@@ -162,7 +161,6 @@ public class ReservationControllerTest {
             );
             return null;
         }).when(mapHelper).map(any(), any());
-
 
 
         Reservation savedReservation = Reservation.builder()

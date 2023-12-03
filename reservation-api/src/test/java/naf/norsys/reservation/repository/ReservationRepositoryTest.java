@@ -75,7 +75,7 @@ class ReservationRepositoryTest {
     }
 
     @Test
-    public void testExistingReservations_ItemAvailable() {
+    void testExistingReservations_ItemAvailable() {
         // First reservation check
         Long itemId1 = item.getId();
         LocalDateTime startDate1 = LocalDateTime.of(2023, 7, 5, 12, 0);
@@ -94,7 +94,7 @@ class ReservationRepositoryTest {
     }
 
     @Test
-    public void testCheckAvailability_ItemAvailable() {
+    void testCheckAvailability_ItemAvailable() {
         // Test the method with a time period that doesn't overlap with existing reservations
         Long itemId = item.getId();
         LocalDateTime startDate = LocalDateTime.of(2023, 9, 5, 12, 0);
@@ -107,7 +107,7 @@ class ReservationRepositoryTest {
     }
 
     @Test
-    public void testCheckAvailability_ItemNotAvailable() {
+    void testCheckAvailability_ItemNotAvailable() {
         // Test the method with a time period that overlaps with an existing reservation
         Long itemId = item.getId();
         LocalDateTime startDate = LocalDateTime.of(2023, 7, 5, 12, 0);

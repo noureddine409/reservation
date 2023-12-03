@@ -9,12 +9,12 @@ import naf.norsys.reservation.model.Item;
 import naf.norsys.reservation.repository.ItemRepository;
 import naf.norsys.reservation.service.impl.ItemServiceImpl;
 import naf.norsys.reservation.utils.MapHelper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
@@ -29,7 +29,8 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class ItemServiceTest {
+@ExtendWith(MockitoExtension.class)
+class ItemServiceTest {
 
     @Mock
     private ItemRepository itemRepository;
@@ -40,13 +41,18 @@ public class ItemServiceTest {
     @InjectMocks
     private ItemServiceImpl itemService;
 
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
+    private static Item createMockItem(Long entityId, String name, String description, GenericEnum.ItemCategory category) {
+        return Item.builder()
+                .id(entityId)
+                .createdAt(LocalDateTime.now())
+                .name(name)
+                .category(category)
+                .description(description)
+                .build();
     }
 
     @Test
-    public void testUpdate_SuccessfulUpdateOfExistingItem() throws ElementNotFoundException {
+    void testUpdate_SuccessfulUpdateOfExistingItem() throws ElementNotFoundException {
         // Prepare Test Data
         final Long entityId = 1L;
         final Item existingEntity = createMockItem(entityId, "name", "description", GenericEnum.ItemCategory.VEHICULE);
@@ -70,7 +76,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void testSave_NewEntity_SuccessfulSave() throws ElementAlreadyExistsException {
+    void testSave_NewEntity_SuccessfulSave() throws ElementAlreadyExistsException {
         // Prepare Test Data
         final Item newItem = createMockItem(null, "name", "descr", GenericEnum.ItemCategory.VEHICULE);
 
@@ -99,7 +105,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void testSave_ExistingEntity_ElementAlreadyExistsException() {
+    void testSave_ExistingEntity_ElementAlreadyExistsException() {
         // Prepare Test Data
         final Long existingEntityId = 1L;
         final Item existingItem = createMockItem(existingEntityId, "Existing Item", "Existing Description", GenericEnum.ItemCategory.VEHICULE);
@@ -118,7 +124,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void testDelete_DataAccessException_ElementNotFoundException()  {
+    void testDelete_DataAccessException_ElementNotFoundException() {
         // Prepare Test Data
         final Long entityId = 1L;
 
@@ -136,7 +142,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void testUpdate_NonExistingItem_ThrowElementNotFoundException() throws ElementNotFoundException {
+    void testUpdate_NonExistingItem_ThrowElementNotFoundException() throws ElementNotFoundException {
 
         // Prepare Test Data
         final Long nonExistingEntityId = 99L;
@@ -157,7 +163,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void testDelete_ExistingEntity_SuccessfulDeletion() throws ElementNotFoundException {
+    void testDelete_ExistingEntity_SuccessfulDeletion() throws ElementNotFoundException {
         // Prepare Test Data
         final Long entityId = 1L;
 
@@ -178,7 +184,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void testFindById_ExistingEntity() throws ElementNotFoundException {
+    void testFindById_ExistingEntity() throws ElementNotFoundException {
         // Prepare Test Data
         final Long entityId = 1L;
         final Item existingEntity = createMockItem(entityId, "name", "description", GenericEnum.ItemCategory.VEHICULE);
@@ -199,7 +205,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void testDelete_NonExistingEntity_ElementNotFoundException() {
+    void testDelete_NonExistingEntity_ElementNotFoundException() {
         // Prepare Test Data
         final Long nonExistingEntityId = 100L;
 
@@ -217,7 +223,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void testFindById_EntityNotFound() {
+    void testFindById_EntityNotFound() {
         // Prepare Test Data
         final Long entityId = 1L;
 
@@ -235,7 +241,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void testSearchByKeywordAndCategory() {
+    void testSearchByKeywordAndCategory() {
         // Prepare test data
         final String keyword = "Item";
         final GenericEnum.ItemCategory category = GenericEnum.ItemCategory.APARTMENT;
@@ -260,7 +266,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void testSearchWithException() {
+    void testSearchWithException() {
         // Prepare test data
         final String keyword = "InvalidKeyword";
         final GenericEnum.ItemCategory category = GenericEnum.ItemCategory.VEHICULE;
@@ -276,16 +282,5 @@ public class ItemServiceTest {
 
         // Verify the BusinessException
         assertThat(exception.getKey()).isEqualTo(CoreConstant.Exception.FIND_ELEMENTS);
-    }
-
-
-    private static Item createMockItem(Long entityId, String name, String description, GenericEnum.ItemCategory category) {
-        return Item.builder()
-                .id(entityId)
-                .createdAt(LocalDateTime.now())
-                .name(name)
-                .category(category)
-                .description(description)
-                .build();
     }
 }

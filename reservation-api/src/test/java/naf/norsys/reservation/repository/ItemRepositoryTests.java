@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-public class ItemRepositoryTests {
+class ItemRepositoryTests {
 
     @Autowired
     private ItemRepository itemRepository;
@@ -46,7 +46,7 @@ public class ItemRepositoryTests {
     }
 
     @Test
-    public void shouldSearchByKeywordAndCategory() {
+    void shouldSearchByKeywordAndCategory() {
         // Test the method
         List<Item> result1 = itemRepository.searchByKeywordAndCategory("Item", GenericEnum.ItemCategory.APARTMENT, PageRequest.of(0, 3));
         List<Item> result2 = itemRepository.searchByKeywordAndCategory("keyword", null, Pageable.unpaged());
@@ -62,7 +62,7 @@ public class ItemRepositoryTests {
     }
 
     @Test
-    public void shouldSearchByKeywordAndCategoryWithPagination() {
+    void shouldSearchByKeywordAndCategoryWithPagination() {
         // Test the method with pagination
         Pageable pageable = PageRequest.of(0, 2, Sort.by("name").ascending());
         List<Item> result = itemRepository.searchByKeywordAndCategory("Item", GenericEnum.ItemCategory.APARTMENT, pageable);

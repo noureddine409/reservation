@@ -10,9 +10,10 @@ import naf.norsys.reservation.service.ItemService;
 import naf.norsys.reservation.utils.MapHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -28,7 +29,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class ItemControllerTest {
+@ExtendWith(MockitoExtension.class)
+class ItemControllerTest {
 
     @Mock
     private ItemService itemService;
@@ -45,12 +47,11 @@ public class ItemControllerTest {
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(itemController).build();
     }
 
     @Test
-    public void testSearchItems() throws Exception {
+    void testSearchItems() throws Exception {
         // Prepare test data
         List<Item> items = Arrays.asList(
                 Item.builder().name("Item 1").category(GenericEnum.ItemCategory.APARTMENT).build(),

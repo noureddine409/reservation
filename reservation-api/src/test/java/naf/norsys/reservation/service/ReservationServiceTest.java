@@ -11,9 +11,10 @@ import naf.norsys.reservation.repository.ReservationRepository;
 import naf.norsys.reservation.service.impl.ReservationServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 
@@ -23,20 +24,17 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class ReservationServiceTest {
+@ExtendWith(MockitoExtension.class)
+class ReservationServiceTest {
 
+    Reservation reservation;
     @Mock
     private ReservationRepository reservationRepository;
-
     @InjectMocks
     private ReservationServiceImpl reservationService;
 
-    Reservation reservation;
-
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
-
         // Create test data for the reservation
         User user = User.builder()
                 .id(1L)
@@ -65,7 +63,7 @@ public class ReservationServiceTest {
     }
 
     @Test
-    public void testSaveSuccessfulReservation() throws ElementAlreadyExistsException {
+    void testSaveSuccessfulReservation() throws ElementAlreadyExistsException {
         // Arrange
         final Long reservationId = 1L; // Assuming the reservation ID is 1L
 
@@ -89,7 +87,7 @@ public class ReservationServiceTest {
     }
 
     @Test
-    public void testSaveUnavailableReservation() {
+    void testSaveUnavailableReservation() {
         // Arrange
         final Long reservationId = 1L; // Assuming the reservation ID is 1L
 
