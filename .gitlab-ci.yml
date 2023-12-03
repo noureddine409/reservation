@@ -1,6 +1,8 @@
-# Define the global images used for all jobs
-image: node:18  # Use a Docker image with Node.js pre-installed
-# Define the PostgreSQL service
+stages:
+  - build
+  - analyze
+  - docker-registry
+
 services:
   - name: postgres:latest
     alias: postgresql
@@ -12,33 +14,52 @@ variables:
   POSTGRES_HOST_AUTH_METHOD: trust
   DATABASE_HOST: postgresql  # PostgreSQL service alias
   DATABASE_PORT: 5432
+  MAVEN_CLI_OPTS: "--batch-mode"  
+  CI_REGISTRY_IMAGE: noureddinelachgar/product-api
+  SONAR_URL: http://172.174.163.92:9000
 
-stages:
-  - build
-  - test
 
 cache:
   paths:
-    - reservation-api/.m2/repository  # Cache Maven dependencies
-    - reservation-front/node_modules  # Cache npm dependencies
+    - .m2/repository
 
-maven_build:
-  image: maven:3.8.6-openjdk-18  # Specify the Maven Docker image with JDK 18
+image: maven:3.8.6-openjdk-18
+
+
+clean-and-test:
   stage: build
   script:
-    - cd reservation-api  # Change directory to the root of your Maven project
-    - mvn clean package -DskipTests -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository
+    - mvn $MAVEN_CLI_OPTS -B verify --file pom.xml
+  artifacts:
+    paths:
+      - target/
+    reports:
+      junit: target/surefire-reports/*.xml
 
-react_build:
+compile:
   stage: build
   script:
-    - cd reservation-front  # Change directory to the root of your React project
-    - npm install
-    - npm run build
+    - mvn $MAVEN_CLI_OPTS compile
 
-test:
-  image: maven:3.8.6-openjdk-18  # Specify the Maven Docker image with JDK 18
-  stage: test
+install:
+  stage: build
   script:
-    - cd reservation-api  # Run backend tests (if you have any)
-    - mvn test
+    - mvn $MAVEN_CLI_OPTS install
+
+sonarqube:
+  stage: analyze
+  script:
+    - mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}
+
+docker:
+  stage: docker-registry
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG .
+    - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+
+
+
