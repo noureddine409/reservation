@@ -55,6 +55,7 @@ test-coverage:
     - cd reservation-api  # Change directory to the root of your Maven project
     - mvn jacoco:report
   artifacts:
+    when: always
     paths:
       - reservation-api/target/site/jacoco
     reports:
