@@ -57,7 +57,7 @@ test-coverage:
   artifacts:
     when: always
     paths:
-      - reservation-api//target
+      - reservation-api/target
     reports:
       coverage_report:
         coverage_format: cobertura
