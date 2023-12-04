@@ -57,7 +57,7 @@ test-coverage:
   artifacts:
     when: always
     paths:
-      - reservation-api/target/site/jacoco
+      - /target
     reports:
       coverage_report:
         coverage_format: cobertura
