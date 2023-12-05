@@ -1,25 +1,14 @@
-# Stage 1: Build the application using Maven
-FROM maven:3.8.6-openjdk-18 AS builder
-
-WORKDIR /app
-
-# Copy only the necessary files for the Maven build
-COPY ./pom.xml ./pom.xml
-COPY ./src ./src/
-
-# Build the application
-RUN mvn clean package
-
-# Stage 2: Execute the application using JRE
+# Fetching latest version of Java
 FROM openjdk:18
 
+# Setting up work directory
 WORKDIR /app
 
-# Copy only the necessary files from the builder stage
-COPY --from=builder /app/target/reservation-api-0.0.1-SNAPSHOT.jar .
+# Copy the jar file into our app
+COPY ./target/reservation-api-0.0.1-SNAPSHOT.jar /app
 
-# Expose port 8080 (if your application uses this port)
+# Exposing port 8080
 EXPOSE 8080
 
-# Start the application
-ENTRYPOINT ["java", "-jar", "reservation-api-0.0.1-SNAPSHOT.jar"]
+# Starting the application
+CMD ["java", "-jar", "reservation-api-0.0.1-SNAPSHOT.jar"]
