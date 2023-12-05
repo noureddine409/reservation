@@ -8,7 +8,7 @@ COPY ./pom.xml ./pom.xml
 COPY ./src ./src/
 
 # Build the application
-RUN mvn -f ./pom.xml clean package
+RUN mvn clean package
 
 # Stage 2: Execute the application using JRE
 FROM openjdk:18
