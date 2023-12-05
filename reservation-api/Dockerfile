@@ -11,7 +11,7 @@ COPY ./src ./src/
 RUN mvn -f ./pom.xml clean package
 
 # Stage 2: Execute the application using JRE
-FROM openjdk:18-jre-slim
+FROM openjdk:18
 
 WORKDIR /app
 
