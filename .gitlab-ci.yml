@@ -63,5 +63,5 @@ docker:
     - docker:dind
   script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-    - docker build -t $CI_REGISTRY_IMAGE/reservation-api:latest .
+    - docker build -t $CI_REGISTRY_IMAGE/reservation-api:latest ./reservation-api
     - docker push $CI_REGISTRY_IMAGE/reservation-api:latest
