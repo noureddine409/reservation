@@ -1,25 +1,67 @@
-# Stage 1: Build the application using Maven
-FROM maven:3.8.4-openjdk-17-slim AS builder
+stages:
+  - build
+  - analyze
+  - docker-registry
 
-WORKDIR /app
+services:
+  - name: postgres:latest
+    alias: postgresql
 
-# Copy only the necessary files for the Maven build
-COPY ./pom.xml ./pom.xml
-COPY ./src .src/
+variables:
+  POSTGRES_DB: reservation
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: maroc123
+  POSTGRES_HOST_AUTH_METHOD: trust
+  DATABASE_HOST: postgresql  # PostgreSQL service alias
+  DATABASE_PORT: 5432
+  MAVEN_CLI_OPTS: "--batch-mode"  
+  CI_REGISTRY_IMAGE: noureddinelachgar/product-api
+  SONAR_URL: http://172.174.163.92:9000
 
-# Build the application
-RUN mvn -f ./pom.xml clean package
+cache:
+  paths:
+    - .m2/repository
 
-# Stage 2: Execute the application using JRE
-FROM openjdk:17-jre-slim
+image: maven:3.8.6-openjdk-18
 
-WORKDIR /app
+clean-and-test:
+  stage: build
+  script:
+    - cd reservation-api
+    - mvn $MAVEN_CLI_OPTS -B clean verify
 
-# Copy only the necessary files from the builder stage
-COPY --from=builder /app/target/reservation-api-0.0.1-SNAPSHOT.jar .
+compile:
+  stage: build
+  script:
+    - cd reservation-api
+    - mvn $MAVEN_CLI_OPTS compile
 
-# Expose port 8080 (if your application uses this port)
-EXPOSE 8080
+install:
+  stage: build
+  script:
+    - cd reservation-api
+    - mvn $MAVEN_CLI_OPTS install
 
-# Start the application
-ENTRYPOINT ["java", "-jar", "reservation-api-0.0.1-SNAPSHOT.jar"]
+test-coverage:
+  stage: analyze
+  script:
+    - cd reservation-api
+    - mvn jacoco:report
+  artifacts:
+    when: always
+    paths:
+      - reservation-api/target/site/jacoco/jacoco.xml
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: reservation-api/target/site/jacoco/jacoco.xml
+
+docker:
+  stage: docker-registry
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE/reservation-api:latest .
+    - docker push $CI_REGISTRY_IMAGE/reservation-api:latest
