@@ -76,9 +76,7 @@ docker:
     - docker:dind
   script:
     - cd reservation-api  # Change directory to the root of your Maven project
-    - mvn clean package -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-    - docker pull maven:3.8.6-openjdk-18  # Pull the Maven Docker image with JDK 18
     - docker build -t $CI_REGISTRY_IMAGE/reservation-api:latest .
     - docker push $CI_REGISTRY_IMAGE/reservation-api:latest
 
