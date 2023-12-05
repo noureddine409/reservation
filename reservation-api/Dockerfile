@@ -4,8 +4,8 @@ FROM maven:3.8.4-openjdk-17-slim AS builder
 WORKDIR /app
 
 # Copy only the necessary files for the Maven build
-COPY ./pom.xml ./reservation-api/
-COPY ./src ./reservation-api/src/
+COPY ./pom.xml ./pom.xml
+COPY ./src .src/
 
 # Build the application
 RUN mvn -f ./pom.xml clean package
