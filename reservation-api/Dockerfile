@@ -3,11 +3,12 @@ FROM maven:3.8.4-openjdk-17-slim AS builder
 
 WORKDIR /app
 
-COPY ./reservation-api ./reservation-api
-
+# Copy only the necessary files for the Maven build
+COPY ./reservation-api/pom.xml ./reservation-api/
+COPY ./reservation-api/src ./reservation-api/src/
 
 # Build the application
-RUN mvn clean package
+RUN mvn -f ./reservation-api/pom.xml clean package
 
 # Stage 2: Execute the application using JRE
 FROM openjdk:17-jre-slim
@@ -15,9 +16,9 @@ FROM openjdk:17-jre-slim
 WORKDIR /app
 
 # Copy only the necessary files from the builder stage
-COPY --from=builder /app/target/reservation-api-0.0.1-SNAPSHOT.jar /app
+COPY --from=builder /app/reservation-api/target/reservation-api-0.0.1-SNAPSHOT.jar .
 
-# Expose port 8080
+# Expose port 8080 (if your application uses this port)
 EXPOSE 8080
 
 # Start the application
