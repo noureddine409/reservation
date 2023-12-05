@@ -63,11 +63,11 @@ test-coverage:
         coverage_format: cobertura
         path: reservation-api/target/site/jacoco/jacoco.xml
 
-sonarqube:
-  stage: analyze
-  script:
-    - cd reservation-api  # Change directory to the root of your Maven project
-    - mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}
+#sonarqube:
+#  stage: analyze
+#  script:
+#    - cd reservation-api  # Change directory to the root of your Maven project
+#    - mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}
 
 docker:
   stage: docker-registry
