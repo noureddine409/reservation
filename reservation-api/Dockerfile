@@ -1,5 +1,5 @@
 # Fetching latest version of Java
-FROM openjdk:17-jdk-slim
+FROM openjdk:18
 
 # Setting up work directory
 WORKDIR /app
@@ -11,5 +11,4 @@ COPY ./target/reservation-api-0.0.1-SNAPSHOT.jar /app
 EXPOSE 8080
 
 # Starting the application
-ENTRYPOINT ["sh", "-c"]
-CMD ["java -jar reservation-api-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "reservation-api-0.0.1-SNAPSHOT.jar"]
