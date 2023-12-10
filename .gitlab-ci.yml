@@ -15,7 +15,7 @@ variables:
   DATABASE_HOST: postgresql  # PostgreSQL service alias
   DATABASE_PORT: 5432
   MAVEN_CLI_OPTS: "--batch-mode"  
-  CI_REGISTRY_IMAGE: noureddinelachgar/product-api
+  CI_REGISTRY_IMAGE: noureddinelachgar/reservation-api
   SONAR_URL: http://172.174.163.92:9000
 
 cache:
@@ -42,13 +42,6 @@ install:
     - cd reservation-api
     - mvn $MAVEN_CLI_OPTS install
 
-sonarqube:
-  stage: analyze
-  script:
-    - cd reservation-api
-    - mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}
-
-
 
 test-coverage:
   stage: analyze
@@ -64,12 +57,21 @@ test-coverage:
         coverage_format: cobertura
         path: reservation-api/target/site/jacoco/jacoco.xml
 
+sonarqube:
+  stage: analyze
+  script:
+    - cd reservation-api
+    - mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}
+
 docker:
   stage: docker-registry
   image: docker:latest
   services:
     - docker:dind
   script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-    - docker build -t $CI_REGISTRY_IMAGE/reservation-api:latest ./reservation-api
-    - docker push $CI_REGISTRY_IMAGE/reservation-api:latest
+    - cd reservation-api
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG .
+    - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+
+
