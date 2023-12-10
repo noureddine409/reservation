@@ -32,26 +32,30 @@ image: maven:3.8.6-openjdk-18
 clean-and-test:
   stage: build
   script:
+    - cd reservation-api
     - mvn $MAVEN_CLI_OPTS -B verify --file pom.xml
   artifacts:
     paths:
-      - target/
+      - reservation-api/target/
     reports:
-      junit: target/surefire-reports/*.xml
+      junit: reservation-api/target/surefire-reports/*.xml
 
 compile:
   stage: build
   script:
+    - cd reservation-api
     - mvn $MAVEN_CLI_OPTS compile
 
 install:
   stage: build
   script:
+    - cd reservation-api
     - mvn $MAVEN_CLI_OPTS install
 
 sonarqube:
   stage: analyze
   script:
+    - cd reservation-api
     - mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}
 
 docker:
@@ -60,6 +64,7 @@ docker:
   services:
     - docker:dind
   script:
+    - cd reservation-api
     - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG .
     - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
