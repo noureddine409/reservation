@@ -61,7 +61,7 @@ sonarqube:
   stage: analyze
   script:
     - cd reservation-api
-    - mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}
+    - mvn clean package sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}
 
 docker:
   stage: docker-registry
