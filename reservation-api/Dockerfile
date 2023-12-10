@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the jar file into our app
-COPY ./target/product-api-0.0.1-SNAPSHOT.jar /app
+COPY ./target/reservation-api-0.0.1-SNAPSHOT.jar /app
 
 # Exposing port 8080
 EXPOSE 8080
