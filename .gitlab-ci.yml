@@ -15,9 +15,8 @@ variables:
   DATABASE_HOST: postgresql  # PostgreSQL service alias
   DATABASE_PORT: 5432
   MAVEN_CLI_OPTS: "--batch-mode"  
-  CI_REGISTRY_IMAGE: noureddinelachgar/product-api
+  CI_REGISTRY_IMAGE: noureddinelachgar/reservation-api
   SONAR_URL: http://172.174.163.92:9000
-
 
 cache:
   paths:
@@ -25,45 +24,44 @@ cache:
 
 image: maven:3.8.6-openjdk-18
 
-
 clean-and-test:
   stage: build
   script:
-    - cd reservation-api  # Change directory to the root of your Maven project
-    - mvn $MAVEN_CLI_OPTS -B verify --file pom.xml
-  artifacts:
-    paths:
-      - target/
-    reports:
-      junit: reservation-api/target/surefire-reports/*.xml
+    - cd reservation-api
+    - mvn $MAVEN_CLI_OPTS -B clean verify
 
 compile:
   stage: build
   script:
-    - cd reservation-api  # Change directory to the root of your Maven project
+    - cd reservation-api
     - mvn $MAVEN_CLI_OPTS compile
 
 install:
   stage: build
   script:
-    - cd reservation-api  # Change directory to the root of your Maven project
+    - cd reservation-api
     - mvn $MAVEN_CLI_OPTS install
+
 
 test-coverage:
   stage: analyze
   script:
-    - cd reservation-api  # Change directory to the root of your Maven project
+    - cd reservation-api
     - mvn jacoco:report
   artifacts:
+    when: always
     paths:
-      - ./target/site/jacoco
-
+      - reservation-api/target/site/jacoco/jacoco.xml
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: reservation-api/target/site/jacoco/jacoco.xml
 
 sonarqube:
   stage: analyze
   script:
-    - cd reservation-api  # Change directory to the root of your Maven project
-    - mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}
+    - cd reservation-api
+    - mvn clean package sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}
 
 docker:
   stage: docker-registry
@@ -71,10 +69,9 @@ docker:
   services:
     - docker:dind
   script:
-    - cd reservation-api  # Change directory to the root of your Maven project
+    - cd reservation-api
     - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG .
     - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-
 
 
