@@ -24,7 +24,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
 public class JwtProvider {
@@ -67,7 +66,7 @@ public class JwtProvider {
 
                     List<String> claims = user.getAuthorities().stream()
                             .map(GrantedAuthority::getAuthority)
-                            .collect(Collectors.toList());
+                            .toList();
 
                     builder
                             .withExpiresAt(expiryDate)
@@ -130,7 +129,7 @@ public class JwtProvider {
     public String extractTokenFromRequest(HttpServletRequest request, GenericEnum.JwtTokenType tokenType) throws UnauthorizedException {
         Cookie[] cookies = request.getCookies();
 
-        if (Objects.isNull(cookies) || cookies.length==0) {
+        if (Objects.isNull(cookies) || cookies.length == 0) {
             throw new UnauthorizedException(null, new UnauthorizedException(), CoreConstant.Exception.AUTHORIZATION_MISSING_COOKIE, null);
         }
 

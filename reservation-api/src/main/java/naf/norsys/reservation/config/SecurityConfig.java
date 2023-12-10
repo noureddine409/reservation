@@ -69,9 +69,9 @@ public class SecurityConfig {
             http
                     .cors(Customizer.withDefaults())
                     .csrf(AbstractHttpConfigurer::disable)
-                    .sessionManagement((session) -> session.sessionCreationPolicy(STATELESS))
+                    .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                     .securityMatcher("/api/v1/**")
-                    .authorizeHttpRequests((authorize) -> authorize
+                    .authorizeHttpRequests(authorize -> authorize
                             .requestMatchers(antPathMatchers).permitAll()
                             .anyRequest().authenticated()
                     )
@@ -114,9 +114,9 @@ public class SecurityConfig {
 
             http
                     .csrf(AbstractHttpConfigurer::disable)
-                    .sessionManagement((session) -> session.sessionCreationPolicy(IF_REQUIRED))
+                    .sessionManagement(session -> session.sessionCreationPolicy(IF_REQUIRED))
                     .securityMatcher(Stream.concat(formAuthWhiteList.stream(), formAuthBlockList.stream()).toArray(String[]::new))
-                    .authorizeHttpRequests((authorize) -> {
+                    .authorizeHttpRequests(authorize -> {
                         try {
                             authorize
                                     .requestMatchers(formWhiteListAntPathMatchers).permitAll()
@@ -126,12 +126,12 @@ public class SecurityConfig {
                             throw new BusinessException(e.getMessage(), e.getCause(), null, null);
                         }
                     })
-                    .formLogin((form) -> form.defaultSuccessUrl(formSuccessUrl))
+                    .formLogin(form -> form.defaultSuccessUrl(formSuccessUrl))
                     .rememberMe(rememberMe -> rememberMe
                             .key(rememberMeKey)
                             .tokenValiditySeconds((int) DAYS.toSeconds(rememberMeTokenValidityInDays))
                     )
-                    .logout((logout) -> logout
+                    .logout(logout -> logout
                             .logoutSuccessUrl(formSuccessUrl)
                             .invalidateHttpSession(true)
                             .deleteCookies(formLogoutCookiesToClear)

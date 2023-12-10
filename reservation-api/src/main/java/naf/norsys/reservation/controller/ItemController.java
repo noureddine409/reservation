@@ -35,6 +35,8 @@ public class ItemController {
 
     private final AuthenticationHelper authenticationHelper;
 
+    private static final String PAGE_NUMBER_HTTP_HEADER = "X-Total-Pages";
+
     public ItemController(ItemService itemService, MapHelper mapHelper, AuthenticationHelper authenticationHelper) {
         this.itemService = itemService;
         this.mapHelper = mapHelper;
@@ -95,8 +97,8 @@ public class ItemController {
         final List<ItemDto> responseDto = mapHelper.convertListToDto(items, ItemDto.class);
         final int totalPages = itemService.getTotalPages(searchDto.getSize());
         HttpHeaders headers = new HttpHeaders();
-        headers.add("X-Total-Pages", String.valueOf(totalPages));
-        headers.add("Access-Control-Expose-Headers", "X-Total-Pages");
+        headers.add(PAGE_NUMBER_HTTP_HEADER, String.valueOf(totalPages));
+        headers.add("Access-Control-Expose-Headers", PAGE_NUMBER_HTTP_HEADER);
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(responseDto);
     }
 
@@ -109,8 +111,8 @@ public class ItemController {
         final List<ItemDto> responseDto = mapHelper.convertListToDto(items, ItemDto.class);
         final int totalPages = itemService.getTotalPages(size);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("X-Total-Pages", String.valueOf(totalPages));
-        headers.add("Access-Control-Expose-Headers", "X-Total-Pages");
+        headers.add(PAGE_NUMBER_HTTP_HEADER, String.valueOf(totalPages));
+        headers.add("Access-Control-Expose-Headers", PAGE_NUMBER_HTTP_HEADER);
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(responseDto);
     }
 }

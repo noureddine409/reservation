@@ -145,11 +145,18 @@ public class GenericGlobalExceptionHandler extends ResponseEntityExceptionHandle
     }
 
     private String getMessage(final FieldError fieldError) {
+        if (fieldError != null) {
+            String defaultMessage = fieldError.getDefaultMessage();
+            if (defaultMessage != null && !defaultMessage.trim().isEmpty()) {
+                return defaultMessage;
+            }
 
-        return fieldError.getDefaultMessage() != null && !fieldError.getDefaultMessage().trim().isEmpty() ? fieldError.getDefaultMessage() :
-                messageSource.getMessage(Objects.requireNonNull(fieldError.getCode()), fieldError.getArguments(), null);
-    }
-
+            String errorCode = fieldError.getCode();
+            if (errorCode != null) {
+                return messageSource.getMessage(errorCode, fieldError.getArguments(), null);
+            }
+        }
+        return "an exception accor";    }
 
 
 

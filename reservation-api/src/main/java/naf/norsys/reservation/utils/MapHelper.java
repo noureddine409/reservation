@@ -26,7 +26,7 @@ public class MapHelper {
     public <T extends GenericEntity, D extends GenericDto> List<D> convertListToDto(final List<T> entities, Class<D> targetClass) {
         return entities.stream()
                 .map(entity -> convertToDto(entity, targetClass))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public <S, D> void mapWithSkipNull(S sourceObject, D destinationObject) {
