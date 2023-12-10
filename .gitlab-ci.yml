@@ -29,6 +29,12 @@ clean-and-test:
   script:
     - cd reservation-api
     - mvn $MAVEN_CLI_OPTS -B clean verify
+  artifacts:
+    paths:
+      - target/
+    reports:
+      junit: target/surefire-reports/*.xml
+
 
 compile:
   stage: build
