@@ -8,7 +8,7 @@ services:
     alias: postgresql
 
 variables:
-  POSTGRES_DB: reservation-db
+  POSTGRES_DB: reservation
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: maroc123
   POSTGRES_HOST_AUTH_METHOD: trust
